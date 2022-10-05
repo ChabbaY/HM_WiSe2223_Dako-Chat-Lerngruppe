@@ -1,0 +1,15 @@
+edu.hm.dako.auditLogServer
+edu.hm.dako.chatBenchmarking
+edu.hm.dako.chatClient
+edu.hm.dako.chatServer
+edu.hm.dako.common
+edu.hm.dako.connection
+edu.hm.dako.connection.tcp
+edu.hm.dako.connection.udp
+edu.hm.dako.echoTcpApp
+edu.hm.dako.echoTcpSocketApp
+edu.hm.dako.echoUdpApp
+edu.hm.dako.echoUdpSocketApp
+edu.hm.dako.networkInterfaces
+edu.hm.dako.rmiBeispiel
+edu.hm.dako.udpMulticast

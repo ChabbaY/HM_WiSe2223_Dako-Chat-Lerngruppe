@@ -1,0 +1,53 @@
+plugins {
+    id 'application'
+    id 'org.openjfx.javafxplugin' version '0.0.11'
+}
+
+application {
+    mainClass.set("edu.hm.dako.chatServer.ChatServerStarter")
+}
+
+jar.enabled = true
+
+javafx {
+    //version = "17.0.2"
+    version = "18"
+    modules = ['javafx.controls', 'javafx.fxml']
+}
+
+sourceSets {
+    main {
+        resources {
+            srcDirs = ["src/main/java"]
+            includes = ["**/*.fxml"]
+            }
+        }
+    }
+
+dependencies {
+    implementation project(':common')
+    implementation project(':communication')
+    implementation 'org.openjfx:javafx:18.0.2'
+    implementation group: 'org.apache.commons', name: 'commons-configuration2', version: '2.8.0'
+    implementation group: 'commons-beanutils', name: 'commons-beanutils', version: '1.9.4'
+}
+
+// build chatserver jar file
+task createChatServerJar(type: Jar) {
+
+        // remove deprecated warning for gradle 7
+        duplicatesStrategy = DuplicatesStrategy.INCLUDE
+
+        manifest {
+            attributes 'Main-Class': 'edu.hm.dako.chatServer.ChatServerStarter'
+        }
+        archiveBaseName.set('chatServer')
+        from {
+            configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+        } with jar
+}
+
+task build(overwrite: true, dependsOn: [checkstyleMain, createChatServerJar])
+
+
+

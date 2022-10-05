@@ -1,0 +1,49 @@
+plugins {
+    id 'application'
+    id 'org.openjfx.javafxplugin' version '0.0.10'
+}
+
+application {
+    mainClass.set("edu.hm.dako.chatClient.ChatClientStarter")
+}
+
+jar.enabled = true
+
+javafx {
+    //version = "17.0.2"
+    version = "18"
+    modules = ['javafx.controls', 'javafx.fxml']
+}
+
+sourceSets {
+    main {
+        resources {
+            srcDirs = ["src/main/java"]
+            includes = ["**/*.fxml"]
+        }
+    }
+}
+
+dependencies {
+
+    implementation project(':common')
+    implementation project(':communication')
+    //implementation 'org.openjfx:javafx:17.0.2'
+    implementation 'org.openjfx:javafx:18'
+}
+
+// build chatclient jar file
+task createChatClientJar(type: Jar) {
+
+    // remove deprecated warning for gradle 7
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+    manifest {
+        attributes 'Main-Class': 'edu.hm.dako.chatClient.ChatClientStarter'
+    }
+    archiveBaseName.set('chatClient')
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    } with jar
+}
+
+task build(overwrite: true, dependsOn: [checkstyleMain, createChatClientJar])
