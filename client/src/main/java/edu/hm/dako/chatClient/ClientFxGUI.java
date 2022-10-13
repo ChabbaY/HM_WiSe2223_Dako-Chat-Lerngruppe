@@ -77,7 +77,7 @@ public class ClientFxGUI extends Application implements ClientUserInterface {
         lc.setAppController(this);
         primaryStage.setTitle("Anmelden");
         primaryStage.setScene(new Scene(root, 280, 320));
-        root.setStyle("-fx-background-color: cornsilk");
+        root.setStyle("-fx-background-color: linear-gradient(from 0% 100% to 100% 0%, #16a34a, #60a5fa)");
         stage = primaryStage;
         primaryStage.show();
     }
@@ -102,8 +102,8 @@ public class ClientFxGUI extends Application implements ClientUserInterface {
 
             Platform.runLater(() -> {
                 stage.setTitle("Angemeldet");
-                stage.setScene(new Scene(root, 600, 400));
-                root.setStyle("-fx-background-color: cornsilk");
+                stage.setScene(new Scene(root, 800, 500));
+                root.setStyle("-fx-background-color: linear-gradient(from 0% 100% to 100% 0%, #16a34a, #60a5fa)");
             });
         } catch (Exception e) {
             ExceptionHandler.logException(e);
@@ -126,7 +126,7 @@ public class ClientFxGUI extends Application implements ClientUserInterface {
             Platform.runLater(() -> {
                 stage.setTitle("Anmelden");
                 stage.setScene(new Scene(root, 280, 320));
-                root.setStyle("-fx-background-color: cornsilk");
+                root.setStyle("-fx-background-color: linear-gradient(from 0% 100% to 100% 0%, #16a34a, #60a5fa)");
             });
         } catch (Exception e) {
             ExceptionHandler.logException(e);

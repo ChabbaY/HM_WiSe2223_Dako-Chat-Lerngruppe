@@ -124,7 +124,7 @@ public class ChatServerGUI extends Application implements ChatServerGuiInterface
     @Override
     public void start(final Stage stage) {
         stage.setTitle("ChatServerGUI");
-        stage.setScene(new Scene(pane, 415, 465));
+        stage.setScene(new Scene(pane, 400, 540));
         stage.show();
 
         stage.setOnCloseRequest(event -> {
@@ -136,13 +136,17 @@ public class ChatServerGUI extends Application implements ChatServerGuiInterface
             }
         });
 
-        pane.setStyle("-fx-background-color: cornsilk");
+        pane.setStyle("-fx-background-color: linear-gradient(from 0% 100% to 100% 0%, #16a34a, #60a5fa)");
         pane.setPadding(new Insets(10, 10, 10, 10));
 
-        pane.getChildren().add(createSeparator("Eingabe", 315));
+        Label label_eingabe = createLabel("Eingabe");
+        label_eingabe.setStyle("-fx-font-weight: bold");
+        pane.getChildren().add(label_eingabe);
         pane.getChildren().add(createInputPane());
 
-        pane.getChildren().add(createSeparator("Informationen", 285));
+        Label label_informationen = createLabel("Informationen");
+        label_informationen.setStyle("-fx-font-weight: bold");
+        pane.getChildren().add(label_informationen);
         pane.getChildren().add(createInfoPane());
 
         pane.getChildren().add(createSeparator("", 360));

@@ -167,7 +167,7 @@ public class BenchmarkingClientFxGUI extends Application implements Benchmarking
         // BorderPane für Layout erstellen
         BorderPane layout = new BorderPane(pane);
         BorderPane.setAlignment(pane, Pos.CENTER);
-        layout.setStyle("-fx-background-color: cornsilk");
+        layout.setStyle("-fx-background-color: linear-gradient(from 0% 100% to 100% 0%, #16a34a, #60a5fa)");
 
         // Progressbar erzeugen
         progressBarFx = createProgressbar();
