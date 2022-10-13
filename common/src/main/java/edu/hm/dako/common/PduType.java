@@ -2,7 +2,8 @@ package edu.hm.dako.common;
 
 /**
  * Enumeration zur Definition der Chat-PDU-Typen
- * @author Peter Mandl, Mathias Strobl
+ *
+ * @author Peter Mandl, Mathias Strobl, edited by Lerngruppe
  */
 public enum PduType {
     UNDEFINED(0, "Undefined"),

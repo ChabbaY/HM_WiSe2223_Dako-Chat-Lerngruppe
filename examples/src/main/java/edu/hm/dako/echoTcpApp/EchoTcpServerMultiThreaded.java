@@ -5,16 +5,16 @@ import edu.hm.dako.connection.tcp.TcpServerSocket;
 
 /**
  * Multithreaded Echo Client
- * @author P. Mandl
+ *
+ * @author Peter Mandl, edited by Lerngruppe
  */
-public class EchoTcpServerMultihreaded {
-
+public class EchoTcpServerMultiThreaded {
     TcpServerSocket serverSocket = null;
-    TcpConnection con = null;
+    final TcpConnection con = null;
 
     public static void main(String[] args) {
         System.out.println("Server gestartet");
-        EchoTcpServerMultihreaded server = new EchoTcpServerMultihreaded();
+        EchoTcpServerMultiThreaded server = new EchoTcpServerMultiThreaded();
         try {
             server.createSocket();
         } catch (Exception e) {
@@ -30,7 +30,7 @@ public class EchoTcpServerMultihreaded {
                 EchoWorkerThread w1 = new EchoWorkerThread(con);
                 w1.start();
             } catch (Exception e3) {
-                System.out.println("Exception in einem Workerthread");
+                System.out.println("Exception in einem WorkerThread");
                 listening = false;
                 server.close();
             }
@@ -39,6 +39,7 @@ public class EchoTcpServerMultihreaded {
 
     /**
      * Server-Socket erzeugen
+     *
      * @throws Exception Fehler beim Erzeugen eines Sockets
      */
     private void createSocket() throws Exception {
@@ -52,6 +53,7 @@ public class EchoTcpServerMultihreaded {
 
     /**
      * Auf Verbindungsaufbauwunsch eines Clients warten
+     *
      * @return Verbindung zum Client
      * @throws Exception Fehler bei der Entgegennahme der Verbindung
      */

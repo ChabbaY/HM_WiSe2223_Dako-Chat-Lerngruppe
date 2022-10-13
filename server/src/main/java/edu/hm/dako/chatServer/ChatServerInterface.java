@@ -2,10 +2,10 @@ package edu.hm.dako.chatServer;
 
 /**
  * Einheitliche Schnittstelle aller Server
- * @author Peter Mandl
+ *
+ * @author Peter Mandl, edited by Lerngruppe
  */
 public interface ChatServerInterface {
-
     /**
      * Startet den Server
      */

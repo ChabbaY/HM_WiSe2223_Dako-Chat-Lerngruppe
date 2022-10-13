@@ -2,9 +2,10 @@ package edu.hm.dako.common;
 
 /**
  * Implementierungsvarianten des ChatServers mit verschiedenen Transportprotokollen
- * @author Mandl
+ *
+ * @author Peter Mandl, edited by Lerngruppe
  */
 
 public enum ChatServerImplementationType {
-    TCPAdvancedImplementation, TCPSimpleImplementation, UDPAdvancedImplementation,
+    TCPAdvancedImplementation, TCPSimpleImplementation, UDPAdvancedImplementation
 }

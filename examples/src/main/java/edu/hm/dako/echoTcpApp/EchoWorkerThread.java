@@ -3,11 +3,11 @@ package edu.hm.dako.echoTcpApp;
 import edu.hm.dako.connection.tcp.TcpConnection;
 
 /**
- * Workerthread fuer multihreaded Server
- * @author Peter Mandl
+ * WorkerThread für multithreaded Server
+ *
+ * @author Peter Mandl, edited by Lerngruppe
  */
 public class EchoWorkerThread extends Thread {
-
     private static int nrWorkerThread = 0;
     private final TcpConnection con;
     private boolean connect;
@@ -20,7 +20,7 @@ public class EchoWorkerThread extends Thread {
     }
 
     /**
-     * Threadimplementierung
+     * ThreadImplementierung
      */
     public void run() {
         System.out.println(this.getName() + " gestartet");
@@ -41,14 +41,15 @@ public class EchoWorkerThread extends Thread {
     }
 
     /**
-     * Nachricht vom Client empfangen und zuruecksenden
+     * Nachricht vom Client empfangen und zurücksenden
+     *
      * @throws Exception Fehler beim Nachrichtenempfang
      */
     private void echo() throws Exception {
         try {
             SimplePDU receivedPdu = (SimplePDU) con.receive();
             String message = receivedPdu.getMessage();
-            System.out.println("PDU empfangen, Message-Laenge = " + message.length());
+            System.out.println("PDU empfangen, Message-Länge = " + message.length());
             con.send(receivedPdu);
         } catch (Exception e) {
             System.out.println("Exception beim Empfang");

@@ -5,12 +5,13 @@ import edu.hm.dako.connection.tcp.TcpConnectionFactory;
 
 /**
  * Echo Client
- * @author Peter Mandl
+ *
+ * @author Peter Mandl, edited by Lerngruppe
  */
 public class EchoTcpClient {
     static final int NR_OF_MSG = 10; // Anzahl zu sendender Nachrichten
-    static final int MAX_LENGTH = 100; // Nachrichtenlaenge
-    TcpConnectionFactory tcpFactory;
+    static final int MAX_LENGTH = 100; // Nachrichtenlänge
+    final TcpConnectionFactory tcpFactory;
     TcpConnection con = null;
 
     EchoTcpClient() {
@@ -19,13 +20,12 @@ public class EchoTcpClient {
     }
 
     public static void main(String[] args) {
-
         EchoTcpClient client = new EchoTcpClient();
         try {
             client.connect();
             for (int i = 0; i < NR_OF_MSG; i++) {
                 client.echo();
-                System.out.println(i + 1 + ". Message gesendet, Laenge =  " + MAX_LENGTH);
+                System.out.println(i + 1 + ". Message gesendet, Länge =  " + MAX_LENGTH);
             }
             client.close();
         } catch (Exception e) {
@@ -35,6 +35,7 @@ public class EchoTcpClient {
 
     /**
      * Einfache Echo-PDU erzeugen
+     *
      * @return PDU ChatPDU
      */
     private static SimplePDU createMessage() {
@@ -47,6 +48,7 @@ public class EchoTcpClient {
 
     /**
      * Verbindung zum Server aufbauen
+     *
      * @throws Exception Fehler beim Verbindungsaufbau
      */
     private void connect() throws Exception {
@@ -62,6 +64,7 @@ public class EchoTcpClient {
 
     /**
      * Echo-Request Senden und Echo-Response empfangen
+     *
      * @throws Exception Fehler beim Empfang
      */
     private void echo() throws Exception {
@@ -78,6 +81,7 @@ public class EchoTcpClient {
 
     /**
      * Verbindung abbauen
+     *
      * @throws Exception Fehler beim Verbindungsabbau
      */
     private void close() throws Exception {

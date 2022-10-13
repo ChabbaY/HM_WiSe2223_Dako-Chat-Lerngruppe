@@ -8,26 +8,25 @@ import java.net.Socket;
 
 /**
  * Multithreaded Echo Client
- * @author P. Mandl
+ *
+ * @author Peter Mandl, edited by Lerngruppe
  */
 public class EchoTcpServerMultithreaded {
     static final int SERVER_PORT = 55000; // Port des Servers
-    ServerSocket serverSocket = null; // Serversocket fuer Listen
+    ServerSocket serverSocket; // Serversocket für Listen
 
     /**
      * Konstruktor
+     *
      * @param serverPort Serverport
      * @throws BindException Port schon belegt
-     * @throws IOException Fehler beim Socket-Zugriff
+     * @throws IOException   Fehler beim Socket-Zugriff
      */
-    public EchoTcpServerMultithreaded(int serverPort)
-            throws BindException, IOException {
-
+    public EchoTcpServerMultithreaded(int serverPort) throws BindException, IOException {
         serverSocket = createServerSocket(serverPort);
     }
 
     public static void main(String[] args) {
-
         EchoTcpServerMultithreaded server = null;
 
         System.out.println("Server gestartet");
@@ -48,7 +47,7 @@ public class EchoTcpServerMultithreaded {
                 EchoWorkerThread w1 = new EchoWorkerThread(connection);
                 w1.start();
             } catch (Exception e) {
-                System.out.println("Exception in einem Workerthread");
+                System.out.println("Exception in einem WorkerThread");
                 listening = false;
                 server.closeServerSocket();
             }
@@ -57,13 +56,12 @@ public class EchoTcpServerMultithreaded {
 
     /**
      * Erzeugt ein TCP-Serversocket und bindet es an einen Port
-     * @param port Portnummer, die verwendet werden soll
+     *
+     * @param port PortNummer, die verwendet werden soll
      * @throws BindException Port schon belegt
-     * @throws IOException I/O-Fehler bei der Socket-Erzeugung
+     * @throws IOException   I/O-Fehler bei der Socket-Erzeugung
      */
-    private ServerSocket createServerSocket(int port)
-            throws BindException, IOException {
-
+    private ServerSocket createServerSocket(int port) throws BindException, IOException {
         ServerSocket serverSocket;
 
         try {
@@ -77,7 +75,7 @@ public class EchoTcpServerMultithreaded {
                     "Port " + port + " auf dem Rechner schon in Benutzung, Bind Exception: " + e);
             throw e;
         } catch (IOException e) {
-            System.out.println("Schwerwiegender Fehler beim Anlegen eines TCP-Sockets mit Portnummer "
+            System.out.println("Schwerwiegender Fehler beim Anlegen eines TCP-Sockets mit PortNummer "
                     + port + ": " + e);
             throw e;
         }
@@ -85,8 +83,9 @@ public class EchoTcpServerMultithreaded {
 
     /**
      * Auf Verbindungsaufbauwunsch eines Clients warten
+     *
      * @return Verbindung zum Client
-     * @throws Exception I/O-Fehler bei der Socket-Erzeugung
+     * @throws IOException I/O-Fehler bei der Socket-Erzeugung
      */
     private Socket waitForConnection() throws IOException {
         try {

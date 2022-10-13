@@ -2,17 +2,17 @@ package edu.hm.dako.chatBenchmarking;
 
 /**
  * Metriken zur Bewertung der Verteilung der gemessenen RTTs
- * @author Peter Mandl
+ *
+ * @author Peter Mandl, edited by Lerngruppe
  */
 public class DistributionMetrics {
-
     // Minimum
     double minimum;
 
     // Maximum
     double maximum;
 
-    // 10 % Percentile, alle RTT-Werte, die zu den kleinsten 10 % gehoeren
+    // 10 % Percentile, alle RTT-Werte, die zu den kleinsten 10 % gehören
     double percentile10;
 
     // 10 % Percentile = 25%-Quartil, alle RTT-Werte, die zu den kleinsten 25 % gehoeren

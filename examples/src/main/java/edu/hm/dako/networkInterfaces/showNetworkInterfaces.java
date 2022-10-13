@@ -1,24 +1,21 @@
 package edu.hm.dako.networkInterfaces;
 
 import java.net.InetAddress;
+import java.net.InterfaceAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Enumeration;
-import java.util.Iterator;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.*;
 
 /**
  * Ausgabe aller Informationen der vorhandenen Netzwerk-Interfaces
  *
- * @author P.Mandl
+ * @author Peter Mandl, edited by Lerngruppe
  */
 public class showNetworkInterfaces {
 
     /**
      * Hauptprogramm
+     *
      * @param args - Argumente (nicht verwendet)
      */
     public static void main(String[] args) {
@@ -26,7 +23,6 @@ public class showNetworkInterfaces {
     }
 
     public void listAllAddresses() {
-
         Enumeration<NetworkInterface> interfaces;
 
         try {
@@ -48,7 +44,6 @@ public class showNetworkInterfaces {
     }
 
     public List<InetAddress> listAllBroadcastAddresses() {
-
         List<InetAddress> broadcastList = new ArrayList<>();
 
         Enumeration<NetworkInterface> interfaces;
@@ -65,9 +60,8 @@ public class showNetworkInterfaces {
 
                 broadcastList.addAll(networkInterface.getInterfaceAddresses()
                         .stream()
-                        .filter(address -> address.getBroadcast() != null)
-                        .map(address -> address.getBroadcast())
-                        .collect(Collectors.toList()));
+                        .map(InterfaceAddress::getBroadcast)
+                        .filter(Objects::nonNull).toList());
             }
         } catch (SocketException ignored) {
         }
@@ -77,7 +71,7 @@ public class showNetworkInterfaces {
 
     public void execute() {
         List<InetAddress> list = listAllBroadcastAddresses();
-        Iterator iterator = list.iterator();
+        Iterator<InetAddress> iterator = list.iterator();
 
         System.out.println("Liste aller vorhandenen Broadcast-Adressen: ");
         while (iterator.hasNext()) {

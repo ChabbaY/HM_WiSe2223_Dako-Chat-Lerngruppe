@@ -15,19 +15,19 @@
 # 12 RTT-Minimum aller gemessenen RTTs in ms
 # 13 RTT-Maximum aller gemessenen RTTs in ms
 # 14 Arithmetisches Mittel aller gemessenen RTTs in ms
-# 15 Standardabweichung ueber alle gemessenen RTTs in ms
+# 15 Standardabweichung über alle gemessenen RTTs in ms
 # 16 Durchschnittliche Serverbearbeitungszeit in ms
 # 17 Anzahl geplanter Requests/Responses
 # 18 Anzahl gesendeter Requests
 # 19 Anzahl empfangener Responses
 # 20 Anzahl verlorener Responses
-# 21 Anzahl aller Uebertragungswiederholungen (nur fuer UDP relevant)
+# 21 Anzahl aller Übertragungswiederholungen (nur für UDP relevant)
 # 22 Anzahl aller vom Server gesendete Events-Nachrichten
-# 23 Anzahl aller vom Server empfangenen Event-Bestaetigungen (Confirm-Event)
-# 24 Anzahl aller vom Server nicht erhaltenen Event-Bestaetigungen
-# 25 Anzahl aller Wiederholungen von Events (fuer unzuverlaessige Verbindungen wie UDP)
+# 23 Anzahl aller vom Server empfangenen Event-Bestätigungen (Confirm-Event)
+# 24 Anzahl aller vom Server nicht erhaltenen Event-Bestätigungen
+# 25 Anzahl aller Wiederholungen von Events (für unzuverlässige Verbindungen wie UDP)
 # 26 Maximale Heap-Size des Clients in MiB
 # 27 Durchschnittliche CPU-Auslastung des Clients in %
 # 28 Startzeit der Messung (Zeitstempel Datum/Uhrzeit)
-# 29 Endezeit der Messung (Zeitstempel Datum/Uhrzeit)
+# 29 Endzeit der Messung (Zeitstempel Datum/Uhrzeit)
 #

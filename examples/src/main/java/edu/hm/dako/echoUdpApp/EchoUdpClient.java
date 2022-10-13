@@ -5,13 +5,13 @@ import edu.hm.dako.connection.udp.UdpClientConnectionFactory;
 
 /**
  * Echo Client(UDP)
- * @author P. Mandl
+ *
+ * @author Peter Mandl, edited by Lerngruppe
  */
 public class EchoUdpClient {
-
     static final int NR_OF_MSG = 5; // Anzahl zu sendender Nachrichten
-    static final int MAX_LENGTH = 10; // Nachrichtenlaenge
-    UdpClientConnectionFactory udpFactory;
+    static final int MAX_LENGTH = 10; // Nachrichtenlänge
+    final UdpClientConnectionFactory udpFactory;
     UdpClientConnection con = null;
 
     EchoUdpClient() {
@@ -20,14 +20,13 @@ public class EchoUdpClient {
     }
 
     public static void main(String[] args) {
-
         EchoUdpClient client = new EchoUdpClient();
 
         try {
             client.connect();
             for (int i = 0; i < NR_OF_MSG; i++) {
                 client.echo();
-                System.out.println(i + 1 + ". Message gesendet, Laenge =  " + MAX_LENGTH);
+                System.out.println(i + 1 + ". Message gesendet, Länge =  " + MAX_LENGTH);
             }
             client.close();
         } catch (Exception e) {
@@ -38,6 +37,7 @@ public class EchoUdpClient {
 
     /**
      * Einfache Echo-PDU erzeugen
+     *
      * @return PDU
      */
     private static SimplePDU createMessage() {
@@ -50,12 +50,13 @@ public class EchoUdpClient {
 
     /**
      * Verbindung zum Server aufbauen
-     * @throws Exception  Fehler in der Verbindung zum Server
+     *
+     * @throws Exception Fehler in der Verbindung zum Server
      */
     private void connect() throws Exception {
         try {
-            con = (UdpClientConnection) udpFactory.connectToServer("localhost", 55000, 0,
-                    400000, 400000);
+            con = (UdpClientConnection) udpFactory.connectToServer("localhost", 55000,
+                    0, 400000, 400000);
             System.out.println("Verbindung steht");
         } catch (Exception e) {
             System.out.println("Exception during connect");
@@ -65,6 +66,7 @@ public class EchoUdpClient {
 
     /**
      * Echo-Request senden und Echo-Response empfangen
+     *
      * @throws Exception Fehler in der Verbindung zum Server
      */
     private void echo() throws Exception {
@@ -81,6 +83,7 @@ public class EchoUdpClient {
 
     /**
      * Verbindung abbauen
+     *
      * @throws Exception Fehler beim Verbindungsabbau
      */
     private void close() throws Exception {

@@ -6,46 +6,41 @@ import edu.hm.dako.connection.Connection;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-
 /**
- * Abstrakte Klasse mit Basisfunktionalitaet fuer clientseitige Message-Processing-Threads
- * @author Peter Mandl
+ * Abstrakte Klasse mit Basisfunktionalität für clientseitige Message-Processing-Threads
+ *
+ * @author Peter Mandl, edited by Lerngruppe
  */
 public abstract class AbstractMessageListenerThread extends Thread {
-
     private static final Logger LOG = LogManager.getLogger(AbstractMessageListenerThread.class);
 
     // Kennzeichen zum Beenden der Bearbeitung
     protected boolean finished = false;
 
     // Verbindung zum Server
-    protected Connection connection;
+    protected final Connection connection;
 
     // Schnittstelle zum User-Interface
-    protected ClientUserInterface userInterface;
+    protected final ClientUserInterface userInterface;
 
     // Gemeinsame Daten zwischen Client-Thread und Message-Processing-Thread
-    protected SharedClientData sharedClientData;
+    protected final SharedClientData sharedClientData;
 
-    public AbstractMessageListenerThread(ClientUserInterface userInterface, Connection con,
-                                         SharedClientData sharedData) {
-
+    public AbstractMessageListenerThread(ClientUserInterface userInterface, Connection con, SharedClientData sharedData) {
         this.userInterface = userInterface;
         this.connection = con;
         this.sharedClientData = sharedData;
     }
 
     /**
-     * Event vom Server zur Veraenderung der UserListe (eingeloggte Clients) verarbeiten
+     * Event vom Server zur Veränderung der UserListe (eingeloggte Clients) verarbeiten
      *
      * @param receivedPdu Empfangene PDU
      */
     protected void handleUserListEvent(ChatPDU receivedPdu) {
+        LOG.debug("Login- oder Logout-Event-PDU für " + receivedPdu.getUserName() + " empfangen");
 
-        LOG.debug(
-                "Login- oder Logout-Event-PDU fuer " + receivedPdu.getUserName() + " empfangen");
-
-        // Neue Userliste zur Darstellung an User Interface uebergeben
+        // Neue Userliste zur Darstellung an User Interface übergeben
         LOG.debug("Empfangene Userliste: " + receivedPdu.getClients());
         userInterface.setUserList(receivedPdu.getClients());
     }
@@ -54,9 +49,8 @@ public abstract class AbstractMessageListenerThread extends Thread {
      * Chat-PDU empfangen
      *
      * @return Empfangene ChatPDU
-     * @throws Exception Verbindungsfehler
      */
-    protected ChatPDU receive() throws Exception {
+    protected ChatPDU receive() {
         try {
             return (ChatPDU) connection.receive();
         } catch (Exception e) {
@@ -80,7 +74,7 @@ public abstract class AbstractMessageListenerThread extends Thread {
     protected abstract void chatMessageEventAction(ChatPDU receivedPdu);
 
     /**
-     * Aktion zur Behandlung ankommender Login-Responsesd.
+     * Aktion zur Behandlung ankommender Login-Responses.
      *
      * @param receivedPdu Ankommende PDU
      */

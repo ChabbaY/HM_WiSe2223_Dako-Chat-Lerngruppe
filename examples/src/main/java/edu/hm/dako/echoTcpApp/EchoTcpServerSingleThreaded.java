@@ -4,16 +4,15 @@ import edu.hm.dako.connection.tcp.TcpConnection;
 import edu.hm.dako.connection.tcp.TcpServerSocket;
 
 /**
- * Singlethreaded Echo Server
- * @author P. Mandl
+ * SingleThreaded Echo Server
+ *
+ * @author Peter Mandl, edited by Lerngruppe
  */
 public class EchoTcpServerSingleThreaded {
-
     TcpServerSocket serverSocket = null;
     TcpConnection con = null;
 
     public static void main(String[] args) {
-
         System.out.println("Server gestartet");
         EchoTcpServerSingleThreaded server = new EchoTcpServerSingleThreaded();
 
@@ -32,7 +31,7 @@ public class EchoTcpServerSingleThreaded {
     /**
      * Server-Socket erzeugen
      *
-     * @throws Exception Fehler bei der Socketerzeugung
+     * @throws Exception Fehler bei der SocketErzeugung
      */
     private void createSocket() throws Exception {
         try {
@@ -45,6 +44,7 @@ public class EchoTcpServerSingleThreaded {
 
     /**
      * Auf Verbindungsaufbauwunsch eines Clients warten
+     *
      * @throws Exception Fehler bei der Verbindungsentgegennahme
      */
     private void waitForConnection() throws Exception {
@@ -58,14 +58,15 @@ public class EchoTcpServerSingleThreaded {
     }
 
     /**
-     * Nachricht vom Client empfangen und zuruecksenden
+     * Nachricht vom Client empfangen und zurücksenden
+     *
      * @throws Exception Fehler beim Receive
      */
     private void echo() throws Exception {
         try {
             SimplePDU receivedPdu = (SimplePDU) con.receive();
             String message = receivedPdu.getMessage();
-            System.out.println("PDU empfangen, Message-Laenge = " + message.length());
+            System.out.println("PDU empfangen, Message-Länge = " + message.length());
             con.send(receivedPdu);
         } catch (Exception e) {
             System.out.println("Exception beim Empfang");

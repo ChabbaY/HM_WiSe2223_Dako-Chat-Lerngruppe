@@ -14,12 +14,13 @@ import org.apache.logging.log4j.Logger;
 import java.io.IOException;
 
 /**
- * Controller fuer Chat-GUI
- * @author Paul Mandl
+ * Controller für Chat-GUI
+ *
+ * @author Peter Mandl, edited by Lerngruppe
  */
 public class LoggedInGuiController {
-
     private static final Logger LOG = LogManager.getLogger(LoggedInGuiController.class);
+
 
     @FXML
     private Button btnSubmit;
@@ -36,18 +37,17 @@ public class LoggedInGuiController {
 
     private ClientFxGUI appController;
 
-
     @FXML
     public void handleEnterPressed(KeyEvent event) {
         if (event.getCode() == KeyCode.ENTER) {
             btnSubmit_OnAction();
         }
     }
+
     /**
      * Controller initialisieren
      */
     public void setAppController(ClientFxGUI appController) {
-
         this.appController = appController;
 
         usersList.maxWidthProperty().bind(scrollPane.widthProperty().subtract(2));
@@ -68,41 +68,38 @@ public class LoggedInGuiController {
     }
 
     /**
-     * Aktion bei Betaetigen des Logout-Buttons
+     * Aktion beim Betätigen des Logout-Buttons
      */
     public void btnLogOut_OnAction() {
         try {
             appController.getCommunicator().logout(appController.getModel().getUserName());
         } catch (IOException e) {
-            LOG.error("Logout konnte nicht durchgefuehrt werden, Server aktiv?");
+            LOG.error("Logout konnte nicht durchgeführt werden, Server aktiv?");
             appController.setErrorMessage("Chat-Client",
                     "Abmelden beim Server nicht erfolgreich, da der Server vermutlich nicht aktiv ist. Sie werden abgemeldet...",
                     5);
             appController.switchToLogInGui();
         }
 
-        // Bei Abschluss des Logout-Vorgangs wird dies ueber die Callback-Methode
+        // Bei Abschluss des Logout-Vorgangs wird dies über die Callback-Methode
         // logoutComplete an die GUI gemeldet. Dort wird dann das Programm beendet
     }
 
     /**
-     * Aktion bei Betaetigen des Submit-Buttons
+     * Aktion beim Betätigen des Submit-Buttons
      */
     public void btnSubmit_OnAction() {
         try {
             // Eingegebene Chat-Nachricht an Server senden
             appController.getCommunicator().tell(appController.getModel().getUserName(),
                     txtChatMessage.getText());
-            Platform.runLater(new Runnable() {
-                @Override
-                public void run() {
-                    txtChatMessage.setText("");
-                    chatList.scrollTo(appController.getModel().chats.size() - 1);
-                }
+            Platform.runLater(() -> {
+                txtChatMessage.setText("");
+                chatList.scrollTo(appController.getModel().chats.size() - 1);
             });
         } catch (IOException e) {
             // Senden funktioniert nicht, Server vermutlich nicht aktiv
-            LOG.error("Senden konnte nicht durchgefuehrt werden, Server aktiv?");
+            LOG.error("Senden konnte nicht durchgeführt werden, Server aktiv?");
             appController.setErrorMessage("Chat-Client",
                     "Die Nachricht konnte nicht gesendet werden, da der Server unter Umst\u00e4nden nicht mehr l\u00e4uft. Sie werden abgemeldet...",
                     6);

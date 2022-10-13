@@ -5,11 +5,11 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 /**
- * Workerthread fuer multihreaded Server
- * @author P. Mandl
+ * WorkerThread für multithreaded Server
+ *
+ * @author Peter Mandl, edited by Lerngruppe
  */
 public class EchoWorkerThread extends Thread {
-
     Socket connection; // Verbindungssocket
     ObjectOutputStream out; // Ausgabestrom der Verbindung
     ObjectInputStream in; // Eingabestrom der Verbindung
@@ -20,25 +20,23 @@ public class EchoWorkerThread extends Thread {
      * Konstruktor
      *
      * @param connection - Verbindungssocket
-     * @throws Exception - Fehler beim Aufbau der Objektstroeme
+     * @throws Exception - Fehler beim Aufbau der Objektströme
      */
     public EchoWorkerThread(Socket connection) throws Exception {
-
         try {
             this.connection = connection;
             out = new ObjectOutputStream(connection.getOutputStream());
             in = new ObjectInputStream(connection.getInputStream());
             connect = true;
-            this.setName("WorkerThread-"
-                    + connection.getLocalPort() + "/" + connection.getPort());
+            this.setName("WorkerThread-" + connection.getLocalPort() + "/" + connection.getPort());
         } catch (Exception e) {
-            System.out.println(this.getName() + " : Exception beim Anlegen der Objectstreams");
+            System.out.println(this.getName() + " : Exception beim Anlegen der ObjectStreams");
             throw e;
         }
     }
 
     /**
-     * Thread fuer die Verbindung
+     * Thread für die Verbindung
      */
     public void run() {
         System.out.println(this.getName() + " gestartet");
@@ -57,14 +55,15 @@ public class EchoWorkerThread extends Thread {
     }
 
     /**
-     * Nachricht vom Client empfangen und zuruecksenden
+     * Nachricht vom Client empfangen und zurücksenden
+     *
      * @throws Exception - Senden oder Empfangen fehlerhaft
      */
     private void echo() throws Exception {
         try {
             SimplePDU receivedPdu = (SimplePDU) in.readObject();
             String message = receivedPdu.getMessage();
-            System.out.println("PDU empfangen, Message-Laenge = " + message.length());
+            System.out.println("PDU empfangen, Message-Länge = " + message.length());
             out.writeObject(receivedPdu);
         } catch (Exception e) {
             if (connection.isConnected()) {
@@ -83,7 +82,7 @@ public class EchoWorkerThread extends Thread {
             connection.close();
             System.out.println("Verbindung geschlossen");
         } catch (Exception e) {
-            System.out.println("Exception waehrend des Schliessen der Verbindung");
+            System.out.println("Exception während des Schliessen der Verbindung");
         }
     }
 }

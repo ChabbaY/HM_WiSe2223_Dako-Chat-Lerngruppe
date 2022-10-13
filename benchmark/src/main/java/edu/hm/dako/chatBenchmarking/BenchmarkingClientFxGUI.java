@@ -43,16 +43,17 @@ import java.util.Formatter;
 import java.util.regex.Pattern;
 
 /**
- * GUI fuer den Benchmarking-Client in JavaFX-GUI-Technologie
- * Hinweis: Um die Groesse der Objekte einheitlich zu gestalten, wird jedes Objekt durch eine eigene Methode erstellt,
- * in der die Groesse festgelegt wird
- * @author Paul Mandl
+ * GUI für den Benchmarking-Client in JavaFX-GUI-Technologie
+ * Hinweis: Um die Größe der Objekte einheitlich zu gestalten, wird jedes Objekt durch eine eigene Methode erstellt,
+ * in der die Größe festgelegt wird
+ *
+ * @author Paul Mandl, edited by Lerngruppe
  */
 
 public class BenchmarkingClientFxGUI extends Application implements BenchmarkingClientUserInterface {
 
-    private final static int MIN_SCREENSIZE = 900;
-    // Patterns fuer die Pruefung der eingegebenen IP-Adressen
+    private final static int MIN_SCREEN_SIZE = 900;
+    // Patterns für die Prüfung der eingegebenen IP-Adressen
     private static final Pattern IPV6_PATTERN = Pattern
             .compile("^(?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}$");
     private static final Pattern IPV4_PATTERN = Pattern.compile(
@@ -67,22 +68,22 @@ public class BenchmarkingClientFxGUI extends Application implements Benchmarking
     final Button newButton = new Button("Neustart");
     final Button finishButton = new Button("Beenden");
 
-    // Vbox fuer die Zusammensetzung der einzelnen Raster erstellen
+    // Vbox für die Zusammensetzung der einzelnen Raster erstellen
     final VBox pane = new VBox(5);
     final VBox box = new VBox();
     private final StringProperty labelString = new SimpleStringProperty();
     // BenchmarkingClient
     BenchmarkingClientCoordinator benchClient;
-    //Bildschirmaufloesung
+    //Bildschirmauflösung
     Dimension dim;
-    // Eingabeparameter fuer GUI erzeugen
-    UserInterfaceInputParameters iParam = new UserInterfaceInputParameters();
-    // Auswahl fuer Comboboxen
-    ObservableList<String> implTypeOptions = FXCollections.observableArrayList(
+    // Eingabeparameter für GUI erzeugen
+    final UserInterfaceInputParameters iParam = new UserInterfaceInputParameters();
+    // Auswahl für ComboBoxen
+    final ObservableList<String> implTypeOptions = FXCollections.observableArrayList(
             SystemConstants.IMPL_TCP_SIMPLE, SystemConstants.IMPL_TCP_ADVANCED);
-    ObservableList<String> measureTypeOptions = FXCollections
+    final ObservableList<String> measureTypeOptions = FXCollections
             .observableArrayList("Variable Threads", "Variable Length");
-    // Comboboxen
+    // ComboBoxen
     private ComboBox<String> optionListImplType;
     private ComboBox<String> optionListMeasureType;
     // Eingabefelder
@@ -90,11 +91,11 @@ public class BenchmarkingClientFxGUI extends Application implements Benchmarking
     private TextField textFieldNumberOfMessagesPerClients;
     private TextField textFieldServerport;
     private TextField textFieldThinkTime;
-    private TextField textFieldServerIpAdress;
+    private TextField textFieldServerIpAddress;
     private TextField textFieldMessageLength;
     private TextField textFieldNumberOfMaxRetries;
     private TextField textFieldResponseTimeout;
-    // Ausgabefelder fuer Laufzeitdaten
+    // Ausgabefelder für Laufzeitdaten
     private TextField textFieldPlannedRequests;
     private TextField textFieldTestBegin;
     private TextField textFieldSentRequests;
@@ -107,7 +108,7 @@ public class BenchmarkingClientFxGUI extends Application implements Benchmarking
     private TextField textFieldLostConfirmEvents;
     private TextField textFieldRetriedEvents;
     private TextField textFieldNumberOfRetries;
-    // Ausgabefelder fuer Messergebnisse
+    // Ausgabefelder für Messergebnisse
     private TextField textFieldAvgRTT;
     private TextField textFieldAvgServerTime;
     private TextField textFieldMaxRTT;
@@ -134,15 +135,15 @@ public class BenchmarkingClientFxGUI extends Application implements Benchmarking
     private Label messageLength;
     private Label numberOfMaxRetries;
     private Label responseTimeout;
-    // Scroller fuer Message Area
+    // Scroller für Message Area
     private ScrollPane scrollPane;
-    // Task fuer Progressbar
+    // Task für Progressbar
     private Task<Boolean> task;
     private Label progressIndicator;
     private int progressCounter;
-    // Laufzeitzaehler erzeugen
+    // Laufzeitzähler erzeugen
     private Long timeCounter = 0L;
-    // Kennzeichen, ob alle Parameter ordnungsgemaess eingegeben wurden, um den
+    // Kennzeichen, ob alle Parameter ordnungsgemäß eingegeben wurden, um den
     // Benchmark zu starten
     private boolean startable = true;
 
@@ -159,12 +160,11 @@ public class BenchmarkingClientFxGUI extends Application implements Benchmarking
     }
 
     /**
-     * Startmethode fuer FX-Application
+     * Startmethode für FX-Application
      */
     @Override
-    public void start(final Stage stage) throws Exception {
-
-        // BorderPane fuer Layout erstellen
+    public void start(final Stage stage) {
+        // BorderPane für Layout erstellen
         BorderPane layout = new BorderPane(pane);
         BorderPane.setAlignment(pane, Pos.CENTER);
         layout.setStyle("-fx-background-color: cornsilk");
@@ -178,7 +178,7 @@ public class BenchmarkingClientFxGUI extends Application implements Benchmarking
         // GUI-Pane erzeugen
         createGuiPane();
 
-        if (dim.getHeight() >= MIN_SCREENSIZE) {
+        if (dim.getHeight() >= MIN_SCREEN_SIZE) {
             progressBarFx.setMinSize(1210, 30);
             progressBarFx.setMaxSize(1210, 30);
         } else {
@@ -186,7 +186,7 @@ public class BenchmarkingClientFxGUI extends Application implements Benchmarking
             progressBarFx.setMaxSize(1050, 30);
         }
 
-        // Reakionsroutinen fuer Buttons einrichten
+        // Reakionsroutinen für Buttons einrichten
         reactOnStartButton();
         reactOnNewButton();
         reactOnFinishButton();
@@ -194,7 +194,7 @@ public class BenchmarkingClientFxGUI extends Application implements Benchmarking
 
         // Titel setzen und Window anzeigen
         stage.setTitle("Benchmarking Client");
-        if (dim.getHeight() >= MIN_SCREENSIZE) {
+        if (dim.getHeight() >= MIN_SCREEN_SIZE) {
             stage.setScene(new Scene(layout, 1235, 850));
         } else {
             stage.setScene(new Scene(layout, 1150, 650));
@@ -203,23 +203,23 @@ public class BenchmarkingClientFxGUI extends Application implements Benchmarking
     }
 
     /**
-     * Pane fuer das Layout der GUI erzeugen
+     * Pane für das Layout der GUI erzeugen
      */
     private void createGuiPane() {
         dim = Toolkit.getDefaultToolkit().getScreenSize();
         scrollPane = createScrollPane();
 
-        pane.getChildren().add(createSeperator("Eingabeparameter"));
+        pane.getChildren().add(createSeparator("Eingabeparameter"));
         pane.getChildren().add(createInputPane());
 
-        pane.getChildren().add(createSeperator("Laufzeitdaten"));
+        pane.getChildren().add(createSeparator("Laufzeitdaten"));
         pane.getChildren().add(createRunTimePane());
 
-        pane.getChildren().add(createSeperator("Messergebnisse"));
+        pane.getChildren().add(createSeparator("Messergebnisse"));
         pane.getChildren().add(createResultPane());
         pane.getChildren().add(scrollPane);
         pane.getChildren().add(createProgressPane());
-        pane.getChildren().add(createSeperator(""));
+        pane.getChildren().add(createSeparator(""));
         pane.getChildren().add(createButtonPane());
 
         pane.setPadding(new Insets(5, 5, 5, 5));
@@ -227,7 +227,7 @@ public class BenchmarkingClientFxGUI extends Application implements Benchmarking
     }
 
     /**
-     * Pane fuer die Eingabeparameter erstellen
+     * Pane für die Eingabeparameter erstellen
      * @return inputPane
      */
     private Pane createInputPane() {
@@ -239,14 +239,14 @@ public class BenchmarkingClientFxGUI extends Application implements Benchmarking
         optionListImplType.setValue(SystemConstants.IMPL_TCP_SIMPLE);
         optionListMeasureType.setValue("Variable Threads");
 
-        // Comboboxen zum Pane hinzufuegen und Labels ergaenzen
+        // ComboBoxen zum Pane hinzufügen und Labels ergänzen
         implType = createLabel("Implementierungstyp");
         inputPane.add(implType, 1, 1);
         inputPane.add(optionListImplType, 3, 1);
         inputPane.add(createLabel("Art der Messung"), 5, 1);
         inputPane.add(optionListMeasureType, 7, 1);
 
-        // Textfelder zum Pane hinzufuegen und Labels ergaenzen
+        // Textfelder zum Pane hinzufügen und Labels ergänzen
         numberOfClientThreads = createLabel("Anzahl Client-Threads");
         inputPane.add(numberOfClientThreads, 1, 3);
         textFieldNumberOfClientThreads = createEditableTextfield(inputPane, 3, 3, "1");
@@ -277,7 +277,7 @@ public class BenchmarkingClientFxGUI extends Application implements Benchmarking
 
         serverIpAddress = createLabel("Server-IP-Adresse");
         inputPane.add(serverIpAddress, 9, 5);
-        textFieldServerIpAdress = createEditableTextfield(inputPane, 11, 5, "localhost");
+        textFieldServerIpAddress = createEditableTextfield(inputPane, 11, 5, "localhost");
 
         return fillPane(inputPane);
     }
@@ -288,13 +288,13 @@ public class BenchmarkingClientFxGUI extends Application implements Benchmarking
      * @return Referenz auf Pane
      */
     private Pane fillPane(GridPane inputPane) {
-        if (dim.getHeight() >= MIN_SCREENSIZE) {
+        if (dim.getHeight() >= MIN_SCREEN_SIZE) {
             inputPane.add(createLabel(""), 1, 9);
-            // Abstaende hinzufuegen
+            // Abstände hinzufügen
             inputPane.setHgap(5);
             inputPane.setVgap(3);
         } else {
-            // Abstaende hinzufuegen
+            // Abstände hinzufügen
             inputPane.setHgap(2);
             inputPane.setVgap(2);
         }
@@ -303,14 +303,14 @@ public class BenchmarkingClientFxGUI extends Application implements Benchmarking
     }
 
     /**
-     * Pane fuer die Laufzeitdaten erstellen
+     * Pane für die Laufzeitdaten erstellen
      * @return runTimePane
      */
     private Pane createRunTimePane() {
 
         final GridPane runTimePane = new GridPane();
 
-        // Textfelder zum Pane hinzufuegen und Label ergaenzen
+        // Textfelder zum Pane hinzufügen und Label ergänzen
 
         runTimePane.add(createLabel("Geplante Requests"), 1, 1);
         textFieldPlannedRequests = createNotEditableTextfield(runTimePane, 3, 1);
@@ -352,14 +352,14 @@ public class BenchmarkingClientFxGUI extends Application implements Benchmarking
     }
 
     /**
-     * Pane fuer die Messergebnisse erstellen
+     * Pane für die Messergebnisse erstellen
      * @return resultPane
      */
     private Pane createResultPane() {
         // Pane initialisieren
         final GridPane resultPane = new GridPane();
 
-        // Textfelder zum Pane hinzufuegen und Label ergaenzen
+        // Textfelder zum Pane hinzufügen und Label ergänzen
         resultPane.add(createLabel("Mittlere RTT in ms"), 1, 1);
         textFieldAvgRTT = createNotEditableTextfield(resultPane, 3, 1);
 
@@ -402,13 +402,13 @@ public class BenchmarkingClientFxGUI extends Application implements Benchmarking
         resultPane.add(createLabel("Mittlere CPU-Auslastung in %"), 9, 11);
         textFieldAvgCpuUsage = createNotEditableTextfield(resultPane, 11, 11);
 
-        if (dim.getHeight() >= MIN_SCREENSIZE) {
+        if (dim.getHeight() >= MIN_SCREEN_SIZE) {
             resultPane.add(createLabel(""), 1, 13);
-            // Abstaende hinzufuegen
+            // Abstände hinzufügen
             resultPane.setHgap(5);
             resultPane.setVgap(3);
         } else {
-            // Abstaende hinzufuegen
+            // Abstände hinzufügen
             resultPane.setHgap(2);
             resultPane.setVgap(2);
         }
@@ -418,14 +418,13 @@ public class BenchmarkingClientFxGUI extends Application implements Benchmarking
     }
 
     /**
-     * Pane fuer Buttons erzeugen
+     * Pane für Buttons erzeugen
      * @return buttonPane
      */
     private HBox createButtonPane() {
-
         final HBox buttonPane = new HBox(10);
 
-        if (dim.getHeight() >= MIN_SCREENSIZE) {
+        if (dim.getHeight() >= MIN_SCREEN_SIZE) {
             abortButton.setFont(Font.font(15));
             abortButton.setStyle(
                     "-fx-background-color: white; -fx-border-color: lightgrey; -fx-border-radius: 5px, 5px, 5px, 5px");
@@ -473,10 +472,9 @@ public class BenchmarkingClientFxGUI extends Application implements Benchmarking
      * @return label Referenz auf erzeugtes Label
      */
     private Label createLabel(String value) {
-
         Label label = new Label(value);
 
-        if (dim.getHeight() >= MIN_SCREENSIZE) {
+        if (dim.getHeight() >= MIN_SCREEN_SIZE) {
             label.setMinSize(230, 20);
             label.setMaxSize(230, 20);
             label.setFont(Font.font(13));
@@ -490,7 +488,7 @@ public class BenchmarkingClientFxGUI extends Application implements Benchmarking
     }
 
     /**
-     * Erstellung eines Progressbars
+     * Erstellung einer Progressbar
      * @return Progressbar
      */
     private ProgressBar createProgressbar() {
@@ -514,7 +512,7 @@ public class BenchmarkingClientFxGUI extends Application implements Benchmarking
         textField.setMaxSize(155, 28);
         textField.setMinSize(155, 28);
         textField.setEditable(false);
-        if (dim.getHeight() >= MIN_SCREENSIZE) {
+        if (dim.getHeight() >= MIN_SCREEN_SIZE) {
             textField.setStyle(
                     "-fx-background-color: white; -fx-border-color: lightgrey; -fx-border-radius: 5px, 5px, 5px, 5px");
         } else {
@@ -537,7 +535,7 @@ public class BenchmarkingClientFxGUI extends Application implements Benchmarking
         textField.setMaxSize(155, 28);
         textField.setMinSize(155, 28);
         textField.setEditable(true);
-        if (dim.getHeight() >= MIN_SCREENSIZE) {
+        if (dim.getHeight() >= MIN_SCREEN_SIZE) {
             textField.setStyle(
                     "-fx-background-color: white; -fx-border-color: lightgrey; -fx-border-radius: 5px, 5px, 5px, 5px");
         } else {
@@ -548,17 +546,17 @@ public class BenchmarkingClientFxGUI extends Application implements Benchmarking
     }
 
     /**
-     * Erstellung einses Separators mit einem Label
-     * @param value Wert fuer den Separator
+     * Erstellung eines Separators mit einem Label
+     * @param value Wert für den Separator
      * @return labeledSeparator
      */
-    private HBox createSeperator(String value) {
+    private HBox createSeparator(String value) {
         // Separator erstellen
         final HBox labeledSeparator = new HBox();
         final Separator rightSeparator = new Separator(Orientation.HORIZONTAL);
         final Label textOnSeparator = new Label(value);
         final double labelLength;
-        if (dim.getHeight() >= MIN_SCREENSIZE) {
+        if (dim.getHeight() >= MIN_SCREEN_SIZE) {
             textOnSeparator.setFont(Font.font(18));
             labelLength = value.length();
             rightSeparator.setMinWidth(1220 - labelLength * 10);
@@ -577,15 +575,15 @@ public class BenchmarkingClientFxGUI extends Application implements Benchmarking
     }
 
     /**
-     * Erstellung von Comboboxen
-     * @param options Conbobox-Optionen
-     * @return comboBox Referenz auf erzeugte Combobox
+     * Erstellung von ComboBoxen
+     * @param options ComboBox-Optionen
+     * @return comboBox Referenz auf erzeugte ComboBox
      */
     private ComboBox<String> createCombobox(ObservableList<String> options) {
         ComboBox<String> comboBox = new ComboBox<>(options);
         comboBox.setMinSize(155, 28);
         comboBox.setMaxSize(155, 28);
-        if (dim.getHeight() >= MIN_SCREENSIZE) {
+        if (dim.getHeight() >= MIN_SCREEN_SIZE) {
             comboBox.setStyle(
                     "-fx-background-color: white; -fx-border-color: lightgrey; -fx-border-radius: 5px, 5px, 5px, 5px;");
         } else {
@@ -596,12 +594,12 @@ public class BenchmarkingClientFxGUI extends Application implements Benchmarking
     }
 
     /**
-     * Erstellung einer MessageArea in einem Scrollpane
+     * Erstellung einer MessageArea in einem ScrollPane
      * @return scrollPane
      */
     private ScrollPane createScrollPane() {
         ScrollPane scrollPane = new ScrollPane();
-        if (dim.getHeight() >= MIN_SCREENSIZE) {
+        if (dim.getHeight() >= MIN_SCREEN_SIZE) {
             scrollPane.setMinSize(1210, 55);
             scrollPane.setMaxSize(1210, 55);
         } else {
@@ -617,7 +615,7 @@ public class BenchmarkingClientFxGUI extends Application implements Benchmarking
     }
 
     /**
-     * Es wird ein Task erstellt, der bei Erhoehung des progressCounter den Progressbar aktualisiert
+     * Es wird ein Task erstellt, der bei Erhöhung des progressCounter den Progressbar aktualisiert
      *
      * @return Task
      */
@@ -625,9 +623,8 @@ public class BenchmarkingClientFxGUI extends Application implements Benchmarking
         return new Task<>() {
             @Override
             protected Boolean call() {
-
-                // Anzahl der erwarteten Progresscounter-Erhoehungen berechnen: Alle
-                // Message-Requests ohne Logins und ohne Logouts
+                // Anzahl der erwarteten ProgressCounter-Erhöhungen berechnen:
+                // alle Message-Requests ohne Logins und ohne Logouts
                 int maxMessages = iParam.getNumberOfMessages() * iParam.getNumberOfClients();
 
                 for (int i = 0; i < maxMessages; i = progressCounter) {
@@ -646,7 +643,7 @@ public class BenchmarkingClientFxGUI extends Application implements Benchmarking
             final NumberFormat format = new DecimalFormat("0.00 %");
             task.progressProperty().addListener((observable, oldValue, newValue) -> labelString.setValue(format.format(newValue)));
             progressIndicator.textProperty().bind(labelString);
-            if (dim.getHeight() >= MIN_SCREENSIZE) {
+            if (dim.getHeight() >= MIN_SCREEN_SIZE) {
                 progressIndicator.setFont(Font.font(13));
             } else {
                 progressIndicator.setFont(Font.font(10));
@@ -658,10 +655,9 @@ public class BenchmarkingClientFxGUI extends Application implements Benchmarking
     }
 
     /**
-     * Reaktion auf Betaetigen des Start-Buttons
+     * Reaktion auf Betätigen des Start-Buttons
      */
     private synchronized void reactOnStartButton() {
-
         startButton.setOnAction(event -> {
             abortButton.setDisable(false);
             newButton.setDisable(true);
@@ -675,7 +671,7 @@ public class BenchmarkingClientFxGUI extends Application implements Benchmarking
     }
 
     /**
-     * Reaktion auf Betaetigen des New-Buttons
+     * Reaktion auf Betätigen des New-Buttons
      */
     private synchronized void reactOnNewButton() {
         newButton.setOnAction(event -> {
@@ -688,7 +684,7 @@ public class BenchmarkingClientFxGUI extends Application implements Benchmarking
     }
 
     /**
-     * Reaktion auf Betaetigen des Finish-Buttons
+     * Reaktion auf Betätigen des Finish-Buttons
      */
     private synchronized void reactOnFinishButton() {
         finishButton.setOnAction(event -> {
@@ -699,7 +695,7 @@ public class BenchmarkingClientFxGUI extends Application implements Benchmarking
     }
 
     /**
-     * Reaktion auf Betaetigen des Abort-Buttons
+     * Reaktion auf Betätigen des Abort-Buttons
      */
     private synchronized void reactOnAbortButton() {
         abortButton.setOnAction(event -> {
@@ -743,10 +739,9 @@ public class BenchmarkingClientFxGUI extends Application implements Benchmarking
     }
 
     /**
-     * Pruefen der Eingabe des Serverports
+     * Prüfen der Eingabe des Serverports
      */
     private void setServerPort() {
-
         String testString = textFieldServerport.getText();
         if (testString.matches("[0-9]+")) {
             int iServerPort = Integer.parseInt(textFieldServerport.getText());
@@ -767,7 +762,7 @@ public class BenchmarkingClientFxGUI extends Application implements Benchmarking
     }
 
     /**
-     * Pruefen der Eingabe der Denkzeit
+     * Prüfen der Eingabe der Denkzeit
      */
     private void setThinkTime() {
         String testString2 = textFieldThinkTime.getText();
@@ -785,10 +780,9 @@ public class BenchmarkingClientFxGUI extends Application implements Benchmarking
     }
 
     /**
-     * Pruefen der Eingabe der Anzahl an Clients
+     * Prüfen der Eingabe der Anzahl an Clients
      */
     private void setNumberOfClientThreads() {
-
         String testString3 = textFieldNumberOfClientThreads.getText();
         if (testString3.matches("[0-9]+")) {
             int iClientThreads = Integer.parseInt(textFieldNumberOfClientThreads.getText());
@@ -809,10 +803,9 @@ public class BenchmarkingClientFxGUI extends Application implements Benchmarking
     }
 
     /**
-     * Pruefen der Eingabe der Anzahl an Nachrichten pro Client
+     * Prüfen der Eingabe der Anzahl an Nachrichten pro Client
      */
     private void setNumberOfMessagesPerClient() {
-
         String testString4 = textFieldNumberOfMessagesPerClients.getText();
         if (testString4.matches("[0-9]+")) {
             int iNumberOfMessages = Integer.parseInt(textFieldNumberOfMessagesPerClients.getText());
@@ -834,10 +827,9 @@ public class BenchmarkingClientFxGUI extends Application implements Benchmarking
     }
 
     /**
-     * Pruefen der Eingabe des Nachrichtenlaenge
+     * Prüfen der Eingabe der Nachrichtenlänge
      */
     private void setMessageLength() {
-
         String testString5 = textFieldMessageLength.getText();
         if (testString5.matches("[0-9]+")) {
             int iMessageLength = Integer.parseInt(textFieldMessageLength.getText());
@@ -848,7 +840,7 @@ public class BenchmarkingClientFxGUI extends Application implements Benchmarking
                 startable = false;
                 messageLength.setTextFill(Color.web(SystemConstants.RED_COLOR));
             } else {
-                System.out.println("Nachrichtenlaenge:" + iMessageLength + " Byte");
+                System.out.println("Nachrichtenlänge:" + iMessageLength + " Byte");
                 iParam.setMessageLength(iMessageLength);
                 messageLength.setTextFill(Color.web(SystemConstants.BLACK_COLOR));
             }
@@ -859,7 +851,7 @@ public class BenchmarkingClientFxGUI extends Application implements Benchmarking
     }
 
     /**
-     * Pruefen der Eingabe fuer den Response-Timeout
+     * Prüfen der Eingabe für den Response-Timeout
      */
     private void setResponseTimeOut() {
         String testString6 = textFieldResponseTimeout.getText();
@@ -877,7 +869,7 @@ public class BenchmarkingClientFxGUI extends Application implements Benchmarking
     }
 
     /**
-     * Pruefen der Eingabe fuer die maximale Anzahl an Wiederholungen
+     * Prüfen der Eingabe für die maximale Anzahl an Wiederholungen
      */
     private void setNumberOfMaxRetries() {
         String testString7 = textFieldNumberOfMaxRetries.getText();
@@ -902,22 +894,22 @@ public class BenchmarkingClientFxGUI extends Application implements Benchmarking
     }
 
     /**
-     * Pruefen der Eingabe fuer die IP-Adresse
+     * Prüfen der Eingabe für die IP-Adresse
      */
     private void setServerIpAddress() {
-        String testString = textFieldServerIpAdress.getText();
+        String testString = textFieldServerIpAddress.getText();
         if (testString.equals("localhost")) {
-            System.out.println("RemoteServerAdress:" + testString);
+            System.out.println("RemoteServerAddress:" + testString);
             iParam.setRemoteServerAddress(testString);
 
             serverIpAddress.setTextFill(Color.web(SystemConstants.BLACK_COLOR));
         } else if (IPV6_PATTERN.matcher(testString).matches()) {
-            System.out.println("RemoteServerAdress:" + testString);
+            System.out.println("RemoteServerAddress:" + testString);
             iParam.setRemoteServerAddress(testString);
 
             serverIpAddress.setTextFill(Color.web(SystemConstants.BLACK_COLOR));
         } else if (IPV4_PATTERN.matcher(testString).matches()) {
-            System.out.println("RemoteServerAdress:" + testString);
+            System.out.println("RemoteServerAddress:" + testString);
             iParam.setRemoteServerAddress(testString);
 
             serverIpAddress.setTextFill(Color.web(SystemConstants.BLACK_COLOR));
@@ -928,10 +920,10 @@ public class BenchmarkingClientFxGUI extends Application implements Benchmarking
     }
 
     /**
-     * Eingabe ueber die Comboboxen auslesen
+     * Eingabe über die ComboBoxen auslesen
      */
     private void readComboBoxes() {
-        // Comboboxen auslesen
+        // ComboBoxen auslesen
         String item = optionListImplType.getValue();
         switch (item) {
             case SystemConstants.IMPL_TCP_ADVANCED -> {
@@ -950,7 +942,7 @@ public class BenchmarkingClientFxGUI extends Application implements Benchmarking
                 implType.setTextFill(Color.web(SystemConstants.RED_COLOR));
             }
             default -> {
-                setAlert("Kein Implementierungstyp ausgew\u00c4hlt!");
+                setAlert("Kein Implementierungstyp ausgewählt!");
                 startable = false;
                 implType.setTextFill(Color.web(SystemConstants.RED_COLOR));
             }
@@ -968,25 +960,22 @@ public class BenchmarkingClientFxGUI extends Application implements Benchmarking
     }
 
     /**
-     * Oeffnen eines Dialogfensters, wenn ein Fehler bei der Eingabe auftritt
-     * @param message Meldung fuer  Dialogfenster
+     * Öffnen eines Dialogfensters, wenn ein Fehler bei der Eingabe auftritt
+     * @param message Meldung für Dialogfenster
      */
     private void setAlert(String message) {
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle("Fehler!");
-        alert.setHeaderText(
-                "Bei den von ihnen eingegebenen Parametern ist ein Fehler aufgetreten:");
+        alert.setHeaderText("Bei den von ihnen eingegebenen Parametern ist ein Fehler aufgetreten:");
         alert.setContentText(message);
         Platform.runLater(alert::showAndWait);
     }
 
     /**
-     * Reaktion auf das Betaetigen des Neu-Buttons
+     * Reaktion auf das Betätigen des Neu-Buttons
      */
     private void newAction() {
-        /*
-         * Loeschen bzw. initialisieren der Ausgabefelder
-         */
+        // Löschen bzw. initialisieren der Ausgabefelder
         textFieldPlannedRequests.setText("");
         textFieldTestBegin.setText("");
         textFieldSentRequests.setText("");
@@ -1026,11 +1015,10 @@ public class BenchmarkingClientFxGUI extends Application implements Benchmarking
     }
 
     /**
-     * Anzeige der uebergebenen Startdaten
+     * Anzeige der übergebenen Startdaten
      */
     @Override
     public void showStartData(UserInterfaceStartData data) {
-
         String strNumberOfRequests = String.valueOf(data.getNumberOfRequests());
 
         String strNumberOfPlannedEventMessages = String.valueOf(
@@ -1046,7 +1034,7 @@ public class BenchmarkingClientFxGUI extends Application implements Benchmarking
 
     /**
      * Ergebnisse eines Testlaufs anzeigen
-     * @param data Testergebnisse Testergebnisse
+     * @param data Testergebnisse
      */
     @Override
     public void showResultData(UserInterfaceResultData data) {
@@ -1112,7 +1100,7 @@ public class BenchmarkingClientFxGUI extends Application implements Benchmarking
 
             formatter = new Formatter();
             textFieldInterquartilRange.setText(formatter
-                    .format("%.2f", (data.getInterquartilRange())).toString());
+                    .format("%.2f", (data.getInterQuartilRange())).toString());
             formatter.close();
 
             formatter = new Formatter();
@@ -1137,19 +1125,18 @@ public class BenchmarkingClientFxGUI extends Application implements Benchmarking
     }
 
     /**
-     * Nachrichtenzeile in der Message Area der GUI ergaenzen
+     * Nachrichtenzeile in der Message Area der GUI ergänzen
      * @param message Nachrichtentext Auszugebende Nachricht
      */
     @Override
     public void setMessageLine(String message) {
-
         Label value = new Label();
         value.setText(message);
         Platform.runLater(() -> box.getChildren().add(value));
     }
 
     /**
-     * Laufzeitfeld in der GUI zuruecksetzen, GUI-Aktion wird in die Queue des Event-Dispatching-Thread eingetragen
+     * Laufzeitfeld in der GUI zurücksetzen, GUI-Aktion wird in die Queue des Event-Dispatching-Thread eingetragen
      */
     @Override
     public void resetCurrentRunTime() {
@@ -1159,7 +1146,7 @@ public class BenchmarkingClientFxGUI extends Application implements Benchmarking
     }
 
     /**
-     * GUI-Feld fuer die Ausgabe der Laufzeit hinzufuegen, GUI-Aktion wird in die Queue des Event-Dispatching-Thread
+     * GUI-Feld für die Ausgabe der Laufzeit hinzufügen, GUI-Aktion wird in die Queue des Event-Dispatching-Thread
      * eingetragen
      */
     @Override
@@ -1182,7 +1169,7 @@ public class BenchmarkingClientFxGUI extends Application implements Benchmarking
     }
 
     /**
-     * Progressbar fuer FX-GUI
+     * Progressbar für FX-GUI
      */
     @Override
     public ProgressBar getProgressBarFx() {
@@ -1199,7 +1186,7 @@ public class BenchmarkingClientFxGUI extends Application implements Benchmarking
     }
 
     /**
-     * Dummy-Methode: Progressbar fuer Swing-GUI
+     * Dummy-Methode: Progressbar für Swing-GUI
      */
     @Override
     public JProgressBar getProgressBar() {

@@ -1,25 +1,23 @@
 package edu.hm.dako.chatBenchmarking;
-
-
 import edu.hm.dako.common.ChatServerImplementationType;
 
 /**
- * Konfigurationsparameter fuer Lasttest
- * @author Mandl
+ * Konfigurationsparameter für Lasttest
+ *
+ * @author Peter Mandl, edited by Lerngruppe
  */
 public class UserInterfaceInputParameters {
-
     // Anzahl zu startender Client-Threads
     private int numberOfClients;
-    // Nachrichtenlaenge
+    // Nachrichtenlänge
     private int messageLength;
     // Denkzeit zwischen zwei Requests
     private int clientThinkTime;
     // Anzahl der Nachrichten pro Client-Thread
     private int numberOfMessages;
 
-    // Maximale Anzahl an Uebertragungswiederholungen bei
-    // verbindungslosen Prototokollen
+    // Maximale Anzahl an Übertragungswiederholungen bei
+    // verbindungslosen Protokollen
     private int numberOfRetries;
     // Maximale Wartezeit in ms auf eine Antwort des Servers
     // bei verbindungslosen Protokollen
@@ -28,13 +26,13 @@ public class UserInterfaceInputParameters {
 
     private ChatServerImplementationType implementationType;
 
-    // Typ der Messung fuer das Messprotokoll
+    // Typ der Messung für das Messprotokoll
     private MeasurementType measurementType;
     private int remoteServerPort;        // UDP- oder TCP-Port des Servers, Default: 50001
     private String remoteServerAddress; // Server-IP-Adresse, Default: "127.0.0.1"
 
     /**
-     * Konstruktor Belegung der Inputparameter mit Standardwerten
+     * Konstruktor Belegung der InputParameter mit Standardwerten
      */
     public UserInterfaceInputParameters() {
         numberOfClients = 2;
@@ -49,46 +47,38 @@ public class UserInterfaceInputParameters {
 
     /**
      * Abbildung der Implementierungstypen auf Strings
+     *
      * @param type Implementierungstyp
-     * @return Passender String fuer Implementierungstyp
+     * @return Passender String für Implementierungstyp
      */
     public String mapImplementationTypeToString(ChatServerImplementationType type) {
         String returnString = null;
 
         switch (type) {
-            case TCPAdvancedImplementation:
-                returnString = "TCPAdvanced-Implementation";
-                break;
-            case TCPSimpleImplementation:
-                returnString = "TCPSimple-Implementation";
-                break;
-            case UDPAdvancedImplementation:
-                returnString = "UDPAdvanced-Implementation";
-                break;
-            default:
-                break;
+            case TCPAdvancedImplementation -> returnString = "TCPAdvanced-Implementation";
+            case TCPSimpleImplementation -> returnString = "TCPSimple-Implementation";
+            case UDPAdvancedImplementation -> returnString = "UDPAdvanced-Implementation";
+            default -> {
+            }
         }
 
         return returnString;
     }
 
     /**
-     * Abbildung der Messungstypen auf Strings
+     * Abbildung der Messung-Typen auf Strings
+     *
      * @param type Messungstyp
-     * @return Passender String fuer Messungstyp
+     * @return Passender String für Messungstyp
      */
     public String mapMeasurementTypeToString(MeasurementType type) {
         String returnString = null;
 
         switch (type) {
-            case VarThreads:
-                returnString = "VariationThreadanzahl";
-                break;
-            case VarMsgLength:
-                returnString = "VariationNachrichtenlaenge";
-                break;
-            default:
-                break;
+            case VarThreads -> returnString = "VariationThreadAnzahl";
+            case VarMsgLength -> returnString = "VariationNachrichtenlänge";
+            default -> {
+            }
         }
 
         return returnString;
@@ -175,13 +165,14 @@ public class UserInterfaceInputParameters {
     }
 
     /**
-     * Typen von unterstuetzten Messungen: Nur fuer die Unterscheidung der Messung im Benchmarking-Protokoll
+     * Typen von unterstützten Messungen: nur für die Unterscheidung der Messung im Benchmarking-Protokoll
+     *
      * @author Mandl
      */
     public enum MeasurementType {
-        // Variation der Threadanzahl
+        // Variation der ThreadAnzahl
         VarThreads,
-        // Variation der Nachrichtenlaenge
+        // Variation der Nachrichtenlänge
         VarMsgLength
     }
 }

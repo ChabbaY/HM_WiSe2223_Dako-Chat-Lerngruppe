@@ -2,7 +2,8 @@ package edu.hm.dako.common;
 
 /**
  * Implementierungsvarianten des Lasttests mit verschiedenen Transportprotokollen
- * @author Mandl
+ *
+ * @author Peter Mandl, edited by Lerngruppe
  */
 
 public enum AuditLogImplementationType {

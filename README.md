@@ -58,7 +58,7 @@ Der AuditLog-Server ist mit Java TCP Sockets, Java Datagramm Sockets und mit Jav
 
 ## Projektinhalt
 Das Projekt ist als Gradle-Multiprojekt organisiert (siehe settings.gradle)
-Die gesamte Anwendung befindet sich im Gradle-Projekt dako. 
+die gesamte Anwendung befindet sich im Gradle-Projekt dako. 
 
 Im Folgenden werden die einzelnen Ordner kurz erläutert:
 

@@ -5,21 +5,19 @@ import edu.hm.dako.common.SystemConstants;
 
 /**
  * Verwaltet eine Verbindung zum Server.
- * @author Peter Mandl
+ *
+ * @author Peter Mandl, edited by Lerngruppe
  */
 public class ClientImpl extends AbstractChatClient {
-
     /**
      * Konstruktor
-     * @param userInterface Schnittstelle zum User-Interface
-     * @param serverPort Portnummer des Servers
+     *
+     * @param userInterface       Schnittstelle zum User-Interface
+     * @param serverPort          PortNummer des Servers
      * @param remoteServerAddress IP-Adresse/Hostname des Servers
-     * @param serverType Typ des Servers
+     * @param serverType          Typ des Servers
      */
-
-    public ClientImpl(ClientUserInterface userInterface, int serverPort,
-                      String remoteServerAddress, String serverType) {
-
+    public ClientImpl(ClientUserInterface userInterface, int serverPort, String remoteServerAddress, String serverType) {
         super(userInterface, serverPort, remoteServerAddress);
         this.serverPort = serverPort;
         this.remoteServerAddress = remoteServerAddress;
@@ -28,11 +26,9 @@ public class ClientImpl extends AbstractChatClient {
         threadName = Thread.currentThread().getName();
 
         try {
-
             if (serverType.equals(SystemConstants.IMPL_TCP_SIMPLE)) {
                 // Simple TCP Server erzeugen, derzeit gibt es nur den einen
-                messageListenerThread = new SimpleMessageListenerThreadImpl(userInterface,
-                        connection, sharedClientData);
+                messageListenerThread = new SimpleMessageListenerThreadImpl(userInterface, connection, sharedClientData);
             }
             messageListenerThread.start();
         } catch (Exception e) {

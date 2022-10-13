@@ -1,7 +1,9 @@
 package edu.hm.dako.chatBenchmarking;
 
+/**
+ * @author Peter Mandl, edited by Lerngruppe
+ */
 public class UserInterfaceResultData {
-
     // Arithmetisches Mittel
     double mean;
     // Standardabweichung
@@ -20,26 +22,26 @@ public class UserInterfaceResultData {
     private long elapsedTime;
     // Anzahl gesendeter Event-Nachrichten im Server
     private long numberOfSentEventMessages;
-    // Anzahl empfangener Event-Bestaetigungen im Server
+    // Anzahl empfangener Event-Bestätigungen im Server
     private long numberOfReceivedConfirmEvents;
-    // Anzahl verlorener Bestaetigungen im Server
+    // Anzahl verlorener Bestätigungen im Server
     private long numberOfLostConfirmEvents;
     // Anzahl von erneuten Sendungen von Event-Nachrichten im Server
     private long numberOfRetriedEvents;
     // Mittlere Serverbearbeitungszeit in ms
     private double avgServerTime;
-    // Maximale Heap-Belegung waehrend des Testlaufs in MiB
+    // Maximale Heap-Belegung während des Testlaufs in MiB
     private long maxHeapSize;
-    // Maximale CPU-Auslastung waehrend des Testlaufs in Prozent
+    // Maximale CPU-Auslastung während des Testlaufs in Prozent
     private float maxCpuUsage;
-    // Minimum (Minimale RTT ueber alle Requests)
+    // Minimum (Minimale RTT über alle Requests)
     private double minimum;
-    // Maximum (Maximale RTT ueber alle Requests)
+    // Maximum (Maximale RTT über alle Requests)
     private double maximum;
-    // 10 % Percentile, alle RTT-Werte, die zu den kleinsten 10 % gehoeren
+    // 10 % Percentile, alle RTT-Werte, die zu den kleinsten 10 % gehören
     private double percentile10;
     // 10 % Percentile = 25%-Quartil, alle RTT-Werte, die zu den kleinsten 25 %
-    // gehoeren
+    // gehören
     private double percentile25;
     // Median = 50%-Quartil
     private double percentile50;
@@ -47,10 +49,10 @@ public class UserInterfaceResultData {
     private double percentile75;
     // 90 % Percentile
     private double percentile90;
-    // Stannweite (zwischen Minimum und Maximum)
+    // Standweite (zwischen Minimum und Maximum)
     private double range;
     // Interquartilsabstand zwischen 25%- und 75%-Percentile
-    private double interquartilRange;
+    private double interQuartilRange;
 
     public long getNumberOfSentRequests() {
         return numberOfSentRequests;
@@ -112,8 +114,7 @@ public class UserInterfaceResultData {
         return numberOfReceivedConfirmEvents;
     }
 
-    public void setNumberOfReceivedConfirmEvents(
-            long numberOfReceivedConfirmEvents) {
+    public void setNumberOfReceivedConfirmEvents(long numberOfReceivedConfirmEvents) {
         this.numberOfReceivedConfirmEvents = numberOfReceivedConfirmEvents;
     }
 
@@ -213,12 +214,12 @@ public class UserInterfaceResultData {
         this.percentile90 = percentile90;
     }
 
-    public double getInterquartilRange() {
-        return interquartilRange;
+    public double getInterQuartilRange() {
+        return interQuartilRange;
     }
 
-    public void setInterquartilRange(double interquartilRange) {
-        this.interquartilRange = interquartilRange;
+    public void setInterQuartilRange(double interQuartilRange) {
+        this.interQuartilRange = interQuartilRange;
     }
 
     public double getRange() {

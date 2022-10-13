@@ -8,10 +8,9 @@ import java.util.concurrent.TimeUnit;
 /**
  * Thread berechnet die Laufzeit eines Benchmarks und sendet diese zyklisch an die GIU
  *
- * @author mandl
+ * @author Peter Mandl, edited by Lerngruppe
  */
 public class BenchmarkingTimeCounterThread extends Thread {
-
     private static final int SLEEP_TIME_IN_SECONDS = 1;
     private static final Logger log = LogManager.getLogger(BenchmarkingTimeCounterThread.class);
     private final BenchmarkingClientUserInterface out;
@@ -24,7 +23,7 @@ public class BenchmarkingTimeCounterThread extends Thread {
     }
 
     /**
-     * Run-Methode fuer den Thread: Erzeugt alle n Sekunden einen Zaehler und sendet ihn an die Ausgabe
+     * Run-Methode für den Thread: Erzeugt alle n Sekunden einen Zähler und sendet ihn an die Ausgabe
      */
     public void run() {
         log.debug(getName() + " gestartet");

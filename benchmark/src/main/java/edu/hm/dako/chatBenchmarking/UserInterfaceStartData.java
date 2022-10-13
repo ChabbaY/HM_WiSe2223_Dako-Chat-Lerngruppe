@@ -1,11 +1,11 @@
 package edu.hm.dako.chatBenchmarking;
 
 /**
- * Startparameter fuer das Benchmarking User Interface
- * @author mandl
+ * Startparameter für das Benchmarking User Interface
+ *
+ * @author Peter Mandl, edited by Lerngruppe
  */
 public class UserInterfaceStartData {
-
     // Anzahl geplanter Requests
     long numberOfRequests;
 
@@ -35,7 +35,7 @@ public class UserInterfaceStartData {
         return numberOfPlannedEventMessages;
     }
 
-    public void setNumberOfPlannedEventMessages (long numberOfPlannedEventMessages) {
+    public void setNumberOfPlannedEventMessages(long numberOfPlannedEventMessages) {
         this.numberOfPlannedEventMessages = numberOfPlannedEventMessages;
     }
 }

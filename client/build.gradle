@@ -29,7 +29,7 @@ dependencies {
     implementation project(':common')
     implementation project(':communication')
     //implementation 'org.openjfx:javafx:17.0.2'
-    implementation 'org.openjfx:javafx:18'
+    implementation 'org.openjfx:javafx:19'
 }
 
 // build chatclient jar file

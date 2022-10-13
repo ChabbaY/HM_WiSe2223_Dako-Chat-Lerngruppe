@@ -8,12 +8,12 @@ import java.net.Socket;
 
 /**
  * Echo Client auf der Basis von TCP Sockets
- * @author P. Mandl
+ *
+ * @author Peter Mandl, edited by Lerngruppe
  * @version 2.0.0
  */
 
 public class EchoTcpClient {
-
     static final int NR_OF_MSG = 5; // Anzahl zu sendender Nachrichten
     static final int SERVER_PORT = 55000; // Port des Servers
     static final String SERVER_HOST = "localhost"; // Serverrechner
@@ -34,6 +34,7 @@ public class EchoTcpClient {
 
     /**
      * Hauptprogramm
+     *
      * @param args (nicht benutzt)
      */
     public static void main(String[] args) {
@@ -43,6 +44,7 @@ public class EchoTcpClient {
 
     /**
      * Echo abwickeln
+     *
      * @param i Nummer der Nachricht
      * @throws Exception Fehler beim Senden oder Empfangen
      */
@@ -52,15 +54,16 @@ public class EchoTcpClient {
             send(requestPDU);
             System.out.println("Gesendet >" + requestPDU.getMessage() + "<");
             SimplePDU responsePDU = (SimplePDU) receive();
-            System.out.println("Emfangen >" + responsePDU.getMessage() + "<");
+            System.out.println("Empfangen >" + responsePDU.getMessage() + "<");
         } catch (Exception e) {
-            System.out.println("Exception waehrend des Sendens oder Empfangens");
+            System.out.println("Exception während des Sendens oder Empfangens");
             throw new Exception();
         }
     }
 
     /**
      * Nachricht blockierend empfangen
+     *
      * @return Referenz auf Nachricht
      * @throws IOException Fehler beim Empfang
      */
@@ -83,11 +86,11 @@ public class EchoTcpClient {
 
     /**
      * Nachricht senden
+     *
      * @param message Nachricht
      * @throws IOException Fehler beim Senden
      */
     public void send(Serializable message) throws IOException {
-
         if (connection.isClosed()) {
             System.out.println("Sendeversuch, obwohl Socket geschlossen ist");
             throw new IOException();
@@ -108,6 +111,7 @@ public class EchoTcpClient {
 
     /**
      * Verbindung abbauen
+     *
      * @throws Exception Fehler beim Verbindungsaufbau
      */
     public void closeConnection() throws Exception {
@@ -122,36 +126,35 @@ public class EchoTcpClient {
 
     /**
      * Einfache Echo-PDU erzeugen
+     *
      * @param i Nummer der PDU
-     * @return Gefuellte PDU
+     * @return Gefüllte PDU
      */
     public SimplePDU createMessage(int i) {
-        String message = new String();
+        String message = "";
         message = message.concat(Integer.toString(i));
         message = message.concat(". Nachricht des Clients mit Port ");
         message = message.concat(Integer.toString(connection.getLocalPort()));
-        SimplePDU pdu = new SimplePDU(message);
-        return (pdu);
+        return (new SimplePDU(message));
     }
 
     /**
      * Verbindung zum Echo Server aufbauen
-     * Es wird mehrmals versucht, eine Verbindung aufzubauen.
+     * es wird mehrmals versucht, eine Verbindung aufzubauen.
+     *
      * @param remoteServerAddress IP-Adresse oder Hostname des Servers
-     * @param serverPort Port des Servers
+     * @param serverPort          Port des Servers
      * @return Verbindungssocket
      * @throws IOException Fehler beim Verbindungsaufbau
      */
-    public Socket connectToServer(String remoteServerAddress, int serverPort)
-            throws IOException {
-
+    public Socket connectToServer(String remoteServerAddress, int serverPort) throws IOException {
         Socket connection = null;
 
         // Maximale Anzahl an Verbindungsaufbauversuchen zum Server, die ein Client
         // unternimmt, bevor er abbricht
         final int MAX_CONNECTION_ATTEMPTS = 3;
 
-        // Zaehlt die Verbindungsaufbauversuche, bis eine Verbindung vom Server
+        // Zählt die Verbindungsaufbauversuche, bis eine Verbindung vom Server
         // angenommen wird
         long connectionTryCounter = 0;
 
@@ -168,7 +171,7 @@ public class EchoTcpClient {
                 attempts++;
                 try {
                     Thread.sleep(100);
-                } catch (Exception e2) {
+                } catch (Exception ignored) {
                 }
 
             } catch (Exception e) {
@@ -179,7 +182,7 @@ public class EchoTcpClient {
             }
         }
 
-        System.out.println("Anzahl der Verbindungsaufbauversuche fuer die Verbindung zum Server: "
+        System.out.println("Anzahl der Verbindungsaufbauversuche für die Verbindung zum Server: "
                 + connectionTryCounter);
 
         out = new ObjectOutputStream(connection.getOutputStream());
@@ -188,15 +191,14 @@ public class EchoTcpClient {
     }
 
     /**
-     * Eigentliche Programmmlogik zur Ausfüeutung eines Echos
+     * Eigentliche Programmlogik zur Ausführung eines Echos
      */
     public void execute() {
-
         // Verbindung zum Server aufbauen
         try {
             connection = connectToServer(SERVER_HOST, SERVER_PORT);
         } catch (IOException e) {
-            System.out.println("Exception waehrend des Verbindungsaufbaus");
+            System.out.println("Exception während des Verbindungsaufbaus");
             System.exit(1);
         }
 
@@ -205,16 +207,14 @@ public class EchoTcpClient {
             try {
                 // Nur ein wenig warten
                 Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                // Ignorieren
+            } catch (InterruptedException ignored) {
             }
             try {
                 echo(i + 1);
             } catch (Exception e1) {
                 try {
                     closeConnection();
-                } catch (Exception e2) {
-                    // Ignorieren
+                } catch (Exception ignored) {
                 }
             }
         }

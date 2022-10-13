@@ -12,23 +12,26 @@ import org.apache.logging.log4j.Logger;
 import java.util.concurrent.Executors;
 
 /**
- * Uebernimmt die Konfiguration und Erzeugung bestimmter Server-Typen.
- * @author Peter Mandl
+ * Übernimmt die Konfiguration und Erzeugung bestimmter Server-Typen.
+ *
+ * @author Peter Mandl, edited by Lerngruppe
  */
 public final class ServerFactory {
     private static final Logger LOG = LogManager.getLogger(ServerFactory.class);
-    protected static Connection connection;
-    protected static AuditLogConnection auditLogConnection = null;
+    private static Connection connection;
+    private static AuditLogConnection auditLogConnection = null;
 
-    private ServerFactory() {}
+    private ServerFactory() {
+    }
 
     /**
      * Erzeugt einen Chat-Server
-     * @param implType Implementierungytyp des Servers
-     * @param serverPort Listenport
-     * @param sendBufferSize Groesse des Sendepuffers in Byte
-     * @param receiveBufferSize Groesse des Empfangspuffers in Byte
-     * @param serverGuiInterface Referenz auf GUI fuer Callback
+     *
+     * @param implType           Implementierungstyp des Servers
+     * @param serverPort         Listenport
+     * @param sendBufferSize     Größe des Sendepuffers in Byte
+     * @param receiveBufferSize  Größe des Empfangspuffers in Byte
+     * @param serverGuiInterface Referenz auf GUI für Callback
      * @return Referenz auf ChatServer-Interface
      * @throws Exception Fehler beim Erzeugen eines Sockets
      */
@@ -43,9 +46,7 @@ public final class ServerFactory {
                 + sendBufferSize + ", Empfangspuffer: " + receiveBufferSize);
 
         switch (implType) {
-
             case TCPSimpleImplementation:
-
                 try {
                     TcpServerSocket tcpServerSocket = new TcpServerSocket(serverPort, sendBufferSize,
                             receiveBufferSize);
@@ -54,25 +55,24 @@ public final class ServerFactory {
                 } catch (Exception e) {
                     throw new Exception(e);
                 }
-
                 // Weitere Implementierungstypen derzeit nicht implementiert
-
             default:
-                System.out.println("Dezeit nur TCPSimpleImplementation implementiert!");
-                throw new RuntimeException("Unknown type: " + implType);
+                System.out.println("Derzeit nur TCPSimpleImplementation implementiert!");
+                throw new RuntimeException("Unknown type: " + implType);//TODO more implementations
         }
     }
 
     /**
      * Erzeugt einen Chat-Server mit Verbindung zum AuditLog-Server
-     * @param implType Implementierungytyp des Servers
-     * @param serverPort Listenport
-     * @param sendBufferSize Groesse des Sendepuffers in Byte
-     * @param receiveBufferSize Groesse des Empfangspuffers in Byte
-     * @param serverGuiInterface Referenz auf GUI fuer Callback
-     * @param auditLogImplementationType AzditLog-Server-Tyo UDP oder TCP
-     * @param auditLogServerHostnameOrIP Hostname, in dem der AuditLog-Server laeuft
-     * @param auditLogServerPort Port des AuditLog-Servers
+     *
+     * @param implType                   Implementierungstyp des Servers
+     * @param serverPort                 Listenport
+     * @param sendBufferSize             Größe des Sendepuffers in Byte
+     * @param receiveBufferSize          Größe des Empfangspuffers in Byte
+     * @param serverGuiInterface         Referenz auf GUI für Callback
+     * @param auditLogImplementationType AuditLog-Server-Tyo UDP oder TCP
+     * @param auditLogServerHostnameOrIP Hostname, in dem der AuditLog-Server läuft
+     * @param auditLogServerPort         Port des AuditLog-Servers
      * @return Referenz auf ChatServer-Interface
      * @throws Exception - Fehler beim Erzeugen eines Sockets
      */
@@ -81,22 +81,18 @@ public final class ServerFactory {
                                                             ChatServerGuiInterface serverGuiInterface,
                                                             AuditLogImplementationType auditLogImplementationType,
                                                             String auditLogServerHostnameOrIP, int auditLogServerPort) throws Exception {
-
-        // Zunaechst Verbindung zum AuditLog-Server aufbauen
+        // Zunächst Verbindung zum AuditLog-Server aufbauen
         LOG.debug("ChatServer wird mit AuditLogServer gestartet, ChatServer Port: " + serverPort + ", Sendepuffer: " + sendBufferSize + ", Empfangspuffer: "
                 + receiveBufferSize + ", AuditLogServer Port: " + auditLogServerPort + ", AuditLogServer Hostname or IP: "
                 + auditLogServerHostnameOrIP);
 
         // Verbindung zum AuditLog-Server aufbauen
+        int typeOfAuditLogConnection = AuditLogConnection.AUDIT_LOG_CONNECTION_TYPE_TCP;
 
-        int typeOfAuditLogConnection = AuditLogConnection.AUDITLOG_CONNECTION_TYPE_TCP;
-
-        if (auditLogImplementationType == AuditLogImplementationType.AuditLogServerTCPImplementation) {
-            typeOfAuditLogConnection = AuditLogConnection.AUDITLOG_CONNECTION_TYPE_TCP;
-        } else if (auditLogImplementationType == AuditLogImplementationType.AuditLogServerUDPImplementation) {
-            typeOfAuditLogConnection = AuditLogConnection.AUDITLOG_CONNECTION_TYPE_UDP;
+        if (auditLogImplementationType == AuditLogImplementationType.AuditLogServerUDPImplementation) {
+            typeOfAuditLogConnection = AuditLogConnection.AUDIT_LOG_CONNECTION_TYPE_UDP;
         } else if (auditLogImplementationType == AuditLogImplementationType.AuditLogServerRMIImplementation) {
-            typeOfAuditLogConnection = AuditLogConnection.AUDITLOG_CONNECTION_TYPE_RMI;
+            typeOfAuditLogConnection = AuditLogConnection.AUDIT_LOG_CONNECTION_TYPE_RMI;
         }
 
         try {
@@ -113,11 +109,8 @@ public final class ServerFactory {
         }
 
         // Dann Chat-Server mit Verbindungsendpunkt erzeugen
-
         switch (implType) {
-
             case TCPSimpleImplementation:
-
                 try {
                     TcpServerSocket tcpServerSocket = new TcpServerSocket(serverPort, sendBufferSize,
                             receiveBufferSize);
@@ -128,7 +121,6 @@ public final class ServerFactory {
                 }
 
                 // Weitere Implementierungstypen derzeit nicht implementiert
-
             default:
                 System.out.println("Derzeit nur TCPSimpleImplementation implementiert!");
                 throw new RuntimeException("Unknown type: " + implType);
@@ -136,35 +128,28 @@ public final class ServerFactory {
     }
 
     /**
-     * Dekoratiert ServerSocket mit Logging-Funktionalitaet
-     * @param serverSocket Serverseitiger Kommunikationsendpunkt fuer den LISTEN Port)
+     * Dekoriert ServerSocket mit Logging-Funktionalität
+     *
+     * @param serverSocket Serverseitiger Kommunikationsendpunkt (für den LISTEN Port)
      * @return Referenz auf dekoriertes ServerSocket
      */
-    private static ServerSocketInterface getDecoratedServerSocket(
-            ServerSocketInterface serverSocket) {
+    private static ServerSocketInterface getDecoratedServerSocket(ServerSocketInterface serverSocket) {
         return new DecoratingServerSocket(serverSocket);
     }
 
     /**
-     * Pruefe, ob AuditLog-Server verbunden ist
+     * Prüfe, ob AuditLog-Server verbunden ist
+     *
      * @return Verbindung aufgebaut = true
      */
     public static boolean isAuditLogServerConnected() {
-        return auditLogConnection != null;
+        return (auditLogConnection != null);
     }
 
     /**
-     * Dekoriert Server-Socket mit Logging-Funktionalitaet
-     * @author mandl
+     * Dekoriert Server-Socket mit Logging-Funktionalität
      */
-    private static class DecoratingServerSocket implements ServerSocketInterface {
-
-        private final ServerSocketInterface wrappedServerSocket;
-
-        DecoratingServerSocket(ServerSocketInterface wrappedServerSocket) {
-            this.wrappedServerSocket = wrappedServerSocket;
-        }
-
+    private record DecoratingServerSocket(ServerSocketInterface wrappedServerSocket) implements ServerSocketInterface {
         @Override
         public Connection accept() throws Exception {
             return new LoggingConnectionDecorator(wrappedServerSocket.accept());

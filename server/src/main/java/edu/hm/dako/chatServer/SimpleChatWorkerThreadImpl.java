@@ -15,50 +15,50 @@ import java.util.Vector;
 /**
  * Worker-Thread zur serverseitigen Bedienung einer Session mit einem Client. Jedem Chat-Client wird serverseitig ein
  * Worker-Thread zugeordnet.
- * @author Peter Mandl
+ *
+ * @author Peter Mandl, edited by Lerngruppe
  */
 public class SimpleChatWorkerThreadImpl extends AbstractWorkerThread {
-
     private static final Logger LOG = LogManager.getLogger(SimpleChatWorkerThreadImpl.class);
 
     protected AuditLogConnection auditLogConnection;
-    protected boolean auditLogServerEnabled;
+    protected final boolean auditLogServerEnabled;
 
     /**
-     * Erzeugen eines Worker Threads fuer die Kommunikation mit einem Chat-Client
-     * @param con Verbindung zum Chat-Client
-     * @param clients Liste der angemeldeten Chat-Clients
-     * @param counter Referenz auf diverse Zaehler fuer Tests
+     * Erzeugen eines Worker Threads für die Kommunikation mit einem Chat-Client
+     *
+     * @param con                Verbindung zum Chat-Client
+     * @param clients            Liste der angemeldeten Chat-Clients
+     * @param counter            Referenz auf diverse Zähler für Tests
      * @param serverGuiInterface Referenz auf GUI des Chat-Servers
      */
-    public SimpleChatWorkerThreadImpl(Connection con, SharedChatClientList clients,
-                                      SharedServerCounter counter, ChatServerGuiInterface serverGuiInterface) {
-
+    public SimpleChatWorkerThreadImpl(Connection con, SharedChatClientList clients, SharedServerCounter counter,
+                                      ChatServerGuiInterface serverGuiInterface) {
         super(con, clients, counter, serverGuiInterface);
         this.auditLogConnection = null;
         this.auditLogServerEnabled = false;
-        System.out.println("Workerthread ohne AuditLog erzeugt");
+        System.out.println("WorkerThread ohne AuditLog erzeugt");
     }
 
     /**
-     * Erzeugen eines Worker Threads fuer die Kommunikation mit einem Chat-Client. Zusätzlich wird
-     * eine Verbindung zu einem AuditLog-Server uebergeben.
-     * @param con Verbindung zum Chat-Client
-     * @param clients Liste der angemeldeten Chat-Clients
-     * @param counter Referenz auf diverse Zaehler fuer Tests
+     * Erzeugen eines Worker Threads für die Kommunikation mit einem Chat-Client. Zusätzlich wird
+     * eine Verbindung zu einem AuditLog-Server übergeben.
+     *
+     * @param con                Verbindung zum Chat-Client
+     * @param clients            Liste der angemeldeten Chat-Clients
+     * @param counter            Referenz auf diverse Zähler für Tests
      * @param serverGuiInterface Referenz auf GUI des Chat-Servers
      * @param auditLogConnection Verbindung zum AuditLog-Server
      */
     public SimpleChatWorkerThreadImpl(Connection con, SharedChatClientList clients,
                                       SharedServerCounter counter, ChatServerGuiInterface serverGuiInterface,
                                       AuditLogConnection auditLogConnection) {
-
         super(con, clients, counter, serverGuiInterface);
 
         if (auditLogConnection != null) {
             this.auditLogServerEnabled = true;
             this.auditLogConnection = auditLogConnection;
-            System.out.println("Workerthread mit AuditLog erzeugt");
+            System.out.println("WorkerThread mit AuditLog erzeugt");
         } else {
             this.auditLogServerEnabled = false;
         }
@@ -66,15 +66,14 @@ public class SimpleChatWorkerThreadImpl extends AbstractWorkerThread {
 
     @Override
     public void run() {
-        LOG.debug(
-                "ChatWorker-Thread erzeugt, Threadname: " + Thread.currentThread().getName());
+        LOG.debug("ChatWorker-Thread erzeugt, ThreadName: " + Thread.currentThread().getName());
         while (!finished && !Thread.currentThread().isInterrupted()) {
             try {
-                // Warte auf naechste Nachricht des Clients und fuehre
+                // Warte auf nächste Nachricht des Clients und führe
                 // entsprechende Aktion aus
                 handleIncomingMessage();
             } catch (Exception e) {
-                LOG.error("Exception waehrend der Nachrichtenverarbeitung");
+                LOG.error("Exception während der Nachrichtenverarbeitung");
                 ExceptionHandler.logException(e);
             }
         }
@@ -84,34 +83,32 @@ public class SimpleChatWorkerThreadImpl extends AbstractWorkerThread {
 
     /**
      * Senden eines Login-List-Update-Event an alle angemeldeten Clients
+     *
      * @param pdu Zu sendende PDU
      */
     protected void sendLoginListUpdateEvent(ChatPDU pdu) {
-
         // Liste der eingeloggten bzw. sich einloggenden User ermitteln
         Vector<String> clientList = clients.getRegisteredClientNameList();
 
-        LOG.debug("Aktuelle Clientliste, die an die Clients uebertragen wird: " + clientList);
+        LOG.debug("Aktuelle ClientListe, die an die Clients übertragen wird: " + clientList);
 
         pdu.setClients(clientList);
 
         Vector<String> clientList2 = clients.getClientNameList();
         new Vector<>(clientList2).forEach(s -> {
-            LOG.debug("Fuer " + s
+            LOG.debug("Für " + s
                     + " wird Login- oder Logout-Event-PDU an alle aktiven Clients gesendet");
             ClientListEntry client = clients.getClient(s);
             try {
                 if (client != null) {
 
                     client.getConnection().send(pdu);
-                    LOG.debug(
-                            "Login- oder Logout-Event-PDU an " + client.getUserName() + " gesendet");
-                    clients.incrNumberOfSentChatEvents(client.getUserName());
+                    LOG.debug("Login- oder Logout-Event-PDU an " + client.getUserName() + " gesendet");
+                    clients.increaseNumberOfSentChatEvents(client.getUserName());
                     eventCounter.getAndIncrement();
                 }
             } catch (Exception e) {
-                LOG.error(
-                        "Senden einer Login- oder Logout-Event-PDU an " + s + " nicht moeglich");
+                LOG.error("Senden einer Login- oder Logout-Event-PDU an " + s + " nicht möglich");
                 ExceptionHandler.logException(e);
             }
         });
@@ -119,30 +116,28 @@ public class SimpleChatWorkerThreadImpl extends AbstractWorkerThread {
 
     @Override
     protected void loginRequestAction(ChatPDU receivedPdu) {
-
         ChatPDU pdu;
-        LOG.debug("Login-Request-PDU fuer " + receivedPdu.getUserName() + " empfangen");
+        LOG.debug("Login-Request-PDU für " + receivedPdu.getUserName() + " empfangen");
 
-        // Neuer Client moechte sich einloggen, Client in Client-Liste
+        // Neuer Client möchte sich einloggen, Client in Client-Liste
         // eintragen
         if (!clients.existsClient(receivedPdu.getUserName())) {
-            LOG.debug("User nicht in Clientliste: " + receivedPdu.getUserName());
+            LOG.debug("User nicht in ClientListe: " + receivedPdu.getUserName());
             ClientListEntry client = new ClientListEntry(receivedPdu.getUserName(), connection);
             client.setLoginTime(System.nanoTime());
             clients.createClient(receivedPdu.getUserName(), client);
             clients.changeClientStatus(receivedPdu.getUserName(),
                     ClientConversationStatus.REGISTERING);
-            LOG.debug("User " + receivedPdu.getUserName() + " nun in Clientliste");
+            LOG.debug("User " + receivedPdu.getUserName() + " nun in ClientListe");
 
             userName = receivedPdu.getUserName();
             clientThreadName = receivedPdu.getClientThreadName();
             Thread.currentThread().setName(receivedPdu.getUserName());
-            LOG.debug("Laenge der Clientliste: " + clients.size());
-            serverGuiInterface.incrNumberOfLoggedInClients();
+            LOG.debug("Länge der ClientListe: " + clients.size());
+            serverGuiInterface.increaseNumberOfLoggedInClients();
 
             // Login-Event an alle Clients (auch an den gerade aktuell
             // anfragenden) senden
-
             Vector<String> clientList = clients.getClientNameList();
             pdu = ChatPDU.createLoginEventPdu(userName, clientList, receivedPdu);
             sendLoginListUpdateEvent(pdu);
@@ -159,9 +154,8 @@ public class SimpleChatWorkerThreadImpl extends AbstractWorkerThread {
 
             LOG.debug("Login-Response-PDU an Client " + userName + " gesendet");
 
-            // Zustand des Clients aendern
+            // Zustand des Clients ändern
             clients.changeClientStatus(userName, ClientConversationStatus.REGISTERED);
-
         } else {
             // User bereits angemeldet, Fehlermeldung an Client senden,
             // Fehlercode an Client senden
@@ -173,7 +167,7 @@ public class SimpleChatWorkerThreadImpl extends AbstractWorkerThread {
                         + " mit Fehlercode " + ChatPDU.LOGIN_ERROR + " gesendet");
             } catch (Exception e) {
                 LOG.debug("Senden einer Login-Response-PDU an " + receivedPdu.getUserName()
-                        + " nicth moeglich");
+                        + " nicht möglich");
                 ExceptionHandler.logExceptionAndTerminate(e);
             }
         }
@@ -181,7 +175,6 @@ public class SimpleChatWorkerThreadImpl extends AbstractWorkerThread {
 
     @Override
     protected void logoutRequestAction(ChatPDU receivedPdu) {
-
         ChatPDU pdu;
         logoutCounter.getAndIncrement();
         LOG.debug("Logout-Request von " + receivedPdu.getUserName() + ", LogoutCount = "
@@ -190,26 +183,21 @@ public class SimpleChatWorkerThreadImpl extends AbstractWorkerThread {
         LOG.debug("Logout-Request-PDU von " + receivedPdu.getUserName() + " empfangen");
 
         if (!clients.existsClient(userName)) {
-            LOG.debug("User nicht in Clientliste: " + receivedPdu.getUserName());
+            LOG.debug("User nicht in ClientListe: " + receivedPdu.getUserName());
         } else {
-
-            // Event an Client versenden
+            // Event an den Client versenden
             Vector<String> clientList = clients.getClientNameList();
             pdu = ChatPDU.createLogoutEventPdu(userName, clientList, receivedPdu);
 
             clients.changeClientStatus(receivedPdu.getUserName(),
                     ClientConversationStatus.UNREGISTERING);
             sendLoginListUpdateEvent(pdu);
-            serverGuiInterface.decrNumberOfLoggedInClients();
+            serverGuiInterface.decreaseNumberOfLoggedInClients();
 
-            // Der Thread muss hier noch warten, bevor ein Logout-Response gesendet
-            // wird, da sich sonst ein Client abmeldet, bevor er seinen letzten Event
-            // empfangen hat. das funktioniert nicht bei einer grossen Anzahl an
-            // Clients (kalkulierte Events stimmen dann nicht mit tatsaechlich
-            // empfangenen Events ueberein.
-            // In der Advanced-Variante wird noch ein Confirm gesendet, das ist
-            // sicherer.
-
+            // Der Thread muss hier noch warten, bevor eine Logout-Response gesendet wird, da sich sonst ein Client
+            // abmeldet, bevor er seinen letzten Event empfangen hat. das funktioniert nicht bei einer grossen Anzahl
+            // an Clients (kalkulierte Events stimmen dann nicht mit tatsächlich empfangenen Events überein). In der
+            // Advanced-Variante wird noch ein Confirm gesendet, das ist sicherer.
             try {
                 Thread.sleep(1000);
             } catch (Exception e) {
@@ -222,26 +210,24 @@ public class SimpleChatWorkerThreadImpl extends AbstractWorkerThread {
             // Logout Response senden
             sendLogoutResponse(receivedPdu.getUserName());
 
-            // Worker-Thread des Clients, der den Logout-Request gesendet
-            // hat, auch gleich zum Beenden markieren
+            // Worker-Thread des Clients, der den Logout-Request gesendet hat, auch gleich zum Beenden markieren
             clients.finish(receivedPdu.getUserName());
-            LOG.debug("Laenge der Clientliste beim Vormerken zum Loeschen von "
-                    + receivedPdu.getUserName() + ": " + clients.size());
+            LOG.debug("Länge der ClientListe beim Vormerken zum Löschen von " + receivedPdu.getUserName() + ": "
+                    + clients.size());
         }
     }
 
     @Override
     protected void chatMessageRequestAction(ChatPDU receivedPdu) {
-
         ClientListEntry client;
         clients.setRequestStartTime(receivedPdu.getUserName(), startTime);
-        clients.incrNumberOfReceivedChatMessages(receivedPdu.getUserName());
-        serverGuiInterface.incrNumberOfRequests();
-        LOG.debug("Chat-Message-Request-PDU von " + receivedPdu.getUserName()
-                + " mit Sequenznummer " + receivedPdu.getSequenceNumber() + " empfangen");
+        clients.increaseNumberOfReceivedChatMessages(receivedPdu.getUserName());
+        serverGuiInterface.increaseNumberOfRequests();
+        LOG.debug("Chat-Message-Request-PDU von " + receivedPdu.getUserName() + " mit Sequenznummer "
+                + receivedPdu.getSequenceNumber() + " empfangen");
 
         if (!clients.existsClient(receivedPdu.getUserName())) {
-            LOG.debug("User nicht in Clientliste: " + receivedPdu.getUserName());
+            LOG.debug("User nicht in ClientListe: " + receivedPdu.getUserName());
         } else {
             // Liste der betroffenen Clients ermitteln
             Vector<String> sendList = clients.getClientNameList();
@@ -251,21 +237,19 @@ public class SimpleChatWorkerThreadImpl extends AbstractWorkerThread {
             for (String s : new Vector<>(sendList)) {
                 client = clients.getClient(s);
                 try {
-                    if ((client != null)
-                            && (client.getStatus() != ClientConversationStatus.UNREGISTERED)) {
+                    if ((client != null) && (client.getStatus() != ClientConversationStatus.UNREGISTERED)) {
                         pdu.setUserName(client.getUserName());
                         client.getConnection().send(pdu);
                         LOG.debug("Chat-Event-PDU an " + client.getUserName() + " gesendet");
-                        clients.incrNumberOfSentChatEvents(client.getUserName());
+                        clients.increaseNumberOfSentChatEvents(client.getUserName());
                         eventCounter.getAndIncrement();
-                        LOG.debug(userName + ": EventCounter erhoeht = " + eventCounter.get()
+                        LOG.debug(userName + ": EventCounter erhöht = " + eventCounter.get()
                                 + ", Aktueller ConfirmCounter = " + confirmCounter.get()
                                 + ", Anzahl gesendeter ChatMessages von dem Client = "
                                 + receivedPdu.getSequenceNumber());
                     }
                 } catch (Exception e) {
-                    LOG.debug("Senden einer Chat-Event-PDU an " + client.getUserName()
-                            + " nicht moeglich");
+                    LOG.debug("Senden einer Chat-Event-PDU an " + client.getUserName() + " nicht möglich");
                     ExceptionHandler.logException(e);
                 }
             }
@@ -279,7 +263,7 @@ public class SimpleChatWorkerThreadImpl extends AbstractWorkerThread {
 
                 if (responsePdu.getServerTime() / 1000000 > 100) {
                     LOG.debug(Thread.currentThread().getName()
-                            + ", Benoetigte Serverzeit vor dem Senden der Response-Nachricht > 100 ms: "
+                            + ", Benötigte Serverzeit vor dem Senden der Response-Nachricht > 100 ms: "
                             + responsePdu.getServerTime() + " ns = "
                             + responsePdu.getServerTime() / 1000000 + " ms");
                 }
@@ -290,11 +274,11 @@ public class SimpleChatWorkerThreadImpl extends AbstractWorkerThread {
                             "Chat-Message-Response-PDU an " + receivedPdu.getUserName() + " gesendet");
                 } catch (Exception e) {
                     LOG.debug("Senden einer Chat-Message-Response-PDU an " + client.getUserName()
-                            + " nicht moeglich");
+                            + " nicht möglich");
                     ExceptionHandler.logExceptionAndTerminate(e);
                 }
             }
-            LOG.debug("Aktuelle Laenge der Clientliste: " + clients.size());
+            LOG.debug("Aktuelle Länge der ClientListe: " + clients.size());
         }
     }
 
@@ -305,16 +289,14 @@ public class SimpleChatWorkerThreadImpl extends AbstractWorkerThread {
 
         LOG.debug("Schliessen der Chat-Connection zum " + userName);
 
-        // Bereinigen der Clientliste falls erforderlich
+        // Bereinigen der ClientListe, falls erforderlich
 
         if (clients.existsClient(userName)) {
-            LOG.debug("Close Connection fuer " + userName
-                    + ", Laenge der Clientliste vor dem bedingungslosen Loeschen: "
-                    + clients.size());
+            LOG.debug("Close Connection für " + userName
+                    + ", Länge der ClientListe vor dem bedingungslosen Löschen: " + clients.size());
 
             clients.deleteClientWithoutCondition(userName);
-            LOG.debug("Laenge der Clientliste nach dem bedingungslosen Loeschen von " + userName
-                    + ": " + clients.size());
+            LOG.debug("Länge der ClientListe nach dem bedingungslosen Löschen von " + userName + ": " + clients.size());
         }
 
         try {
@@ -326,7 +308,8 @@ public class SimpleChatWorkerThreadImpl extends AbstractWorkerThread {
     }
 
     /**
-     * Antwort-PDU fuer den initiierenden Client aufbauen und senden
+     * Antwort-PDU für den initiierenden Client aufbauen und senden
+     *
      * @param eventInitiatorClient Name des Clients
      */
     private void sendLogoutResponse(String eventInitiatorClient) {
@@ -337,14 +320,13 @@ public class SimpleChatWorkerThreadImpl extends AbstractWorkerThread {
             ChatPDU responsePdu = ChatPDU.createLogoutResponsePdu(eventInitiatorClient, 0, 0, 0,
                     0, client.getNumberOfReceivedChatMessages(), clientThreadName);
 
-            LOG.debug(eventInitiatorClient + ": SentEvents aus Clientliste: "
-                    + client.getNumberOfSentEvents() + ": ReceivedConfirms aus Clientliste: "
+            LOG.debug(eventInitiatorClient + ": SentEvents aus ClientListe: "
+                    + client.getNumberOfSentEvents() + ": ReceivedConfirms aus ClientListe: "
                     + client.getNumberOfReceivedEventConfirms());
             try {
                 clients.getClient(eventInitiatorClient).getConnection().send(responsePdu);
             } catch (Exception e) {
-                LOG.debug("Senden einer Logout-Response-PDU an " + eventInitiatorClient
-                        + " fehlgeschlagen");
+                LOG.debug("Senden einer Logout-Response-PDU an " + eventInitiatorClient + " fehlgeschlagen");
                 LOG.debug("Exception Message: " + e.getMessage());
             }
 
@@ -353,8 +335,9 @@ public class SimpleChatWorkerThreadImpl extends AbstractWorkerThread {
     }
 
     /**
-     * Prueft, ob Clients aus der Clientliste geloescht werden koennen
-     * @return boolean, true: Client geloescht, false: Client nicht geloescht
+     * Prüft, ob Clients aus der ClientListe gelöscht werden können
+     *
+     * @return boolean, true: Client gelöscht, false: Client nicht gelöscht
      */
     private boolean checkIfClientIsDeletable() {
 
@@ -365,28 +348,26 @@ public class SimpleChatWorkerThreadImpl extends AbstractWorkerThread {
             client = clients.getClient(userName);
             if (client != null) {
                 if (client.isFinished()) {
-                    // Loesche den Client aus der Clientliste
-                    // Ein Loeschen ist aber nur zulaessig, wenn der Client
+                    // Lösche den Client aus der ClientListe. Ein Löschen ist aber nur zulässig, wenn der Client
                     // nicht mehr in einer anderen Warteliste ist
-                    LOG.debug("Laenge der Clientliste vor dem Entfernen von " + userName + ": "
+                    LOG.debug("Länge der ClientListe vor dem Entfernen von " + userName + ": "
                             + clients.size());
                     if (clients.deleteClient(userName)) {
                         // Jetzt kann auch Worker-Thread beendet werden
-
-                        LOG.debug("Laenge der Clientliste nach dem Entfernen von " + userName + ": "
+                        LOG.debug("Länge der ClientListe nach dem Entfernen von " + userName + ": "
                                 + clients.size());
-                        LOG.debug("Worker-Thread fuer " + userName + " zum Beenden vorgemerkt");
+                        LOG.debug("Worker-Thread für " + userName + " zum Beenden vorgemerkt");
                         return true;
                     }
                 }
             }
         }
 
-        // Garbage Collection in der Clientliste durchfuehren
+        // Garbage Collection in der ClientListe durchführen
         Vector<String> deletedClients = clients.gcClientList();
         if (deletedClients.contains(userName)) {
-            LOG.debug("Ueber Garbage Collector ermittelt: Laufender Worker-Thread fuer "
-                    + userName + " kann beendet werden");
+            LOG.debug("Über Garbage Collector ermittelt: Laufender Worker-Thread für " + userName
+                    + " kann beendet werden");
             finished = true;
             return true;
         }
@@ -399,33 +380,28 @@ public class SimpleChatWorkerThreadImpl extends AbstractWorkerThread {
             return;
         }
 
-        // Warten auf naechste Nachricht
+        // Warten auf nächste Nachricht
         ChatPDU receivedPdu;
 
-        // Nach einer Minute wird geprueft, ob Client noch eingeloggt ist
+        // Nach einer Minute wird geprüft, ob Client noch eingeloggt ist
         final int RECEIVE_TIMEOUT = 1200000;
 
         try {
             receivedPdu = (ChatPDU) connection.receive(RECEIVE_TIMEOUT);
 
-            // Nachricht empfangen
-            // Zeitmessung fuer Serverbearbeitungszeit starten
+            // Nachricht empfangen.
+            // Zeitmessung für Serverbearbeitungszeit starten
             startTime = System.nanoTime();
-
         } catch (ConnectionTimeoutException e) {
-
-            // Wartezeit beim Empfang abgelaufen, pruefen, ob der Client
-            // ueberhaupt noch etwas sendet
-            LOG.debug(
-                    "Timeout beim Empfangen, " + RECEIVE_TIMEOUT + " ms ohne Nachricht vom Client");
+            // Wartezeit beim Empfang abgelaufen, prüfen, ob der Client
+            // überhaupt noch etwas sendet
+            LOG.debug("Timeout beim Empfangen, " + RECEIVE_TIMEOUT + " ms ohne Nachricht vom Client");
 
             if (clients.getClient(userName) != null) {
-                if (clients.getClient(userName)
-                        .getStatus() == ClientConversationStatus.UNREGISTERING) {
+                if (clients.getClient(userName).getStatus() == ClientConversationStatus.UNREGISTERING) {
                     // Worker-Thread wartet auf eine Nachricht vom Client, aber es
                     // kommt nichts mehr an
-                    LOG.error(
-                            "Client ist im Zustand UNREGISTERING und bekommt aber keine Nachricht mehr");
+                    LOG.error("Client ist im Zustand UNREGISTERING und bekommt aber keine Nachricht mehr");
                     // Zur Sicherheit eine Logout-Response-PDU an Client senden und
                     // dann Worker-Thread beenden
                     finished = true;
@@ -434,20 +410,17 @@ public class SimpleChatWorkerThreadImpl extends AbstractWorkerThread {
             return;
 
         } catch (EndOfFileException e) {
-            LOG.debug("End of File beim Empfang, vermutlich Verbindungsabbau des Partners fuer "
-                    + userName);
+            LOG.debug("End of File beim Empfang, vermutlich Verbindungsabbau des Partners für " + userName);
             finished = true;
             return;
 
         } catch (java.net.SocketException e) {
-            LOG.error("Verbindungsabbruch beim Empfang der naechsten Nachricht vom Client "
-                    + getName());
+            LOG.error("Verbindungsabbruch beim Empfang der nächsten Nachricht vom Client " + getName());
             finished = true;
             return;
 
         } catch (Exception e) {
-            LOG.error(
-                    "Empfang einer Nachricht fehlgeschlagen, Workerthread fuer User: " + userName);
+            LOG.error("Empfang einer Nachricht fehlgeschlagen, WorkerThread für User: " + userName);
             ExceptionHandler.logException(e);
             finished = true;
             return;
@@ -455,7 +428,6 @@ public class SimpleChatWorkerThreadImpl extends AbstractWorkerThread {
 
         // Empfangene Nachricht bearbeiten
         try {
-
             switch (receivedPdu.getPduType()) {
                 // Login-Request vom Client empfangen
                 case LOGIN_REQUEST -> {
@@ -493,8 +465,8 @@ public class SimpleChatWorkerThreadImpl extends AbstractWorkerThread {
                         }
                     }
                 }
-                default -> LOG.debug("Falsche PDU empfangen von Client: " + receivedPdu.getUserName()
-                        + ", PduType: " + receivedPdu.getPduType());
+                default -> LOG.debug("Falsche PDU empfangen von Client: " + receivedPdu.getUserName() + ", PduType: "
+                        + receivedPdu.getPduType());
             }
         } catch (Exception e) {
             LOG.error("Exception bei der Nachrichtenverarbeitung");

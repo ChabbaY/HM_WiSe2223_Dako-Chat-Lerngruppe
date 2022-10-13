@@ -2,7 +2,6 @@ package edu.hm.dako.chatBenchmarking;
 
 import edu.hm.dako.chatClient.ClientImpl;
 import edu.hm.dako.chatClient.AbstractChatClient;
-import edu.hm.dako.chatClient.ClientImpl;
 import edu.hm.dako.chatClient.ClientUserInterface;
 import edu.hm.dako.chatClient.SimpleMessageListenerThreadImpl;
 import edu.hm.dako.common.ChatServerImplementationType;
@@ -18,7 +17,8 @@ import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * Benchmarking-Client: Simuliert einen Chat-User
- * @author Peter Mandl
+ *
+ * @author Peter Mandl, edited by Lerngruppe
  */
 public class BenchmarkingClientImpl extends AbstractChatClient
         implements Runnable, ClientUserInterface {
@@ -30,21 +30,21 @@ public class BenchmarkingClientImpl extends AbstractChatClient
     // Serverzeit des letzten Chat-Message-Requests
     private final AtomicLong lastServerTime = new AtomicLong(0);
     /*
-     * Parameter fuer den Benchmarking-Lauf
+     * Parameter für den Benchmarking-Lauf
      */
-    protected int clientNumber;
-    protected int messageLength;
-    protected int numberOfMessagesToSend;
-    protected int responseTimeout;
-    protected int nrOfRetries;
-    protected int clientThinkTime;
-    protected ChatServerImplementationType implementationType;
-    // Schnittstelle zur BenchmarkingGui, um den Progressbar zu veraendern
-    protected BenchmarkingClientUserInterface benchmarkingGui;
+    protected final int clientNumber;
+    protected final int messageLength;
+    protected final int numberOfMessagesToSend;
+    protected final int responseTimeout;
+    protected final int nrOfRetries;
+    protected final int clientThinkTime;
+    protected final ChatServerImplementationType implementationType;
+    // Schnittstelle zur BenchmarkingGui, um den Progressbar zu verändern
+    protected final BenchmarkingClientUserInterface benchmarkingGui;
     // Gemeinsame Daten aller Threads zur Erfassung statistischer Daten
-    protected SharedClientStatistics sharedStatistics;
+    protected final SharedClientStatistics sharedStatistics;
     /*
-     * Statistikzaehlerstaende fuer eine beendete Chat-Session
+     * StatistikZählerstände für eine beendete Chat-Session
      */
     private long numberOfSentEvents;
     private long numberOfReceivedConfirms;
@@ -53,18 +53,19 @@ public class BenchmarkingClientImpl extends AbstractChatClient
     private long numberOfReceivedChatMessages;
 
     /**
-     * Konstruktor fuer Benchmarking
+     * Konstruktor für Benchmarking
+     *
      * @param userInterface       Schnittstelle zur GUI
      * @param benchmarkingGui     Schnittstelle zur BenchmarkingGUI
      * @param implementationType  Typ der Implementierung
      * @param serverPort          Port des Servers
-     * @param remoteServerAddress Hostadresse des Servers
+     * @param remoteServerAddress HostAdresse des Servers
      * @param numberOfClient      Anzahl der zu simulierenden Clients
-     * @param messageLength       Laenge der Chat-Nachrichten
+     * @param messageLength       Länge der Chat-Nachrichten
      * @param numberOfMessages    Anzahl der Nachrichten pro Client
      * @param clientThinkTime     Maximale Denkzeit zwischen zwei Chat-Requests
      * @param numberOfRetries     Anzahl Wiederholungen bei Nachrichtenverlust
-     * @param responseTimeout     Timeout bei Uebrwachung der Bestaetigungen
+     * @param responseTimeout     Timeout bei Überwachung der Bestätigungen
      * @param sharedStatistics    Statistikdaten
      */
     public BenchmarkingClientImpl(ClientUserInterface userInterface,
@@ -117,15 +118,15 @@ public class BenchmarkingClientImpl extends AbstractChatClient
 
     /**
      * Thread zur Simulation eines Chat-Users: User wird beim Server registriert, alle Requests werden gesendet,
-     * Antworten werden gelesen und am Ende wird ein Logout ausgefuehrt. Der Vorgang wird abprupt abgebrochen, wenn dies
-     * ueber die GUI gewuenscht wird.
+     * Antworten werden gelesen und am Ende wird ein Logout ausgeführt. Der Vorgang wird abrupt abgebrochen, wenn dies
+     * über die GUI gewünscht wird.
      */
     @Override
     public void run() {
 
         try {
-            // Login ausfuehren und warten, bis Server bestaetigt
-            // Eindeutigen Login-Namen generieren
+            // Login ausführen und warten, bis Server bestätigt
+            // eindeutigen Login-Namen generieren
             String userName = threadName.concat(UUID.randomUUID().toString());
             this.login(userName);
 
@@ -139,7 +140,7 @@ public class BenchmarkingClientImpl extends AbstractChatClient
                 }
             }
 
-            sharedStatistics.incrNumberOfLoggedInClients();
+            sharedStatistics.increaseNumberOfLoggedInClients();
 
             log.debug("User " + userName + " beim Server angemeldet");
 
@@ -152,7 +153,7 @@ public class BenchmarkingClientImpl extends AbstractChatClient
 
                 sendMessageAndWaitForAck(i);
                 try {
-                    // Zufaellige Zeit, aber maximal die angegebene Denkzeit
+                    // Zufällige Zeit, aber maximal die angegebene Denkzeit
                     // warten
                     int randomThinkTime = (int) (Math.random() * clientThinkTime) + 1;
                     Thread.sleep(randomThinkTime);
@@ -168,13 +169,13 @@ public class BenchmarkingClientImpl extends AbstractChatClient
             // haben alle Chat-Nachrichten gesendet)
             waitForLoggingOutClients();
 
-            // Logout ausfuehren und warten, bis Server bestaetigt
+            // Logout ausführen und warten, bis Server bestätigt
             this.logout(threadName);
             while (sharedClientData.status != ClientConversationStatus.UNREGISTERED) {
                 Thread.sleep(1);
             }
 
-            sharedStatistics.incrNumberOfLoggedOutClients();
+            sharedStatistics.increaseNumberOfLoggedOutClients();
 
             log.debug(
                     "Anzahl gesendeter Requests: " + sharedStatistics.getNumberOfSentRequests());
@@ -188,7 +189,7 @@ public class BenchmarkingClientImpl extends AbstractChatClient
                     + sharedStatistics.getAverageServerTime() + ", = "
                     + sharedStatistics.getAverageServerTime() / 1000000 + " ms");
 
-            // Nachbearbeitung fuer die Statistik
+            // Nachbearbeitung für die Statistik
             postLogout();
             log.debug("User " + userName + " beim Server abgemeldet");
 
@@ -201,17 +202,16 @@ public class BenchmarkingClientImpl extends AbstractChatClient
     }
 
     /**
-     * Warten, bis Server einen Chat-Response als Antwort auf den letzten Chat-Request gesendet hat (nur fuer
-     * Benchmarking)
+     * Warten, bis Server eine Chat-Response als Antwort auf den letzten Chat-Request gesendet hat
+     * (nur für Benchmarking)
      */
     private void waitUntilChatResponseReceived() {
-
         setLock(true);
         try {
             while (getLock()) {
                 log.debug(userName + " wartet auf Chat-Message-Response-PDU");
                 Thread.sleep(1);
-                // Durch den Sleep wird die RTT beim Benchmark ein wenig verfaelscht
+                // Durch den Sleep wird die RTT beim Benchmark ein wenig verfälscht
             }
         } catch (Exception e) {
             ExceptionHandler.logException(e);
@@ -220,24 +220,24 @@ public class BenchmarkingClientImpl extends AbstractChatClient
 
     /**
      * Chat-Nachricht an den Server senden und auf Antwort warten. Methode wird nur von Benchmarking-Client genutzt
+     *
      * @param i Nummer des Clients
      */
     private void sendMessageAndWaitForAck(int i) {
-
         // Dummy-Nachricht zusammenbauen
         StringBuilder chatMessage = new StringBuilder();
         chatMessage.append("+".repeat(Math.max(0, messageLength)));
 
-        // Senden der Nachricht und warten, bis Bestaetigung vom Server da ist
+        // Senden der Nachricht und warten, bis Bestätigung vom Server da ist
         try {
 
-            sharedStatistics.incrSentMsgCounter(clientNumber);
+            sharedStatistics.increaseSentMsgCounter(clientNumber);
 
             // RTT-Startzeit ermitteln
             long rttStartTime = System.nanoTime();
             tell(userName, chatMessage.toString());
 
-            // Warten, bis Chat-Response empfangen wurde, dann erst naechsten
+            // Warten, bis Chat-Response empfangen wurde, dann erst nächsten
             // Chat Request senden
             waitUntilChatResponseReceived();
 
@@ -253,6 +253,7 @@ public class BenchmarkingClientImpl extends AbstractChatClient
     /**
      * Synchronisation mit allen anderen Client-Threads: Warten, bis alle Clients angemeldet sind und dann erst mit der
      * Lasterzeugung beginnen
+     *
      * @throws InterruptedException falls sleep unterbrochen wurde
      */
     private void waitForLoggedInClients() throws InterruptedException {
@@ -263,6 +264,7 @@ public class BenchmarkingClientImpl extends AbstractChatClient
     /**
      * Synchronisation mit allen anderen Client-Threads: Warten, bis alle Clients angemeldet sind und dann erst mit der
      * Lasterzeugung beginnen
+     *
      * @throws InterruptedException falls sleep unterbrochen wurde
      */
     private void waitForLoggingOutClients() throws InterruptedException {
@@ -273,22 +275,22 @@ public class BenchmarkingClientImpl extends AbstractChatClient
 
     /**
      * Nacharbeit nach Empfang einer PDU vom Server
+     *
      * @param messageNumber Fortlaufende Nachrichtennummer
-     * @param serverTime Zeit, die der Server fuer die Bearbeitung des Chat-Message-Requests benoetigt
-     * @param rtt Round Trip Time fuer den Request
+     * @param serverTime    Zeit, die der Server für die Bearbeitung des Chat-Message-Requests benötigt
+     * @param rtt           Round Trip Time für den Request
      */
     private void postReceive(int messageNumber, long serverTime, long rtt) {
-
-        // Response-Zaehler und Serverbearbeitungszeit erhoehen
-        sharedStatistics.incrReceivedMsgCounter(clientNumber, rtt, serverTime);
+        // Response-Zähler und Serverbearbeitungszeit erhöhen
+        sharedStatistics.increaseReceivedMsgCounter(clientNumber, rtt, serverTime);
 
         // Progressbar weiterschreiben
         benchmarkingGui.countUpProgressTask();
 
         if (rtt <= serverTime) {
-            // Test, ob Messung plausibel ist, rtt muss groesser als serverTime sein
-            log.error(threadName + ": RTT fuer Request " + (messageNumber + 1) + ": " + rtt
-                    + " ns = " + (rtt / 1000000) + " ms,  benoetigte Serverzeit: " + serverTime
+            // Test, ob Messung plausibel ist, rtt muss größer als serverTime sein
+            log.error(threadName + ": RTT für Request " + (messageNumber + 1) + ": " + rtt
+                    + " ns = " + (rtt / 1000000) + " ms,  benötigte Serverzeit: " + serverTime
                     + " ns = " + (serverTime / 1000000) + " ms");
         }
     }
@@ -297,8 +299,7 @@ public class BenchmarkingClientImpl extends AbstractChatClient
      * Nacharbeit nach Logout
      */
     private void postLogout() {
-
-        // Zaehler fuer Statistik eintragen
+        // Zähler für Statistik eintragen
         sharedStatistics.setNumberOfSentEventMessages(clientNumber, getNumberOfSentEvents());
         sharedStatistics.setNumberOfReceivedConfirmEvents(clientNumber,
                 getNumberOfReceivedConfirms());
@@ -309,34 +310,34 @@ public class BenchmarkingClientImpl extends AbstractChatClient
         log.debug(
                 "Vom Server verarbeitete Chat-Nachrichten: " + getNumberOfReceivedChatMessages());
         log.debug("Vom Server gesendete Event-Nachrichten: " + getNumberOfSentEvents());
-        log.debug("Dem Server bestaetigte Event-Nachrichten (Confirms): "
+        log.debug("Dem Server bestätigte Event-Nachrichten (Confirms): "
                 + getNumberOfReceivedConfirms());
-        log.debug("Im Server nicht empfangene Bestaetigungen: " + getNumberOfLostConfirms());
+        log.debug("Im Server nicht empfangene Bestätigungen: " + getNumberOfLostConfirms());
         log.debug("Vom Server initiierte Wiederholungen: " + getNumberOfRetries());
     }
 
     @Override
-    // Wird nicht genutzt, nur fuer ClientGui relevant
+    // Wird nicht genutzt, nur für ClientGui relevant
     public void setUserList(Vector<String> names) {
     }
 
     @Override
-    // Wird nicht genutzt, nur fuer ClientGui relevant
+    // Wird nicht genutzt, nur für ClientGui relevant
     public void setMessageLine(String sender, String message) {
     }
 
     @Override
-    // Wird nicht genutzt, nur fuer ClientGui relevant
+    // Wird nicht genutzt, nur für ClientGui relevant
     public void setErrorMessage(String sender, String errorMessage, long errorCode) {
     }
 
     @Override
-    // Wird nicht genutzt, nur fuer BenchmarkingClientCoordinator relevant
+    // Wird nicht genutzt, nur für BenchmarkingClientCoordinator relevant
     public void loginComplete() {
     }
 
     @Override
-    // Wird nicht genutzt, nur fuer BenchmarkingClientCoordinator relevant
+    // Wird nicht genutzt, nur für BenchmarkingClientCoordinator relevant
     public void logoutComplete() {
     }
 
@@ -362,7 +363,7 @@ public class BenchmarkingClientImpl extends AbstractChatClient
         chatResponseReceived.getAndSet(lock);
         if (!chatResponseReceived.get()) {
             log.debug(Thread.currentThread().getName() + " sendet notify");
-            // Antwort auf letzten Request erhalten, naechster Request kann gesendet
+            // Antwort auf letzten Request erhalten, nächster Request kann gesendet
             // werden
             notifyAll();
         }
@@ -399,10 +400,9 @@ public class BenchmarkingClientImpl extends AbstractChatClient
     }
 
     @Override
-    public void setSessionStatisticsCounter(long numberOfSentEvents,
-                                            long numberOfReceivedConfirms, long numberOfLostConfirms, long numberOfRetries,
+    public void setSessionStatisticsCounter(long numberOfSentEvents, long numberOfReceivedConfirms,
+                                            long numberOfLostConfirms, long numberOfRetries,
                                             long numberOfReceivedChatMessages) {
-
         this.numberOfSentEvents = numberOfSentEvents;
         this.numberOfReceivedConfirms = numberOfReceivedConfirms;
         this.numberOfLostConfirms = numberOfLostConfirms;

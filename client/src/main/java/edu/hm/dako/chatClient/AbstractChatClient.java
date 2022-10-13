@@ -15,11 +15,11 @@ import java.io.IOException;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * Gemeinsame Funktionalitaet fuer alle Client-Implementierungen.
- * @author Peter Mandl
+ * Gemeinsame Funktionalität für alle Client-Implementierungen.
+ *
+ * @author Peter Mandl, edited by Lerngruppe
  */
 public abstract class AbstractChatClient implements ClientCommunication {
-
     private static final Logger LOG = LogManager.getLogger(AbstractChatClient.class);
 
     // Username (Login-Kennung) des Clients
@@ -28,7 +28,7 @@ public abstract class AbstractChatClient implements ClientCommunication {
     protected int localPort;
     protected int serverPort;
     protected String remoteServerAddress;
-    protected ClientUserInterface userInterface;
+    protected final ClientUserInterface userInterface;
 
     // Connection Factory
     protected ConnectionFactory connectionFactory;
@@ -36,10 +36,10 @@ public abstract class AbstractChatClient implements ClientCommunication {
     // und Verbindung zum Server
     protected Connection connection;
 
-    // Gemeinsame Daten des Clientthreads und dem Message-Listener-Threads
-    protected SharedClientData sharedClientData;
+    // Gemeinsame Daten des Client-Threads und des Message-Listener-Threads
+    protected final SharedClientData sharedClientData;
 
-    // Thread, der die ankommenden Nachrichten fuer den Client verarbeitet
+    // Thread, der die ankommenden Nachrichten für den Client verarbeitet
     protected Thread messageListenerThread;
 
     /**
@@ -49,9 +49,7 @@ public abstract class AbstractChatClient implements ClientCommunication {
      * @param serverPort          Port des Servers
      * @param remoteServerAddress Adresse des Servers
      */
-    public AbstractChatClient(ClientUserInterface userInterface, int serverPort,
-                              String remoteServerAddress) {
-
+    public AbstractChatClient(ClientUserInterface userInterface, int serverPort, String remoteServerAddress) {
         this.userInterface = userInterface;
         this.serverPort = serverPort;
         this.remoteServerAddress = remoteServerAddress;
@@ -61,8 +59,8 @@ public abstract class AbstractChatClient implements ClientCommunication {
          */
         try {
             connectionFactory = getDecoratedFactory(new TcpConnectionFactory());
-            connection = connectionFactory.connectToServer(remoteServerAddress, serverPort,
-                    localPort, 20000, 20000);
+            connection = connectionFactory.connectToServer(remoteServerAddress, serverPort, localPort, 20000,
+                    20000);
         } catch (Exception e) {
             ExceptionHandler.logException(e);
         }
@@ -73,7 +71,6 @@ public abstract class AbstractChatClient implements ClientCommunication {
          * Gemeinsame Datenstruktur aufbauen
          */
         sharedClientData = new SharedClientData();
-        sharedClientData.messageCounter = new AtomicInteger(0);
         sharedClientData.logoutCounter = new AtomicInteger(0);
         sharedClientData.eventCounter = new AtomicInteger(0);
         sharedClientData.confirmCounter = new AtomicInteger(0);
@@ -81,7 +78,7 @@ public abstract class AbstractChatClient implements ClientCommunication {
     }
 
     /**
-     * Ergaenzt ConnectionFactory um Logging-Funktionalitaet
+     * Ergänzt ConnectionFactory um Logging-Funktionalität
      *
      * @param connectionFactory ConnectionFactory
      * @return Dekorierte ConnectionFactory
@@ -104,7 +101,7 @@ public abstract class AbstractChatClient implements ClientCommunication {
         requestPdu.setUserName(userName);
         try {
             connection.send(requestPdu);
-            LOG.debug("Login-Request-PDU fuer Client {} an Server gesendet", userName);
+            LOG.debug("Login-Request-PDU für Client {} an Server gesendet", userName);
         } catch (Exception e) {
             throw new IOException();
         }
@@ -112,7 +109,6 @@ public abstract class AbstractChatClient implements ClientCommunication {
 
     @Override
     public void logout(String name) throws IOException {
-
         sharedClientData.status = ClientConversationStatus.UNREGISTERING;
         ChatPDU requestPdu = new ChatPDU();
         requestPdu.setPduType(PduType.LOGOUT_REQUEST);
@@ -126,14 +122,13 @@ public abstract class AbstractChatClient implements ClientCommunication {
                     , sharedClientData.logoutCounter.get());
 
         } catch (Exception e) {
-            LOG.debug("Senden der Logout-Nachricht nicht moeglich");
+            LOG.debug("Senden der Logout-Nachricht nicht möglich");
             throw new IOException();
         }
     }
 
     @Override
     public void tell(String name, String text) throws IOException {
-
         ChatPDU requestPdu = new ChatPDU();
         requestPdu.setPduType(PduType.CHAT_MESSAGE_REQUEST);
         requestPdu.setClientStatus(sharedClientData.status);
@@ -144,11 +139,11 @@ public abstract class AbstractChatClient implements ClientCommunication {
         requestPdu.setSequenceNumber(sharedClientData.messageCounter.get());
         try {
             connection.send(requestPdu);
-            LOG.debug("Chat-Message-Request-PDU fuer Client {} an Server gesendet, Inhalt: {}", name, text);
+            LOG.debug("Chat-Message-Request-PDU für Client {} an Server gesendet, Inhalt: {}", name, text);
             LOG.debug("MessageCounter: {}, SequenceNumber: {}", sharedClientData.messageCounter.get(),
                     requestPdu.getSequenceNumber());
         } catch (Exception e) {
-            LOG.debug("Senden der Chat-Nachricht nicht moeglich");
+            LOG.debug("Senden der Chat-Nachricht nicht möglich");
             throw new IOException();
         }
     }

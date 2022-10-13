@@ -4,10 +4,10 @@ import java.io.IOException;
 
 /**
  * Interface zur Kommunikation des Chat-Clients mit dem Chat-Server
- * @author Peter Mandl
+ *
+ * @author Peter Mandl, edited by Lerngruppe
  */
 public interface ClientCommunication {
-
     /**
      * Login-Request an den Server senden
      *
@@ -39,7 +39,7 @@ public interface ClientCommunication {
     void cancelConnection();
 
     /**
-     * Pruefen, ob Logout schon komplett vollzogen
+     * Prüfen, ob Logout schon komplett vollzogen
      *
      * @return boolean - true = Logout abgeschlossen
      */

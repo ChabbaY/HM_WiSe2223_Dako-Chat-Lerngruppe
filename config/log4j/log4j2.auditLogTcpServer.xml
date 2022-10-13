@@ -19,7 +19,7 @@
     <Loggers>
 
         <!--
-            Ausgabe-Level waehlen: info, debug, trace, error
+            Ausgabe-Level wählen: info, debug, trace, error
              -->
         <Root level="debug">
             <AppenderRef ref="RollingFile"/>

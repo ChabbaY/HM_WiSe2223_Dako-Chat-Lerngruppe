@@ -8,12 +8,11 @@ import org.apache.logging.log4j.Logger;
 import java.util.Vector;
 
 /**
- * Eintrag in der serverseitigen Clientliste zur Verwaltung der angemeldeten User inkl.
- * des Conversation-Status.
- * <p>
- * Der Eintrag enthaelt auch eine Wartelsite fuer Clients (User), die auf eine Confirm-Nachricht
- * fuer ein vorher gesendetes Event warten. Diese Liste wird nur im AdvancedChat benötigt.
- * @author Peter Mandl
+ * Eintrag in der serverseitigen Client-Liste zur Verwaltung der angemeldeten User inklusive des Conversation-Status.
+ * Der Eintrag enthält auch eine Warteliste für Clients (User), die auf eine Confirm-Nachricht für ein vorher gesendetes
+ * Event warten. Diese Liste wird nur im AdvancedChat benötigt.
+ *
+ * @author Peter Mandl, edited by Lerngruppe
  */
 public class ClientListEntry {
     private static final Logger LOG = LogManager.getLogger(ClientListEntry.class);
@@ -21,11 +20,11 @@ public class ClientListEntry {
     boolean finished;
     // Login-Name des Clients
     private String userName;
-    // Verbindungs-Handle fuer Transportverbindung zum Client
+    // Verbindung-Handle für Transportverbindung zum Client
     private Connection con;
     // Login-Zeitpunkt
 
-    // Ankunftszeit einer Chat-Message fuer die Serverzeit-Messung
+    // Ankunftszeit einer Chat-Message für die Serverzeit-Messung
     private long startTime;
 
     // Conversation-Status des Clients
@@ -35,21 +34,21 @@ public class ClientListEntry {
     private long numberOfReceivedChatMessages;
 
     // Anzahl gesendeter Events (ChatMessageEvents, LoginEvents, LogoutEvents),
-    // die der Server fuer den Client sendet
+    // die der Server für den Client sendet
     private long numberOfSentEvents;
 
     // Anzahl aller empfangenen Confirms (ChatMessageConfirm, LoginConfirm,
-    // LogoutConfirm) fuer den Client
+    // LogoutConfirm) für den Client
     private long numberOfReceivedEventConfirms;
 
-    // Anzahl nicht erhaltener Bestaetigungen (derzeit nicht genutzt)
+    // Anzahl nicht erhaltener Bestätigungen (derzeit nicht genutzt)
     private long numberOfLostEventConfirms;
 
     // Anzahl an Nachrichtenwiederholungen (derzeit nicht genutzt)
     private long numberOfRetries;
 
-    // Liste, die auf alle Clients verweist, die noch kein Event-Confirm fuer
-    // einen konkret laufenden Request gesendet haben (nur fuer Advanced Chat notwendig)
+    // Liste, die auf alle Clients verweist, die noch kein Event-Confirm für
+    // einen konkret laufenden Request gesendet haben (nur für Advanced Chat notwendig)
     private Vector<String> waitList;
 
     public ClientListEntry(String userName, Connection con) {
@@ -68,7 +67,6 @@ public class ClientListEntry {
 
     @Override
     public String toString() {
-
         return "ChatClientListEntry+++++++++++++++++++++++++++++++++++++++++++++" +
                 "UserName: " + this.userName +
                 "\n" +
@@ -162,47 +160,48 @@ public class ClientListEntry {
         this.finished = finished;
     }
 
-    public synchronized void incrNumberOfSentEvents() {
+    public synchronized void increaseNumberOfSentEvents() {
         this.numberOfSentEvents++;
     }
 
-    public synchronized void incrNumberOfReceivedEventConfirms() {
+    public synchronized void increaseNumberOfReceivedEventConfirms() {
         this.numberOfReceivedEventConfirms++;
     }
 
-    public synchronized void incrNumberOfLostEventConfirms() {
+    public synchronized void increaseNumberOfLostEventConfirms() {
         this.numberOfLostEventConfirms++;
     }
 
-    public synchronized void incrNumberOfReceivedChatMessages() {
+    public synchronized void increaseNumberOfReceivedChatMessages() {
         this.numberOfReceivedChatMessages++;
     }
 
-    public synchronized void incrNumberOfRetries() {
+    public synchronized void increaseNumberOfRetries() {
         this.numberOfRetries++;
     }
 
     /**
-     * Ergaenzen eines Eintrags in der Warteliste
+     * Ergänzen eines Eintrags in der Warteliste
+     *
      * @param userName Name des Clients
      */
     public synchronized void addWaitListEntry(String userName) {
         this.waitList.add(userName);
-        LOG.debug("Warteliste von " + this.userName + " ergaenzt um " + userName);
+        LOG.debug("Warteliste von " + this.userName + " ergänzt um " + userName);
     }
 
     /**
-     * Lesen der Wartelsite fuer ein Event
-     * @return
+     * Lesen der Warteliste für ein Event
      */
     public synchronized Vector<String> getWaitList() {
         return waitList;
     }
 
     /**
-     * Aktualisierung der Liste aller Clients, die auf ein Confirm fuer ein
+     * Aktualisierung der Liste aller Clients, die auf ein Confirm für ein
      * gesendetes Event warten
-     * @param list Clientliste
+     *
+     * @param list ClientListe
      */
     public synchronized void setWaitList(Vector<String> list) {
         this.waitList = list;
@@ -210,7 +209,7 @@ public class ClientListEntry {
     }
 
     /**
-     * Loesche einer Warteliste fuer ein Event
+     * Lösche einer Warteliste für ein Event
      */
     public synchronized void clearWaitList() {
         waitList.clear();

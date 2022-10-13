@@ -7,15 +7,16 @@ import java.net.InetAddress;
 
 /**
  * Echo-Server auf Basis von UDP Datagram-Sockets
- * @author P.Mandl
+ *
+ * @author Peter Mandl, edited by Lerngruppe
  * @version 2.0
  */
 public class EchoUdpServer {
-
     protected DatagramSocket socket;
 
     /**
      * Konstruktor
+     *
      * @param port - Port des Serverdienstes
      * @throws IOException - Fehler bei der Socket-Erzeugung
      */
@@ -25,6 +26,7 @@ public class EchoUdpServer {
 
     /**
      * Hauptprogramm
+     *
      * @param args - nicht verwendet
      */
     public static void main(String[] args) {
@@ -40,7 +42,7 @@ public class EchoUdpServer {
     }
 
     /**
-     * Warten auf Nachricht und Nachricht zuruecksenden, bis ein Fehler eintritt
+     * Warten auf Nachricht und Nachricht zurücksenden, bis ein Fehler eintritt
      */
     public void execute() {
         boolean running = true;
@@ -59,6 +61,7 @@ public class EchoUdpServer {
 
     /**
      * Datagram empfangen
+     *
      * @return Empfangenes Datagram
      * @throws IOException Fehler beim Empfang
      */
@@ -80,15 +83,15 @@ public class EchoUdpServer {
     }
 
     /**
-     * Zuruecksenden der empfangenen Nachricht
+     * Zurücksenden der empfangenen Nachricht
+     *
      * @param address Zieladresse des Echo-Clients
-     * @param port Port des Echo-Clients
-     * @param data Nachricht
-     * @param length Nachrichtnelaenge
+     * @param port    Port des Echo-Clients
+     * @param data    Nachricht
+     * @param length  Nachrichtenlänge
      * @throws IOException Fehler beim Senden
      */
-    protected void sendEcho(InetAddress address, int port, byte[] data,
-                            int length) throws IOException {
+    protected void sendEcho(InetAddress address, int port, byte[] data, int length) throws IOException {
         DatagramPacket packet = new DatagramPacket(data, length, address, port);
 
         try {
@@ -99,7 +102,6 @@ public class EchoUdpServer {
             System.out.println("Exception in send");
             throw e;
         }
-
     }
 
     /**

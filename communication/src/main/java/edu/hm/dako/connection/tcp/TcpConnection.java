@@ -17,10 +17,10 @@ import java.net.SocketException;
 
 /**
  * Implementierung der TCP-Verbindung
- * @author Peter Mandl
+ *
+ * @author Peter Mandl, edited by Lerngruppe
  */
 public class TcpConnection implements Connection {
-
     private static final Logger log = LogManager.getLogger(TcpConnection.class);
     // Verwendetes TCP-Socket
     private final Socket socket;
@@ -30,14 +30,15 @@ public class TcpConnection implements Connection {
 
     /**
      * Verbindungsendpunkt auf Serverseite anlegen
-     * @param serverSocket TCP-Serversocket (mit Listen-Port)
-     * @param sendBufferSize Groesse des Sendepuffers in Byte
-     * @param receiveBufferSize Groesse des Empfangspuffers in Byte
-     * @param keepAlive Option KEEPAALIVE
-     * @param TcpNoDelay Option TCP_NODELAY
+     *
+     * @param serverSocket      TCP-Serversocket (mit Listen-Port)
+     * @param sendBufferSize    Größe des Sendepuffers in Byte
+     * @param receiveBufferSize Größe des Empfangspuffers in Byte
+     * @param keepAlive         Option KEEP_ALIVE
+     * @param TcpNoDelay        Option TCP_NO_DELAY
      */
-    public TcpConnection(ServerSocket serverSocket, int sendBufferSize, int receiveBufferSize,
-                         boolean keepAlive, boolean TcpNoDelay) throws IOException {
+    public TcpConnection(ServerSocket serverSocket, int sendBufferSize, int receiveBufferSize, boolean keepAlive,
+                         boolean TcpNoDelay) throws IOException {
         try {
             // Verbindungsaufbauwunsch akzeptieren
             this.socket = serverSocket.accept();
@@ -45,7 +46,7 @@ public class TcpConnection implements Connection {
             // Verbindungsparameter setzen
             setConnectionParameters(sendBufferSize, receiveBufferSize, keepAlive, TcpNoDelay);
 
-            // Ein- und Ausgabe-Objektstroeme erzeugen
+            // Ein- und Ausgabe-Objektströme erzeugen
             createObjectStreams();
 
             log.debug(Thread.currentThread().getName()
@@ -58,16 +59,17 @@ public class TcpConnection implements Connection {
 
     /**
      * Verbindungsendpunkt auf Clientseite anlegen.
-     * Zur Information: Standardgroesse des Empfangspuffers einer TCP-Verbindung: 8192 Byte.
-     * Standardgroesse des Sendepuffers einer TCP-Verbindung: 8192 Byte.
+     * Zur Information: Standardgröße des Empfangspuffers einer TCP-Verbindung: 8192 Byte.
+     * Standardgröße des Sendepuffers einer TCP-Verbindung: 8192 Byte.
+     *
      * @param remoteServerAddress Entfernter Hostname
-     * @param serverPort Port des Servers
-     * @param localHost Lokale IP_Adresse, die verwendet werden soll
-     * @param localPort Lokaler Port (bei 0 wird einer vergeben)
-     * @param sendBufferSize Groesse des Sendepuffers in Byte
-     * @param receiveBufferSize Groesse des Empfangspuffers in Byte
-     * @param keepAlive Option KEEPAALIVE
-     * @param TcpNoDelay Option TCP_NODELAY
+     * @param serverPort          Port des Servers
+     * @param localHost           Lokale IP_Adresse, die verwendet werden soll
+     * @param localPort           Lokaler Port (bei 0 wird einer vergeben)
+     * @param sendBufferSize      Größe des Sendepuffers in Byte
+     * @param receiveBufferSize   Größe des Empfangspuffers in Byte
+     * @param keepAlive           Option KEEP_ALIVE
+     * @param TcpNoDelay          Option TCP_NO_DELAY
      */
     public TcpConnection(String remoteServerAddress, int serverPort, String localHost,
                          int localPort, int sendBufferSize, int receiveBufferSize,
@@ -87,7 +89,7 @@ public class TcpConnection implements Connection {
             InetSocketAddress remoteAddress = new InetSocketAddress(remoteServerAddress, serverPort);
             socket.connect(remoteAddress);
 
-            // Ein- und Ausgabe-Objektstroeme erzeugen
+            // Ein- und Ausgabe-Objektströme erzeugen
             createObjectStreams();
 
         } catch (IOException e) {
@@ -97,7 +99,7 @@ public class TcpConnection implements Connection {
     }
 
     /**
-     * Ein- und Ausgabe-Objektstroeme erzeugen
+     * Ein- und Ausgabe-Objektströme erzeugen
      * Achtung: Erst Ausgabestrom, dann Eingabestrom erzeugen, sonst Fehler
      * beim Verbindungsaufbau, siehe API-Beschreibung
      */
@@ -112,23 +114,24 @@ public class TcpConnection implements Connection {
 
     /**
      * Verbindungsparameter setzen
-     * @param sendBufferSize Sendepuffergroesse
-     * @param receiveBufferSize Empfangspuffergroesse
-     * @param keepAlive Option KEEP_ALIVE
-     * @param TcpNoDelay Option TCP_NODELAY
+     *
+     * @param sendBufferSize    Sendepuffergröße
+     * @param receiveBufferSize Empfangspuffergröße
+     * @param keepAlive         Option KEEP_ALIVE
+     * @param TcpNoDelay        Option TCP_NO_DELAY
      */
     private void setConnectionParameters(int sendBufferSize, int receiveBufferSize,
                                          boolean keepAlive, boolean TcpNoDelay) {
         try {
-            log.debug("Standardgroesse des Empfangspuffers der Verbindung: "
+            log.debug("Standardgröße des Empfangspuffers der Verbindung: "
                     + socket.getReceiveBufferSize() + " Byte");
-            log.debug("Standardgroesse des Sendepuffers der Verbindung: "
+            log.debug("Standardgröße des Sendepuffers der Verbindung: "
                     + socket.getSendBufferSize() + " Byte");
             socket.setReceiveBufferSize(receiveBufferSize);
             socket.setSendBufferSize(sendBufferSize);
-            log.debug("Eingestellte Groesse des Empfangspuffers der Verbindung: "
+            log.debug("Eingestellte Größe des Empfangspuffers der Verbindung: "
                     + socket.getReceiveBufferSize() + " Byte");
-            log.debug("Eingestellte Groesse des Sendepuffers der Verbindung: "
+            log.debug("Eingestellte Größe des Sendepuffers der Verbindung: "
                     + socket.getSendBufferSize() + " Byte");
 
             // Weitere TCP-Optionen einstellen
@@ -137,21 +140,21 @@ public class TcpConnection implements Connection {
 
             // TCP-Optionen ausgeben
             if (socket.getKeepAlive()) {
-                log.debug("KeepAlive-Option ist fuer die Verbindung aktiviert");
+                log.debug("KeepAlive-Option ist für die Verbindung aktiviert");
             } else {
-                log.debug("KeepAlive-Option ist fuer die Verbindung nicht aktiviert");
+                log.debug("KeepAlive-Option ist für die Verbindung nicht aktiviert");
             }
 
             if (socket.getTcpNoDelay()) {
-                log.debug("Nagle-Algorithmus ist fuer die Verbindung aktiviert");
+                log.debug("Nagle-Algorithmus ist für die Verbindung aktiviert");
             } else {
-                log.debug("Nagle-Algorithmus ist fuer die Verbindung nicht aktiviert");
+                log.debug("Nagle-Algorithmus ist für die Verbindung nicht aktiviert");
             }
 
             if (socket.getReuseAddress()) {
-                log.debug("SO_REUSEADDR ist fuer den Port aktiviert, Port kann gleich wieder ohne Wartezeit verwendet werden");
+                log.debug("SO_REUSE_ADDRESS ist für den Port aktiviert, Port kann gleich wieder ohne Wartezeit verwendet werden");
             } else {
-                log.debug("SO_REUSEADDR ist fuer den Port nicht aktiviert");
+                log.debug("SO_REUSE_ADDRESS ist für den Port nicht aktiviert");
             }
         } catch (SocketException e) {
             throw new RuntimeException(e);
@@ -161,7 +164,6 @@ public class TcpConnection implements Connection {
     @Override
     public Serializable receive(int timeout)
             throws ConnectionTimeoutException, EndOfFileException {
-
         if (!socket.isConnected()) {
             log.debug("Empfangsversuch, obwohl Verbindung nicht mehr steht");
             throw new EndOfFileException();
@@ -185,7 +187,6 @@ public class TcpConnection implements Connection {
 
     @Override
     public Serializable receive() throws Exception {
-
         if (!socket.isConnected()) {
             log.debug("Empfangsversuch, obwohl Verbindung nicht mehr steht");
             throw new EndOfFileException();
@@ -203,7 +204,6 @@ public class TcpConnection implements Connection {
 
     @Override
     public void send(Serializable message) throws Exception {
-
         if (socket.isClosed()) {
             log.debug("Sendeversuch, obwohl Socket geschlossen ist");
             throw new IOException();

@@ -15,16 +15,16 @@ import java.util.concurrent.TimeUnit;
 /**
  * Basisklasse zum Starten eines Benchmarks
  *
- * @author Peter Mandl
+ * @author Peter Mandl, edited by Lerngruppe
  */
 public class BenchmarkingClientCoordinator extends Thread
         implements BenchmarkingStartInterface, ClientUserInterface {
     private static final Logger log = LogManager.getLogger(BenchmarkingClientCoordinator.class);
-    // Uebergebene Parameter vom User-Interface
-    UserInterfaceInputParameters parm;
+    // Übergebene Parameter vom User-Interface
+    UserInterfaceInputParameters params;
     // GUI-Schnittstelle
     BenchmarkingClientUserInterface benchmarkingClientGui;
-    // Anzahl aller Requests, die auszufuehren sind
+    // Anzahl aller Requests, die auszuführen sind
     long numberOfAllRequests;
     // Startzeit des Tests
     long startTime;
@@ -32,12 +32,12 @@ public class BenchmarkingClientCoordinator extends Thread
     String startTimeAsString;
     // Kalender zur Umrechnung der Startzeit
     Calendar cal;
-    // Thread zur Zeitzaehlung fuer die Dauer des Tests
+    // Thread zur Zeitzählung für die Dauer des Tests
     BenchmarkingTimeCounterThread timeCounterThread;
     // Daten aller Client-Threads zur Verwaltung der Statistik
     private SharedClientStatistics sharedData;
     private CpuUtilisationWatch cpuUtilisationWatch;
-    // Kennzeichen, ob gerade ein Test laeuft (es darf nur einer zu einer Zeit
+    // Kennzeichen, ob gerade ein Test läuft (es darf nur einer zu einer Zeit
     // laufen)
     private boolean running = false;
     // Kennzeichen, ob Test in der GUI gestoppt wurde
@@ -54,27 +54,27 @@ public class BenchmarkingClientCoordinator extends Thread
     }
 
     @Override
-    public void executeTest(UserInterfaceInputParameters parm,
+    public void executeTest(UserInterfaceInputParameters param,
                             BenchmarkingClientUserInterface clientGui) {
 
-        this.parm = parm;
+        this.params = param;
         this.benchmarkingClientGui = clientGui;
 
-        clientGui.setMessageLine(parm.mapImplementationTypeToString(parm.getChatServerImplementationType())
+        clientGui.setMessageLine(param.mapImplementationTypeToString(param.getChatServerImplementationType())
                 + ": Benchmark gestartet");
 
         // Anzahl aller erwarteten Requests ermitteln
-        numberOfAllRequests = (long) parm.getNumberOfClients() * parm.getNumberOfMessages();
+        numberOfAllRequests = (long) param.getNumberOfClients() * param.getNumberOfMessages();
 
-        // Gemeinsamen Datenbereich fuer alle Threads anlegen
-        sharedData = new SharedClientStatistics(parm.getNumberOfClients(),
-                parm.getNumberOfMessages(), parm.getClientThinkTime());
+        // Gemeinsamen Datenbereich für alle Threads anlegen
+        sharedData = new SharedClientStatistics(param.getNumberOfClients(),
+                param.getNumberOfMessages(), param.getClientThinkTime());
 
-        // Berechnung aller Messages fuer Progress-Bar
+        // Berechnung aller Messages für Progress-Bar
         if (clientGui.getProgressBar() != null) {
             clientGui.getProgressBar()
-                    .setMaximum(parm.getNumberOfClients() * parm.getNumberOfMessages()
-                            + parm.getNumberOfClients() + parm.getNumberOfClients());
+                    .setMaximum(param.getNumberOfClients() * param.getNumberOfMessages()
+                            + param.getNumberOfClients() + param.getNumberOfClients());
         }
 
         startTime = 0;
@@ -90,8 +90,8 @@ public class BenchmarkingClientCoordinator extends Thread
     }
 
     /**
-     * Thread zur Entkoppelung des User-Interface von der Testausfuehrung, damit im User-Interface Eingaben moeglich
-     * sind, waehrend der Benchmark laeuft (z.B. Abbruch).
+     * Thread zur Entkoppelung des User-Interface von der Testausführung, damit im User-Interface Eingaben möglich
+     * sind, während der Benchmark läuft (z.B. Abbruch).
      */
     @Override
     public void run() {
@@ -99,14 +99,14 @@ public class BenchmarkingClientCoordinator extends Thread
         // Test aktiv
         running = true;
 
-        // Client-Threads in Abhaengigkeit des Implementierungstyps instanziieren
+        // Client-Threads in Abhängigkeit des Implementierungstyps instanziieren
         // und starten
         ExecutorService executorService = Executors
-                .newFixedThreadPool(parm.getNumberOfClients());
+                .newFixedThreadPool(params.getNumberOfClients());
 
-        for (int i = 0; i < parm.getNumberOfClients(); i++) {
+        for (int i = 0; i < params.getNumberOfClients(); i++) {
             executorService.submit(
-                    BenchmarkingClientFactory.getClient(this, parm, i, sharedData, benchmarkingClientGui));
+                    BenchmarkingClientFactory.getClient(this, params, i, sharedData, benchmarkingClientGui));
 
             // Warten, bis der Client seinen Login abgeschlossen hat. Damit erfolgt
             // eine Serialisierung der Logins, damit die Anzahl der Login-Events genau
@@ -127,23 +127,23 @@ public class BenchmarkingClientCoordinator extends Thread
         startData.setStartTime(getCurrentTime(cal));
 
         /*
-         * Maximal moegliche Events = ChatMessage-Events + Anzahl an Login-Events
-         * (wenn alle Clients sich seriell hintereinander einloggen + die Anzahl an
-         * Logout-Events, wenn alle Clients bis zuum letzten Logout arbeiten.
+         * Maximal mögliche Events = ChatMessage-Events + Anzahl an Login-Events
+         * (wenn alle Clients sich seriell hintereinander einloggen) + die Anzahl an
+         * Logout-Events, wenn alle Clients bis zum letzten Logout arbeiten.
          */
 
         long numberOfPlannedLoginEvents = 0;
-        for (int i = 1; i <= parm.getNumberOfClients(); i++) {
+        for (int i = 1; i <= params.getNumberOfClients(); i++) {
             numberOfPlannedLoginEvents += i;
         }
         log.debug("Anzahl geplanter LoginEvent-Nachrichten: " + numberOfPlannedLoginEvents);
 
-        long numberOfPlannedMessagesEvents = numberOfAllRequests * parm.getNumberOfClients();
+        long numberOfPlannedMessagesEvents = numberOfAllRequests * params.getNumberOfClients();
         log.debug(
                 "Anzahl geplanter MessageEvent-Nachrichten: " + numberOfPlannedMessagesEvents);
 
-        long numberOfPlannedLogoutEvents = (long) parm.getNumberOfClients()
-                * parm.getNumberOfClients();
+        long numberOfPlannedLogoutEvents = (long) params.getNumberOfClients()
+                * params.getNumberOfClients();
 
         log.debug("Anzahl geplanter LogoutEvent-Nachrichten: " + numberOfPlannedLogoutEvents);
 
@@ -153,7 +153,7 @@ public class BenchmarkingClientCoordinator extends Thread
         benchmarkingClientGui.showStartData(startData);
 
         benchmarkingClientGui.setMessageLine(
-                "Alle " + parm.getNumberOfClients() + " Clients-Threads gestartet");
+                "Alle " + params.getNumberOfClients() + " Clients-Threads gestartet");
 
         // Auf das Ende aller Clients warten
         executorService.shutdown();
@@ -165,10 +165,10 @@ public class BenchmarkingClientCoordinator extends Thread
             ExceptionHandler.logException(e);
         }
 
-        // Laufzeitzaehler-Thread beenden
+        // Laufzeitzähler-Thread beenden
         timeCounterThread.stopThread();
 
-        // Analyse der Ergebnisse durchfuehren, Statistikdaten berechnen und
+        // Analyse der Ergebnisse durchführen, Statistikdaten berechnen und
         // ausgeben
         // sharedData.printStatistic();
 
@@ -179,58 +179,58 @@ public class BenchmarkingClientCoordinator extends Thread
 
         benchmarkingClientGui.showResultData(resultData);
         benchmarkingClientGui
-                .setMessageLine(parm.mapImplementationTypeToString(parm.getChatServerImplementationType())
+                .setMessageLine(params.mapImplementationTypeToString(params.getChatServerImplementationType())
                         + ": Benchmark beendet");
 
         benchmarkingClientGui.testFinished();
 
         log.debug(
-                "Anzahl aller erneuten Sendungen wegen Nachrichtenverlust (Uebertragungswiederholungen): "
+                "Anzahl aller erneuten Sendungen wegen Nachrichtenverlust (Übertragungswiederholungen): "
                         + sharedData.getSumOfAllRetries());
 
-        // Datensatz fuer Benchmark-Lauf auf Protokolldatei schreiben
+        // Datensatz für Benchmark-Lauf auf Protokolldatei schreiben
         sharedData.writeStatisticSet("Benchmarking-ChatApp-Protokolldatei",
-                parm.mapImplementationTypeToString(parm.getChatServerImplementationType()),
-                parm.mapMeasurementTypeToString(parm.getMeasurementType()), startTimeAsString,
+                params.mapImplementationTypeToString(params.getChatServerImplementationType()),
+                params.mapMeasurementTypeToString(params.getMeasurementType()), startTimeAsString,
                 resultData.getEndTime(), cpuUtilisationWatch.getAverageCpuUtilisation());
 
-        // In der GUI erneute Testlaeufe zulassen
+        // In der GUI erneute Testläufe zulassen
         running = false;
     }
 
     @Override
-    // Wird nicht genutzt, nur fuer ChatClientGUI relevant
+    // Wird nicht genutzt, nur für ChatClientGUI relevant
     public synchronized void setUserList(Vector<String> names) {
     }
 
     @Override
-    // Wird nicht genutzt, nur fuer ChatClientGUI relevant
+    // Wird nicht genutzt, nur für ChatClientGUI relevant
     public synchronized void setMessageLine(String sender, String message) {
     }
 
     @Override
-    // Wird nicht genutzt, nur fuer ChatClientGUI
+    // Wird nicht genutzt, nur für ChatClientGUI
     public void setErrorMessage(String sender, String errorMessage, long errorCode) {
     }
 
     @Override
-    // Wird nicht genutzt, nur fuer BenchmarkingClientImpl relevant
+    // Wird nicht genutzt, nur für BenchmarkingClientImpl relevant
     public void loginComplete() {
     }
 
     @Override
-    // Wird nicht genutzt, nur fuer BenchmarkingClientImpl relevant
+    // Wird nicht genutzt, nur für BenchmarkingClientImpl relevant
     public void logoutComplete() {
     }
 
     @Override
-    // Wird nicht genutzt, nur fuer BenchmarkingClientImpl relevant
+    // Wird nicht genutzt, nur für BenchmarkingClientImpl relevant
     public synchronized boolean getLock() {
         return false;
     }
 
     @Override
-    // Wird nicht genutzt, nur fuer BenchmarkingClientImpl relevant
+    // Wird nicht genutzt, nur für BenchmarkingClientImpl relevant
     public synchronized void setLock(boolean lock) {
     }
 
@@ -255,49 +255,49 @@ public class BenchmarkingClientCoordinator extends Thread
     }
 
     @Override
-    // Wird nicht genutzt, nur fuer BenchmarkingClientImpl relevant
+    // Wird nicht genutzt, nur für BenchmarkingClientImpl relevant
     public synchronized long getLastServerTime() {
         return 0;
     }
 
     @Override
-    // Wird nicht genutzt, nur fuer BenchmarkingClientImpl relevant
+    // Wird nicht genutzt, nur für BenchmarkingClientImpl relevant
     public synchronized void setLastServerTime(long lastServerTime) {
     }
 
     @Override
-    // Wird nicht genutzt, nur fuer BenchmarkingClientImpl relevant
+    // Wird nicht genutzt, nur für BenchmarkingClientImpl relevant
     public synchronized void setSessionStatisticsCounter(long numberOfSentEvents,
                                                          long numberOfReceivedConfirms, long numberOfLostConfirms, long numberOfRetries,
                                                          long numberOfReceivedChatMessages) {
     }
 
     @Override
-    // Wird nicht genutzt, nur fuer BenchmarkingClientImpl relevant
+    // Wird nicht genutzt, nur für BenchmarkingClientImpl relevant
     public synchronized long getNumberOfSentEvents() {
         return 0;
     }
 
     @Override
-    // Wird nicht genutzt, nur fuer BenchmarkingClientImpl relevant
+    // Wird nicht genutzt, nur für BenchmarkingClientImpl relevant
     public synchronized long getNumberOfReceivedConfirms() {
         return 0;
     }
 
     @Override
-    // Wird nicht genutzt, nur fuer BenchmarkingClientImpl relevant
+    // Wird nicht genutzt, nur für BenchmarkingClientImpl relevant
     public synchronized long getNumberOfLostConfirms() {
         return 0;
     }
 
     @Override
-    // Wird nicht genutzt, nur fuer BenchmarkingClientImpl relevant
+    // Wird nicht genutzt, nur für BenchmarkingClientImpl relevant
     public synchronized long getNumberOfRetries() {
         return 0;
     }
 
     @Override
-    // Wird nicht genutzt, nur fuer BenchmarkingClientImpl relevant
+    // Wird nicht genutzt, nur für BenchmarkingClientImpl relevant
     public synchronized long getNumberOfReceivedChatMessages() {
         return 0;
     }
@@ -309,7 +309,6 @@ public class BenchmarkingClientCoordinator extends Thread
      * @return Ergebnisdaten
      */
     private UserInterfaceResultData getResultData(long startTime) {
-
         Calendar cal;
         UserInterfaceResultData resultData = new UserInterfaceResultData();
         DistributionMetrics distributionMetrics = sharedData.calculateMetrics();
@@ -322,7 +321,7 @@ public class BenchmarkingClientCoordinator extends Thread
         resultData.setPercentile90(distributionMetrics.getPercentile90());
         resultData.setStandardDeviation(distributionMetrics.getStandardDeviation());
         resultData.setRange(distributionMetrics.getRange());
-        resultData.setInterquartilRange(distributionMetrics.getInterquartilRange());
+        resultData.setInterQuartilRange(distributionMetrics.getInterquartilRange());
         resultData.setMinimum(distributionMetrics.getMinimum());
         resultData.setMaximum(distributionMetrics.getMaximum());
 

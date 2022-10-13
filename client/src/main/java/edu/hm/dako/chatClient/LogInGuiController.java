@@ -17,15 +17,15 @@ import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 
 /**
- * Controller fuer Login-GUI
- * @author Paul Mandl
+ * Controller für Login-GUI
+ *
+ * @author Peter Mandl, edited by Lerngruppe
  */
 public class LogInGuiController implements Initializable {
-
     private static final Pattern IPV6_PATTERN = Pattern
             .compile("^(?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}$");
-    private static final Pattern IPV4_PATTERN = Pattern.compile(
-            "(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)");
+    private static final Pattern IPV4_PATTERN = Pattern
+            .compile("(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)");
     private static final Logger log = LogManager.getLogger(LogInGuiController.class);
     private String userName;
     @FXML
@@ -54,12 +54,10 @@ public class LogInGuiController implements Initializable {
     }
 
     /**
-     * Login-Eingaben entgegennehmen, pruefen und Anmeldung beim Server durchfuehren
+     * Login-Eingaben entgegennehmen, prüfen und Anmeldung beim Server durchführen
      */
     public void performLogin() {
-
-        // Benutzernamen pruefen
-
+        // Benutzernamen prüfen
         userName = txtUsername.getText();
         if (userName.isEmpty()) {
             log.debug("Benutzername ist leer");
@@ -69,8 +67,7 @@ public class LogInGuiController implements Initializable {
             appController.getModel().setUserName(userName);
         }
 
-        // IP-Adresse pruefen
-
+        // IP-Adresse prüfen
         if (!ipCorrect()) {
             appController.setErrorMessage("Chat-Client",
                     "IP-Adresse nicht korrekt, z.B. 127.0.0.1, 192.168.178.2 oder localhost!", 3);
@@ -80,8 +77,7 @@ public class LogInGuiController implements Initializable {
         // IP-Adresse ist korrekt
         lblIP.setTextFill(Color.web(SystemConstants.BLACK_COLOR));
 
-        // Serverport pruefen
-
+        // Serverport prüfen
         int serverPort;
         String valueServerPort = txtServerPort.getText();
         if (valueServerPort.matches("[0-9]+")) {
@@ -103,7 +99,6 @@ public class LogInGuiController implements Initializable {
         }
 
         // Verbindung herstellen und beim Server anmelden
-
         appController.createCommunicator(comboServerType.getValue(), serverPort,
                 txtServername.getText());
         try {
@@ -124,12 +119,11 @@ public class LogInGuiController implements Initializable {
     }
 
     public void exitButtonReaction() {
-
         System.exit(0);
     }
 
     /**
-     * Pruefen, ob IP-Adresse korrekt ist
+     * Prüfen, ob IP-Adresse korrekt ist
      *
      * @return true - korrekt, false - nicht korrekt
      */

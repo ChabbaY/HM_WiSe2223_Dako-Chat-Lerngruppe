@@ -16,17 +16,16 @@ import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 
-
 /**
- * Diese Klasse kapselt die Datagram-Sockets und stellt eine etwas komfortablere Schnittstelle zur Verfuegung.
+ * Diese Klasse kapselt die Datagram-Sockets und stellt eine etwas komfortablere Schnittstelle zur Verfügung.
  * Der Mehrwert dieser Klasse im Vergleich zur Standard-DatagramSocket-Klasse ist die Nutzung eines Objektstroms zur
- * Kommunikation ueber UDP.
- * Achtung: Maximale Datagramlaenge: 64 KByte
- * @author Mandl
+ * Kommunikation über UDP.
+ * Achtung: Maximale DatagramLänge: 64 KByte
+ *
+ * @author Peter Mandl, edited by Lerngruppe
  * @version 1.0.0
  */
 public class UdpSocket {
-
     static final int MAX_BUFFER_SIZE = 65527;
     private static final Logger log = LogManager.getLogger(UdpSocket.class);
     private DatagramSocket socket;
@@ -35,71 +34,62 @@ public class UdpSocket {
 
     /**
      * Konstruktor
-     * @param port UDP-Port, der lokal fuer das Datagramm-Socket verwendet werden soll
-     * @throws SocketException Fehler beim Erzeugen des Sockets oder beim einer Adresse
+     *
+     * @param port UDP-Port, der lokal für das Datagramm-Socket verwendet werden soll
+     * @throws SocketException Fehler beim Erzeugen des Sockets oder beim Erzeugen einer Adresse
      */
     public UdpSocket(int port) throws SocketException {
-
         try {
             socket = new DatagramSocket(port);
-            System.out.println("Groesse des Empfangspuffers des Datagram-Sockets: "
-                    + socket.getReceiveBufferSize() + " Byte");
-            System.out.println("Groesse des Sendepuffers des Datagram-Sockets: "
-                    + socket.getSendBufferSize() + " Byte");
+            System.out.println("Größe des Empfangspuffers des Datagram-Sockets: " + socket.getReceiveBufferSize()
+                    + " Byte");
+            System.out.println("Größe des Sendepuffers des Datagram-Sockets: " + socket.getSendBufferSize() + " Byte");
         } catch (BindException e) {
-            log.error(
-                    "Port " + port + " auf dem Rechner schon in Benutzung, Bind Exception: " + e);
-            System.out.println(
-                    "Port " + port + " auf dem Rechner schon in Benutzung, Bind Exception: " + e);
+            log.error("Port " + port + " auf dem Rechner schon in Benutzung, Bind Exception: " + e);
+            System.out.println("Port " + port + " auf dem Rechner schon in Benutzung, Bind Exception: " + e);
             throw e;
         } catch (SocketException e) {
-            log.error("Datagram-Socketfehler: " + e);
+            log.error("Datagram-SocketFehler: " + e);
             throw e;
         }
     }
 
     /**
      * Konstruktor
-     * @param port UDP-Port, der lokal fuer das Datagramm-Socket verwendet werden soll
-     * @param sendBufferSize Groesse des Sendepuffers in Byte
-     * @param receiveBufferSize Groesse des Empfangspuffers in Byte
-     * @throws SocketException Fehler beim Erzeugen des Sockets oder beim einer Adresse
+     *
+     * @param port              UDP-Port, der lokal für das Datagramm-Socket verwendet werden soll
+     * @param sendBufferSize    Größe des Sendepuffers in Byte
+     * @param receiveBufferSize Größe des Empfangspuffers in Byte
+     * @throws SocketException Fehler beim Erzeugen des Sockets oder beim Erzeugen einer Adresse
      */
-
     public UdpSocket(int port, int sendBufferSize, int receiveBufferSize) throws SocketException {
-
         try {
             socket = new DatagramSocket(port);
             socket.setReceiveBufferSize(receiveBufferSize);
             socket.setSendBufferSize(sendBufferSize);
-            System.out.println("Groesse des Empfangspuffers des Datagram-Sockets: "
-                    + socket.getReceiveBufferSize() + " Byte");
-            System.out.println("Groesse des Sendepuffers des Datagram-Sockets: "
-                    + socket.getSendBufferSize() + " Byte");
+            System.out.println("Größe des Empfangspuffers des Datagram-Sockets: " + socket.getReceiveBufferSize()
+                    + " Byte");
+            System.out.println("Größe des Sendepuffers des Datagram-Sockets: " + socket.getSendBufferSize() + " Byte");
         } catch (BindException e) {
-            log.error(
-                    "Port " + port + " auf dem Rechner schon in Benutzung, Bind Exception: " + e);
-            System.out.println(
-                    "Port " + port + " auf dem Rechner schon in Benutzung, Bind Exception: " + e);
+            log.error("Port " + port + " auf dem Rechner schon in Benutzung, Bind Exception: " + e);
+            System.out.println("Port " + port + " auf dem Rechner schon in Benutzung, Bind Exception: " + e);
             throw e;
         } catch (SocketException e) {
-            log.debug("Datagram-Socketfehler: " + e);
+            log.debug("Datagram-SocketFehler: " + e);
         }
     }
 
     /**
-     * Empfangen einer Nachricht ueber UDP
+     * Empfangen einer Nachricht über UDP
+     *
      * @param timeout Wartezeit in ms
      * @return Referenz auf Nachricht, die empfangen wurde
-     * @throws IOException Fehler bei der Ein-/Ausgabe
-     * @throws SocketTimeoutException Timeout beim Empfang
-     * @throws StreamCorruptedException Stream zerstoert
-     * @throws ClassNotFoundException Nachricht keiner Klasse zuordenbar
-     * @throws Exception Sonstiger Fehler
+     * @throws IOException              Fehler bei der Ein-/Ausgabe
+     * @throws SocketTimeoutException   Timeout beim Empfang
+     * @throws StreamCorruptedException Stream zerstört
+     * @throws Exception                Sonstiger Fehler
      */
-    public Object receive(int timeout) throws IOException, SocketTimeoutException,
-            StreamCorruptedException, ClassNotFoundException, Exception {
-
+    public Object receive(int timeout) throws IOException, SocketTimeoutException, StreamCorruptedException, Exception {
         // Maximale Wartezeit beim Empfang einstellen
         try {
             socket.setSoTimeout(timeout);
@@ -114,19 +104,17 @@ public class UdpSocket {
         try {
             // Blockiert nur, bis Timeout abgelaufen ist
             socket.receive(packet);
-            log.debug("Datagramm empfangen, Datagramm-Laenge: " + packet.getLength());
+            log.debug("Datagramm empfangen, Datagramm-Länge: " + packet.getLength());
         } catch (SocketTimeoutException e1) {
             log.debug("Timeout beim Empfangen");
             throw e1;
         } catch (IOException e2) {
             log.error("Fehler beim Empfangen eines Datagramms");
             throw e2;
-        } catch (Exception e3) {
-            throw e3;
         }
 
-        ByteArrayInputStream bais = new ByteArrayInputStream(packet.getData());
-        ObjectInputStream ois = new ObjectInputStream(bais);
+        ByteArrayInputStream baInputStream = new ByteArrayInputStream(packet.getData());
+        ObjectInputStream ois = new ObjectInputStream(baInputStream);
 
         Object pdu;
         try {
@@ -135,9 +123,7 @@ public class UdpSocket {
             remoteAddress = packet.getAddress();
             remotePort = packet.getPort();
 
-            log.debug("Entfernter Port: " + packet.getPort() + ", Zielport: "
-                    + socket.getLocalPort());
-
+            log.debug("Entfernter Port: " + packet.getPort() + ", Zielport: " + socket.getLocalPort());
         } catch (ClassNotFoundException e1) {
             log.error("ClassNotFoundException beim Empfang: ", e1);
             // throw e1;
@@ -155,10 +141,11 @@ public class UdpSocket {
     }
 
     /**
-     * Senden einer Nachricht ueber UDP
-     * @param remoteAddress Adresse des Empfaengers
-     * @param remotePort Port des Empfaengers
-     * @param pdu Zu sendende PDU
+     * Senden einer Nachricht über UDP
+     *
+     * @param remoteAddress Adresse des Empfängers
+     * @param remotePort    Port des Empfängers
+     * @param pdu           Zu sendende PDU
      * @throws IOException Fehler beim Senden
      */
     public void send(InetAddress remoteAddress, int remotePort, Object pdu) throws IOException {
@@ -169,8 +156,7 @@ public class UdpSocket {
 
         log.debug("Zu sendende Bytes: " + bytes.length);
 
-        DatagramPacket packet = new DatagramPacket(bytes, bytes.length, remoteAddress,
-                remotePort);
+        DatagramPacket packet = new DatagramPacket(bytes, bytes.length, remoteAddress, remotePort);
 
         log.debug("Senden mit Quelladresse " + packet.getAddress() + ":" + packet.getPort());
 

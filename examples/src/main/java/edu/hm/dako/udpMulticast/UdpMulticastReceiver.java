@@ -10,29 +10,29 @@ import java.net.NetworkInterface;
 /**
  * Multicast Receiver
  * <p>
- * Anlegen einer Multicast-Gruppe und Empfangen von Nachrichten ueber diese.
+ * Anlegen einer Multicast-Gruppe und Empfangen von Nachrichten über diese.
  * <p>
  * Die neue Methode joinGroup(ab Java 14) erfordert die Angabe des Netzwerk-Interface,
- * ueber das  Multicast-Nachrichten empfangen werden sollen. Dies wird im Beispiel statisch
- * auf "en0" eingestellt. Diese Bezeichnung ist bei macOS fuer LAN-Interfaces ueblich.
+ * über das Multicast-Nachrichten empfangen werden sollen. Dies wird im Beispiel statisch
+ * auf "en0" eingestellt. Diese Bezeichnung ist bei macOS für LAN-Interfaces üblich.
  * <p>
- * Besser ist es, das Netzwerk-Interface dynamisch zu ermitteln. Das ist ueber die Klasse
- * NetworkInterface moeglich.
- * @author P.Mandl
+ * Besser ist es, das Netzwerk-Interface dynamisch zu ermitteln. Das ist über die Klasse
+ * NetworkInterface möglich.
+ *
+ * @author Peter Mandl, edited by Lerngruppe
  * @version 2.0
  */
 public class UdpMulticastReceiver {
-
     public final static int MY_MULTICAST_PORT = 7000;
     public final static int MY_LOCAL_PORT = 7000;
     public final static String MY_MULTICAST_ADDRESS = "224.10.1.1";
 
     /**
      * Hauptprogramm
+     *
      * @param args nicht genutzt
      */
     public static void main(String[] args) {
-
         InetAddress myMulticastAddress;
         InetSocketAddress group;
         MulticastSocket s = null;
@@ -40,7 +40,7 @@ public class UdpMulticastReceiver {
 
         try {
             // Verwendung des Ports 7000 und der IP-Klasse-D-Adresse 224.10.1.1
-            // fuer die Multicast-Gruppe
+            // für die Multicast-Gruppe
             myMulticastAddress = InetAddress.getByName(MY_MULTICAST_ADDRESS);
             group = new InetSocketAddress(myMulticastAddress, MY_LOCAL_PORT);
             s = new MulticastSocket(MY_MULTICAST_PORT);
@@ -51,7 +51,6 @@ public class UdpMulticastReceiver {
             s.joinGroup(group, networkInterface);
             // s.joinGroup(group); (deprecated)
             System.out.println("Multicast group joined");
-
         } catch (IOException e) {
             System.out.println("Error in creating multicast socket");
             System.exit(1);
@@ -73,9 +72,8 @@ public class UdpMulticastReceiver {
                 String receivedMessage = new String(packet.getData(), 0, packet.getLength());
                 System.out.print("Packet received in Multicast group: >");
                 System.out.println(receivedMessage + "<");
-
             } catch (IOException e) {
-                System.out.println("Error in receiving Multcast packet");
+                System.out.println("Error in receiving Multicast packet");
                 running = false;
                 s.close();
             }

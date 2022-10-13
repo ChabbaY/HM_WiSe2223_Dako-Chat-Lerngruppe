@@ -4,8 +4,9 @@ import edu.hm.dako.connection.udp.UdpServerConnection;
 import edu.hm.dako.connection.udp.UdpServerSocket;
 
 /**
- * Singlethreaded Server (UDP)
- * @author Peter Mandl
+ * SingleThreaded Server (UDP)
+ *
+ * @author Peter Mandl, edited by Lerngruppe
  */
 public class EchoUdpServer {
     UdpServerSocket serverSocket = null;
@@ -30,6 +31,7 @@ public class EchoUdpServer {
 
     /**
      * Server-Socket erzeugen
+     *
      * @throws Exception Fehler in der Verbindung zum Server
      */
     private void createSocket() throws Exception {
@@ -43,6 +45,7 @@ public class EchoUdpServer {
 
     /**
      * Auf Verbindungsaufbauwunsch eines Clients warten
+     *
      * @throws Exception Fehler in der Verbindung zum Server
      */
     private void waitForConnection() throws Exception {
@@ -56,19 +59,18 @@ public class EchoUdpServer {
     }
 
     /**
-     * Nachricht vom Client empfangen und zuruecksenden
+     * Nachricht vom Client empfangen und zurücksenden
+     *
      * @throws Exception Fehler in der Verbindung zum Server
      */
     private void echo() throws Exception {
         try {
             SimplePDU receivedPdu = (SimplePDU) con.receive();
             String message = receivedPdu.getMessage();
-            System.out.println("PDU empfangen, Message-Laenge = " + message.length()
-                    + ", Message: " + message);
+            System.out.println("PDU empfangen, Message-Länge = " + message.length() + ", Message: " + message);
             if (message.compareTo("CLOSE") == 0) {
                 System.out.println("close erkannt");
-                System.out.println("PDU empfangen, Message-Laenge = " + message.length()
-                        + " Message: " + message);
+                System.out.println("PDU empfangen, Message-Länge = " + message.length() + " Message: " + message);
                 System.exit(1);
                 throw new Exception();
             }

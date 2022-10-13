@@ -7,14 +7,13 @@ import java.io.Serial;
 import java.io.Serializable;
 
 /**
- * Nachrichtenaufbau fuer ein Simple-Protokoll
- * @author Peter Mandl
+ * Nachrichtenaufbau für ein Simple-Protokoll
+ * @author Peter Mandl, edited by Lerngruppe
  */
 public class SimplePDU implements Serializable {
-
     @Serial
     private static final long serialVersionUID = -6172619032079227588L;
-    private static Logger log = LogManager.getLogger(SimplePDU.class);
+    private static final Logger log = LogManager.getLogger(SimplePDU.class);
 
     // Name des Client-Threads, der den Request absendet
     private String clientThreadName;
@@ -37,7 +36,6 @@ public class SimplePDU implements Serializable {
     }
 
     public String toString() {
-
         return "\n"
                 + "SimplePdu ****************************************************************************************************"
                 + "\n" + "clientThreadName: " + this.clientThreadName + ", " + "\n"

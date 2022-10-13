@@ -21,11 +21,12 @@ import java.util.Formatter;
 import java.util.concurrent.CountDownLatch;
 
 /**
- * Die Klasse sammelt Statistikdaten zur Ermittlung von Round Trip Times (RTT) fuer einen Test zur
+ * Die Klasse sammelt Statistikdaten zur Ermittlung von Round Trip Times (RTT) für einen Test zur
  * Kommunikation zwischen mehreren Client-Threads und einem Server.
- * Die Daten werden in einem Array gesammelt, das einen Eintrag fuer jeden Client enthaelt.
- * Jeder Client erhaelt eine Nummer, die als Zugriffsindex auf das Array verwendet wird.
- * @author Peter Mandl
+ * Die Daten werden in einem Array gesammelt, das einen Eintrag für jeden Client enthält.
+ * Jeder Client erhält eine Nummer, die als Zugriffsindex auf das Array verwendet wird.
+ *
+ * @author Peter Mandl, edited by Lerngruppe
  */
 public class SharedClientStatistics {
     private static final Logger log = LogManager.getLogger(SharedClientStatistics.class);
@@ -35,27 +36,28 @@ public class SharedClientStatistics {
     private final int numberOfMessages;
     // Denkzeit eines Clients zwischen zwei Requests in ms
     private final int clientThinkTime;
-    // Alle Antwortnachrichten, die fuer den Test empfangen werden muessen
+    // Alle Antwortnachrichten, die für den Test empfangen werden müssen
     private final int numberOfAllMessages;
     // Kann benutzt werden, um ein gleichzeitiges Starten aller Client-Threads zu
-    // ermoeglichen
+    // ermöglichen
     private final CountDownLatch loginSignal;
-    // Kann benutzt werden um ein gleichzeitiges Logout aller Client-Threads zu
-    // ermoeglichen, erst nachdem alle Chat-Messages von allen Clients versendet wurden
+    // Kann benutzt werden, um ein gleichzeitiges Logout aller Client-Threads zu
+    // ermöglichen, erst nachdem alle Chat-Messages von allen Clients versendet wurden
     private final CountDownLatch logoutSignal;
     private final ClientStatistics[] clientStatistics;
-    // Alle Event-Nachrichten, die fuer den Test vom Server gesendet werden muessen
-    long numberOfPlannedEventMessages;
-    // Zaehlt angemeldete Clients
+    // Alle Event-Nachrichten, die für den Test vom Server gesendet werden müssen
+    final long numberOfPlannedEventMessages;
+    // Zählt angemeldete Clients
     private int numberOfLoggedInClients;
-    // Zaehlt abgemeldete Clients
+    // Zählt abgemeldete Clients
     private int numberOfLoggedOutClients;
 
     /**
      * Konstruktor
-     * @param numberOfClients Anzahl an Clients
+     *
+     * @param numberOfClients  Anzahl an Clients
      * @param numberOfMessages Anzahl Nachrichten, die je Client gesendet werden sollen
-     * @param clientThinkTime Denkzeit
+     * @param clientThinkTime  Denkzeit
      */
     public SharedClientStatistics(int numberOfClients, int numberOfMessages, int clientThinkTime) {
         this.numberOfClients = numberOfClients;
@@ -88,21 +90,23 @@ public class SharedClientStatistics {
     }
 
     /**
-     * Test, ob Client-Id im gueltigen Bereich ist
+     * Test, ob Client-Id im gültigen Bereich ist
+     *
      * @param i Client-Id
-     * @return true, falls Client-Id im gueltigen Bereich ist. Sonst false.
+     * @return true, falls Client-Id im gültigen Bereich ist. Sonst false.
      */
-    private boolean inRange(int i) {
+    private boolean notInRange(int i) {
         if ((i < 0) || (i > numberOfClients)) {
-            log.error("Client-Id nicht im gueltigen Bereich");
-            return false;
-        } else {
+            log.error("Client-Id nicht im gültigen Bereich");
             return true;
+        } else {
+            return false;
         }
     }
 
     /**
-     * Login-Signal fuer das gleichzeitige Anlaufen von Clients ermitteln
+     * Login-Signal für das gleichzeitige Anlaufen von Clients ermitteln
+     *
      * @return Login-Signal
      */
     public CountDownLatch getLoginSignal() {
@@ -110,7 +114,8 @@ public class SharedClientStatistics {
     }
 
     /**
-     * Logout-Signal fuer das gleichzeitige Beenden von Clients ermitteln
+     * Logout-Signal für das gleichzeitige Beenden von Clients ermitteln
+     *
      * @return Login-Signal
      */
     public CountDownLatch getLogoutSignal() {
@@ -118,9 +123,9 @@ public class SharedClientStatistics {
     }
 
     /**
-     * Anzahl der angemeldeten Clients erhoehen
+     * Anzahl der angemeldeten Clients erhöhen
      */
-    public synchronized void incrNumberOfLoggedInClients() {
+    public synchronized void increaseNumberOfLoggedInClients() {
         numberOfLoggedInClients++;
 
         if (numberOfLoggedInClients == numberOfClients) {
@@ -130,18 +135,17 @@ public class SharedClientStatistics {
 
     /**
      * Anzahl der angemeldeten Clients ausgeben
+     *
      * @return Anzahl eingeloggter Clients
      */
     public synchronized int getNumberOfLoggedInClients() {
-
         return numberOfLoggedInClients;
     }
 
     /**
-     * Anzahl der abgemeldeten Clients erhoehen
+     * Anzahl der abgemeldeten Clients erhöhen
      */
-    public synchronized void incrNumberOfLoggedOutClients() {
-
+    public synchronized void increaseNumberOfLoggedOutClients() {
         numberOfLoggedOutClients++;
         log.debug(numberOfLoggedOutClients + " Test-Clients abgemeldet");
         if (numberOfLoggedOutClients == numberOfClients) {
@@ -150,113 +154,112 @@ public class SharedClientStatistics {
     }
 
     /**
-     * Anzahl der gesendeten Nachrichten eines Clients erhoehen
+     * Anzahl der gesendeten Nachrichten eines Clients erhöhen
+     *
      * @param i Client-Id
      */
-    public synchronized void incrSentMsgCounter(int i) {
-        if (!inRange(i))
-            return;
+    public synchronized void increaseSentMsgCounter(int i) {
+        if (notInRange(i)) return;
         clientStatistics[i].sentRequests++;
     }
 
     /**
      * Anzahl der gesendeten Events setzen
+     *
      * @param i  Nummer des Client-Threads
      * @param nr Anzahl der gesendeten Event-Nachrichten
      */
     public synchronized void setNumberOfSentEventMessages(int i, long nr) {
-        if (!inRange(i))
-            return;
+        if (notInRange(i)) return;
         clientStatistics[i].numberOfSentEventMessages = nr;
     }
 
     /**
      * Anzahl der gesendeten Events lesen
+     *
      * @param i Client-Id
      * @return Anzahl gesendeter Message Events
      */
     public synchronized long getNumberOfSentEventMessages(int i) {
-        if (!inRange(i))
-            return (-1);
+        if (notInRange(i)) return (-1);
         return clientStatistics[i].numberOfSentEventMessages;
     }
 
     /**
-     * Anzahl der verlorenen Event-Bestaetigungen setzen
+     * Anzahl der verlorenen Event-Bestätigungen setzen
+     *
      * @param i  Client-Id
-     * @param nr Anzahl an verlorengegangenen Confirm-Nachrichten
+     * @param nr Anzahl an verloren gegangenen Confirm-Nachrichten
      */
     public synchronized void setNumberOfLostConfirmEvents(int i, long nr) {
-        if (!inRange(i))
-            return;
+        if (notInRange(i)) return;
         clientStatistics[i].numberOfLostConfirmEvents = nr;
     }
 
     /**
      * Anzahl der verlorenen Confirms lesen
+     *
      * @param i Client-Id
      * @return Anzahl verlorener Confirm Events
      */
     public synchronized long getNumberOfLostConfirmEvents(int i) {
-        if (!inRange(i))
-            return (-1);
+        if (notInRange(i)) return (-1);
         return clientStatistics[i].numberOfLostConfirmEvents;
     }
 
     /**
-     * Anzahl der empfangenen Event-Bestaetigungen setzen
-     * @param i Client-Id
+     * Anzahl der empfangenen Event-Bestätigungen setzen
+     *
+     * @param i  Client-Id
      * @param nr Anzahl an empfangenen Confirm-Nachrichten
      */
     public synchronized void setNumberOfReceivedConfirmEvents(int i, long nr) {
-        if (!inRange(i))
-            return;
+        if (notInRange(i)) return;
         clientStatistics[i].numberOfReceivedConfirmEvents = nr;
     }
 
     /**
      * Anzahl der empfangenen Confirms lesen
+     *
      * @param i Client-Id
      * @return Anzahl empfangener Confirm-Events
      */
     public synchronized long getNumberOfReceivedConfirmEvents(int i) {
-        if (!inRange(i))
-            return (-1);
+        if (notInRange(i)) return (-1);
         return clientStatistics[i].numberOfReceivedConfirmEvents;
     }
 
     /**
      * Anzahl der Event-Wiederholungen setzen
+     *
      * @param i  Client-Id
-     * @param nr Anzahl der Wiederholugen von Event-Nachrichten
+     * @param nr Anzahl der Wiederholungen von Event-Nachrichten
      */
     public synchronized void setNumberOfRetriedEvents(int i, long nr) {
-        if (!inRange(i))
-            return;
+        if (notInRange(i)) return;
         clientStatistics[i].numberOfRetriedEvents = nr;
     }
 
     /**
      * Anzahl der wiederholten Confirms lesen
+     *
      * @param i Client-Id
-     * @return Anzahl der Wiederholugen von Event-Nachrichten
+     * @return Anzahl der Wiederholungen von Event-Nachrichten
      */
     public synchronized long getNumberOfRetriedEvents(int i) {
-        if (!inRange(i))
-            return (-1);
+        if (notInRange(i)) return (-1);
         return clientStatistics[i].numberOfRetriedEvents;
     }
 
     /**
-     * Anzahl der empfangenen Nachrichten eines Clients erhoehen
-     * @param i Client-Id
-     * @param rtt RoundTrip Time
-     * @param serverTime Die Zeit, die der Server benoetigt hat
+     * Anzahl der empfangenen Nachrichten eines Clients erhöhen
+     *
+     * @param i          Client-Id
+     * @param rtt        RoundTrip Time
+     * @param serverTime Die Zeit, die der Server benötigt hat
      */
-    public synchronized void incrReceivedMsgCounter(int i, long rtt, long serverTime) {
-
-        if (!inRange(i))
-            return;
+    public synchronized void increaseReceivedMsgCounter(int i, long rtt, long serverTime) {
+        if (notInRange(i)) return;
 
         clientStatistics[i].receivedResponses++;
 
@@ -276,7 +279,7 @@ public class SharedClientStatistics {
         clientStatistics[i].avgServerTime = clientStatistics[i].sumServerTime
                 / clientStatistics[i].receivedResponses;
 
-        clientStatistics[i].rttList.add((Long) rtt);
+        clientStatistics[i].rttList.add(rtt);
         if (clientStatistics[i].maxHeapSize < usedMemory()) {
             clientStatistics[i].maxHeapSize = usedMemory();
         }
@@ -284,6 +287,7 @@ public class SharedClientStatistics {
 
     /**
      * Test, ob alle Clients angemeldet sind
+     *
      * @return true angemeldet; false nicht angemeldet
      */
     public synchronized boolean allClientsLoggedIn() {
@@ -292,6 +296,7 @@ public class SharedClientStatistics {
 
     /**
      * Anzahl aller empfangenen Event-Confirm-Nachrichten ermitteln
+     *
      * @return Anzahl empfangener Event-Confirm-Nachrichten
      */
     public synchronized int getSumOfAllReceivedConfirmEvents() {
@@ -304,6 +309,7 @@ public class SharedClientStatistics {
 
     /**
      * Anzahl aller verlorenen Event-Confirm-Nachrichten ermitteln
+     *
      * @return Anzahl verlorener Event-Confirm-Nachrichten
      */
     public synchronized int getSumOfAllLostConfirmEvents() {
@@ -316,6 +322,7 @@ public class SharedClientStatistics {
 
     /**
      * Anzahl aller Wiederholungen von Event-Nachrichten ermitteln
+     *
      * @return Anzahl verlorener Event-Nachrichten
      */
     public synchronized int getSumOfAllRetriedEvents() {
@@ -328,6 +335,7 @@ public class SharedClientStatistics {
 
     /**
      * Anzahl aller gesendeten Event-Nachrichten ermitteln
+     *
      * @return Anzahl gesendeten Event-Nachrichten
      */
     public synchronized int getSumOfAllSentEventMessages() {
@@ -340,6 +348,7 @@ public class SharedClientStatistics {
 
     /**
      * Anzahl aller empfangenen Nachrichten ermitteln
+     *
      * @return Anzahl empfangener Nachrichten
      */
     public synchronized int getSumOfAllReceivedMessages() {
@@ -351,8 +360,9 @@ public class SharedClientStatistics {
     }
 
     /**
-     * Anzahl aller Uebertragungswiederholungen ermitteln
-     * @return Anzahl Uebertragungswiederholungen
+     * Anzahl aller Übertragungswiederholungen ermitteln
+     *
+     * @return Anzahl Übertragungswiederholungen
      */
     public synchronized int getSumOfAllRetries() {
         int sum = 0;
@@ -364,6 +374,7 @@ public class SharedClientStatistics {
 
     /**
      * Durchschnittliche RTT ermitteln
+     *
      * @return Durchschnittliche RTT
      */
     public synchronized long getAverageRTT() {
@@ -387,6 +398,7 @@ public class SharedClientStatistics {
 
     /**
      * Durchschnittliche RTT eines Clients ermittelt
+     *
      * @param i Client-Id
      * @return Durchschnittliche RTT
      */
@@ -395,14 +407,14 @@ public class SharedClientStatistics {
     }
 
     /**
-     * Minimale RTT ueber alle Clients ermitteln
+     * Minimale RTT über alle Clients ermitteln
+     *
      * @return Minimale RTT
      */
     public synchronized long getMinimumRTT() {
-
         long min = Long.MAX_VALUE;
         for (int i = 0; i < numberOfClients; i++) {
-            // Nur Threads, die mindestens eine Antwort bekommen haben,nverwenden
+            // Nur Threads, die mindestens eine Antwort bekommen haben verwenden
             if (clientStatistics[i].receivedResponses > 0) {
                 min = Math.min(clientStatistics[i].minRTT, min);
             }
@@ -416,7 +428,8 @@ public class SharedClientStatistics {
     }
 
     /**
-     * Maximale RTT ueber alle Clients ermitteln
+     * Maximale RTT über alle Clients ermitteln
+     *
      * @return Maximale RTT
      */
     public synchronized long getMaximumRTT() {
@@ -439,6 +452,7 @@ public class SharedClientStatistics {
 
     /**
      * Anzahl der gesendeten Requests aller Clients liefern
+     *
      * @return Anzahl gesendeter Requests
      */
     public synchronized int getNumberOfSentRequests() {
@@ -453,17 +467,18 @@ public class SharedClientStatistics {
 
     /**
      * Anzahl der gesendeten Requests eines Clients liefern
+     *
      * @param i Client-Id
      * @return Anzahl gesendeter Requests des Clients i
      */
     public synchronized int getNumberOfSentRequests(int i) {
-        if (!inRange(i))
-            return (-1);
+        if (notInRange(i)) return (-1);
         return clientStatistics[i].sentRequests;
     }
 
     /**
      * Anzahl der empfangenden Responses liefern
+     *
      * @return Anzahl empfangener Responses
      */
     public synchronized int getNumberOfReceivedResponses() {
@@ -476,17 +491,18 @@ public class SharedClientStatistics {
 
     /**
      * Anzahl der empfangenen Responses eines Clients liefern
+     *
      * @param i Client-Id
      * @return Anzahl empfangenerResponses des Clients i
      */
     public synchronized int getNumberOfReceivedResponses(int i) {
-        if (!inRange(i))
-            return (-1);
+        if (notInRange(i)) return (-1);
         return clientStatistics[i].receivedResponses;
     }
 
     /**
      * Anzahl der verlorenen Responses liefern
+     *
      * @return Anzahl verlorenen Responses
      */
     public synchronized int getNumberOfLostResponses() {
@@ -499,39 +515,40 @@ public class SharedClientStatistics {
 
     /**
      * Anzahl der verlorenen Responses eines Clients liefern
+     *
      * @param i Client-Id
      * @return Anzahl verlorenen Responses des Clients i
      */
     public synchronized int getNumberOfLostResponses(int i) {
-        if (!inRange(i))
-            return (-1);
+        if (notInRange(i)) return (-1);
         return clientStatistics[i].sentRequests - getNumberOfReceivedResponses(i);
     }
 
     /**
-     * Anzahl der Uebertragungswuederholungen eines Clients liefern
+     * Anzahl der Übertragungswiederholungen eines Clients liefern
+     *
      * @param i Client-Id
-     * @return Anzahl Uebertragungswiederholungen des Clients i
+     * @return Anzahl Übertragungswiederholungen des Clients i
      */
     public synchronized int getNumberOfRetries(int i) {
-        if (!inRange(i))
-            return (-1);
+        if (notInRange(i)) return (-1);
         return clientStatistics[i].numberOfRetries;
     }
 
     /**
-     * Gesamte RTT ueber einen Client ermitteln
+     * Gesamte RTT über einen Client ermitteln
+     *
      * @param i Client-Id
      * @return RTT oder -1 bei falscher Client-Id
      */
     public synchronized long getSumRTT(int i) {
-        if (!inRange(i))
-            return (-1);
+        if (notInRange(i)) return (-1);
         return clientStatistics[i].sumRTT;
     }
 
     /**
-     * Gesamte RTT ueber alle Clients ermitteln
+     * Gesamte RTT über alle Clients ermitteln
+     *
      * @return RTT
      */
     public synchronized long getSumRTT() {
@@ -544,25 +561,25 @@ public class SharedClientStatistics {
 
     /**
      * Serverzeit eines Clients ermitteln
+     *
      * @param i Client-Id
      * @return Serverzeit
      */
     public synchronized long getSumServerTime(int i) {
-        if (!inRange(i))
-            return (-1);
+        if (notInRange(i)) return (-1);
         return clientStatistics[i].sumServerTime;
     }
 
     /**
-     * Gesamtliste ueber alle RTTs bilden
+     * Gesamtliste über alle RTTs bilden
+     *
      * @return ArrayList
      */
     public synchronized DistributionMetrics calculateMetrics() {
-
         ArrayList<Long> completeList = new ArrayList<>();
         DistributionMetrics distributionMetrics = new DistributionMetrics();
 
-        // RTT-Listen aller Clients zusammenfuegen
+        // RTT-Listen aller Clients zusammenfügen
         for (int i = 0; i < numberOfClients; i++) {
             completeList.addAll(clientStatistics[i].rttList);
         }
@@ -603,7 +620,7 @@ public class SharedClientStatistics {
             distributionMetrics
                     .setRange(distributionMetrics.maximum - distributionMetrics.minimum);
 
-            // Artihmetisches Mittel berechnen
+            // Arithmetisches Mittel berechnen
             Mean mean = new Mean();
             mean.setData(doubleList);
             distributionMetrics.setMean(mean.evaluate() / 1000000.0);
@@ -625,7 +642,8 @@ public class SharedClientStatistics {
     }
 
     /**
-     * Gesamte Serverzeit ueber alle Clients ermitteln
+     * Gesamte Serverzeit über alle Clients ermitteln
+     *
      * @return Serverzeit
      */
     public synchronized long getSumServerTime() {
@@ -638,6 +656,7 @@ public class SharedClientStatistics {
 
     /**
      * Durchschnittliche Serverbearbeitungszeit ermitteln
+     *
      * @return Serverbearbeitungszeit
      */
     public synchronized long getAverageServerTime() {
@@ -660,8 +679,9 @@ public class SharedClientStatistics {
     }
 
     /**
-     * Maximale Heap-Groesse ueber alle Clients ermitteln
-     * @return Maximale Heap-Groesse
+     * Maximale Heap-Größe über alle Clients ermitteln
+     *
+     * @return Maximale Heap-Größe
      */
     public synchronized long getMaxHeapSize() {
         long max = -1;
@@ -675,17 +695,16 @@ public class SharedClientStatistics {
                 }
             }
         }
-
         return max;
     }
 
     /**
-     * Ausgabe Statistikdaten fuer einen Client
+     * Ausgabe Statistikdaten für einen Client
+     *
      * @param i Client-Id
      */
     public synchronized void printClientStatistic(int i) {
-        if (!inRange(i))
-            return;
+        if (notInRange(i)) return;
 
         System.out
                 .println("********************** Client-Statistik *****************************"
@@ -694,7 +713,7 @@ public class SharedClientStatistics {
                         + this.getNumberOfSentRequests(i) + "\n" + "Anzahl empfangener Responses: "
                         + this.getNumberOfReceivedResponses(i) + "\n"
                         + "Anzahl verlorener Responses: " + this.getNumberOfLostResponses(i) + "\n"
-                        + "Anzahl Uebertragungswiederholungen: " + this.getNumberOfRetries(i) + "\n"
+                        + "Anzahl Übertragungswiederholungen: " + this.getNumberOfRetries(i) + "\n"
                         + "Anzahl aller gesendeten Events: " + this.getNumberOfSentEventMessages(i)
                         + "\n" + "Anzahl aller gesendeten Events-Confirms: "
                         + this.getNumberOfReceivedConfirmEvents(i) + "\n"
@@ -716,7 +735,6 @@ public class SharedClientStatistics {
      * Ausgabe aller Statistikdaten
      */
     public synchronized void printStatistic() {
-
         NumberFormat n = NumberFormat.getInstance();
         // n.setMaximumFractionDigits(2);
         String usedMemoryAsString = n.format(usedMemory() / (1024 * 1024));
@@ -730,8 +748,8 @@ public class SharedClientStatistics {
                         + "\n" + "Anzahl gesendeter Requests: " + this.getNumberOfSentRequests()
                         + "\n" + "Anzahl empfangener Responses: " + this.getSumOfAllReceivedMessages()
                         + " von erwarteten " + numberOfAllMessages + "\n"
-                        + "Anzahl Uebertragungswiederholungen: " + this.getSumOfAllRetries() + "\n"
-                        + "Anzahl geplanter Events (nur fuer Chat-Nachrichten): "
+                        + "Anzahl Übertragungswiederholungen: " + this.getSumOfAllRetries() + "\n"
+                        + "Anzahl geplanter Events (nur für Chat-Nachrichten): "
                         + numberOfPlannedEventMessages + "\n" + "Anzahl aller gesendeten Events: "
                         + this.getSumOfAllSentEventMessages() + "\n"
                         + "Anzahl aller gesendeten Events-Confirms: "
@@ -739,14 +757,14 @@ public class SharedClientStatistics {
                         + "Anzahl aller nicht empfangenen Event-Confirms: "
                         + this.getSumOfAllLostConfirmEvents() + "\n"
                         + "Anzahl aller Event-Wiederholungen: " + this.getSumOfAllRetriedEvents()
-                        + "\n" + "\n" + "Gesamte RTT ueber alle Clients: " + this.getSumRTT()
+                        + "\n" + "\n" + "Gesamte RTT über alle Clients: " + this.getSumRTT()
                         + " ns (" + (this.getSumRTT() / 1000000.0) + " ms)" + "\n"
-                        + "Gesamte Serverzeit ueber alle Clients: " + this.getSumServerTime()
+                        + "Gesamte Serverzeit über alle Clients: " + this.getSumServerTime()
                         + " ns  (" + (this.getSumServerTime() / 1000000.0) + " ms)" + "\n"
-                        + "Reine Kommunikationszeit ueber alle Clients: "
+                        + "Reine Kommunikationszeit über alle Clients: "
                         + (this.getSumRTT() - this.getSumServerTime()) + " ns ("
                         + ((this.getSumRTT() - this.getSumServerTime()) / 1000000.0) + " ms)" + "\n\n"
-                        + "Durchschnittswerte ueber alle Clients:" + "\n" + "RTT: "
+                        + "Durchschnittswerte über alle Clients:" + "\n" + "RTT: "
                         + this.getAverageRTT() + " ns (" + this.getAverageRTT() / 1000000.0 + " ms)"
                         + "\n" + "Minimum RTT: " + this.getMinimumRTT() + " ns ("
                         + this.getMinimumRTT() / 1000000 + " ms)" + "\n" + "Maximum RTT: "
@@ -762,7 +780,7 @@ public class SharedClientStatistics {
     }
 
     /**
-     * Ausgabe eines Auswertungssatzes fuer eine Messung (einen Benchmark-Lauf) in eine Datei im CSV-Dateiformat in
+     * Ausgabe eines Auswertungssatzes für eine Messung (einen Benchmark-Lauf) in eine Datei im CSV-Dateiformat in
      * folgender Form:
      * <p>
      * 01 Messungstyp als String
@@ -791,7 +809,7 @@ public class SharedClientStatistics {
      * <p>
      * 13 Maximum
      * <p>
-     * 14 Arithmetisches Mittel
+     * 14 arithmetisches Mittel
      * <p>
      * 15 Standardabweichung
      * <p>
@@ -805,41 +823,40 @@ public class SharedClientStatistics {
      * <p>
      * 20 Anzahl verlorener Echo Responses
      * <p>
-     * 21 Anzahl aller Uebertragungswiederholungen (nur fuer UDP relevant)
+     * 21 Anzahl aller Übertragungswiederholungen (nur für UDP relevant)
      * <p>
      * 22 Anzahl aller vom Server gesendete Events-Nachrichten
      * <p>
-     * 23 Anzahl aller vom Server empfangenen Event-Bestaetigungen (Confirm-Event)
+     * 23 Anzahl aller vom Server empfangenen Event-Bestätigungen (Confirm-Event)
      * <p>
-     * 24 Anzahl aller vom Server nicht erhaltenen Event-Bestaetigungen
+     * 24 Anzahl aller vom Server nicht erhaltenen Event-Bestätigungen
      * <p>
-     * 25 Anzahl aller Wiederholungen von Events (fuer unzuverlaessige Verbindungen wie UDP)
+     * 25 Anzahl aller Wiederholungen von Events (für unzuverlässige Verbindungen wie UDP)
      * <p>
      * 26 Maximale Heap-Size des Clients
      * <p>
-     * 27 Durchschnittliche CPU-Auslastung des Clients in %
+     * 27 durchschnittliche CPU-Auslastung des Clients in %
      * <p>
      * 28 Startzeit der Messung
      * <p>
-     * 29 Endezeit der Messung
+     * 29 Endzeit der Messung
      * <p>
-     * Der Satz wird an das Ende einer bestehenden Datei angehaengt.
+     * Der Satz wird an das Ende einer bestehenden Datei angehängt.
      * Die Datei kann zur Testauswertung in Excel weiterverarbeitet werden.
      *
-     * @param fileName Name der Datei
-     * @param implType Typ der Implementierung
-     * @param measureType Typ der Messung
-     * @param startTime Startzeitpunkt der Messung
-     * @param endTime Endezeitpunkt der Messung
+     * @param fileName       Name der Datei
+     * @param implType       Typ der Implementierung
+     * @param measureType    Typ der Messung
+     * @param startTime      Startzeitpunkt der Messung
+     * @param endTime        Endzeitpunkt der Messung
      * @param averageCpuTime Durchschnittliche CPU-Nutzungszeit
      */
-
     public synchronized void writeStatisticSet(String fileName, String implType,
                                                String measureType, String startTime, String endTime, float averageCpuTime) {
         File file = new File(fileName);
 
         // Verteilungsmetriken berechnen
-        DistributionMetrics distr = calculateMetrics();
+        DistributionMetrics distributionMetrics = calculateMetrics();
 
         // Datei anlegen, wenn notwendig
         try {
@@ -850,9 +867,9 @@ public class SharedClientStatistics {
                 log.debug("Datei " + fileName + " erfolgreich angelegt");
             }
 
-            // Datei zum Erweitern oeffnen
-            FileWriter fstream = new FileWriter(fileName, true);
-            BufferedWriter out = new BufferedWriter(fstream);
+            // Datei zum Erweitern öffnen
+            FileWriter fileWriter = new FileWriter(fileName, true);
+            BufferedWriter out = new BufferedWriter(fileWriter);
 
             StringBuilder sb = new StringBuilder();
             Formatter formatter = new Formatter();
@@ -862,10 +879,10 @@ public class SharedClientStatistics {
                             + "%05.2f | %05.2f | %05.2f | %05.2f | %05.2f | %05.2f | %05.2f | %05.2f | %05.2f | %05.2f |  %05.2f |  %05.2f | "
                             + "%d | %d | %d | %d | %d | %d | %d | %d | %d | %d | %02.2f | %s | %s%n",
                     measureType, implType, numberOfClients, numberOfMessages,
-                    distr.getPercentile10(), distr.getPercentile25(), distr.getPercentile50(),
-                    distr.getPercentile75(), distr.getPercentile90(), distr.getRange(),
-                    distr.getInterquartilRange(), distr.getMinimum(), distr.getMaximum(),
-                    distr.getMean(), distr.getStandardDeviation(),
+                    distributionMetrics.getPercentile10(), distributionMetrics.getPercentile25(), distributionMetrics.getPercentile50(),
+                    distributionMetrics.getPercentile75(), distributionMetrics.getPercentile90(), distributionMetrics.getRange(),
+                    distributionMetrics.getInterquartilRange(), distributionMetrics.getMinimum(), distributionMetrics.getMaximum(),
+                    distributionMetrics.getMean(), distributionMetrics.getStandardDeviation(),
                     this.getAverageServerTime() / 1000000.0, this.numberOfAllMessages,
                     this.getNumberOfSentRequests(), this.getNumberOfReceivedResponses(),
                     this.getNumberOfLostResponses(), this.getSumOfAllRetries(),
@@ -885,7 +902,7 @@ public class SharedClientStatistics {
     }
 
     /**
-     * Berechnet den tatsaechlich benutzten Heap-Speicher Heap-Groesse in MiB
+     * Berechnet den tatsächlich benutzten Heap-Speicher Heap-Größe in MiB
      *
      * @return Verwendeter Heap-Speicher
      */
@@ -900,16 +917,16 @@ public class SharedClientStatistics {
         int sentRequests;
         // Anzahl empfangener Antworten
         int receivedResponses;
-        // Anzahl an Uebertragungswiederholungen (fuer unzuverlaessige Verbindungen wie UDP)
+        // Anzahl an Übertragungswiederholungen (für unzuverlässige Verbindungen wie UDP)
         int numberOfRetries;
-        // Anzahl gesendeter Events fuer den Client
+        // Anzahl gesendeter Events für den Client
         long numberOfSentEventMessages;
-        // Anzahl empfangener Responses fuer den Client
+        // Anzahl empfangener Responses für den Client
         long numberOfReceivedConfirmEvents;
-        // Anzahl verlorender Event-Bestaetigungen fuer den Client
+        // Anzahl verlorener Event-Bestätigungen für den Client
         long numberOfLostConfirmEvents;
-        // Anzahl von wiederholten Events fuer den Client
-        // (fuer unzuverlaessige Verbindungen wie UDP)
+        // Anzahl von wiederholten Events für den Client
+        // (für unzuverlässige Verbindungen wie UDP)
         long numberOfRetriedEvents;
         // Durchschnittliche Round Trip Time in ns
         long averageRTT;
@@ -919,13 +936,13 @@ public class SharedClientStatistics {
         long minRTT;
         // Summe aller RTTs in ns
         long sumRTT;
-        // Alle RTTs werden hier fuer die Quartilsermittlung gesammelt
+        // Alle RTTs werden hier für die Quartils-Ermittlung gesammelt
         ArrayList<Long> rttList;
-        // Zeit, die der Server insgesamt fuer alle Requests benoetigt in ns
+        // Zeit, die der Server insgesamt für alle Requests benötigt in ns
         long sumServerTime;
-        // Zeit, die der Server im Durchschnitt fuer einen Request benoetigt in ns
+        // Zeit, die der Server im Durchschnitt für einen Request benötigt in ns
         long avgServerTime;
-        // Maximale Heap-Groesse in Bytes waehrend eines Testlaufs
+        // Maximale Heap-Größe in Bytes während eines Testlaufs
         long maxHeapSize;
     }
 }

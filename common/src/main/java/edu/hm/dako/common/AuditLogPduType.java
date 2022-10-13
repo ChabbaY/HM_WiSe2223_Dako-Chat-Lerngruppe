@@ -2,17 +2,16 @@ package edu.hm.dako.common;
 
 /**
  * Enumeration zur Definition der Audit-PDU-Typen
- * @author P. Mandl
+ *
+ * @author Peter Mandl, edited by Lerngruppe
  */
 public enum AuditLogPduType {
-
     UNDEFINED(0, "Undefined"),
     //BEGIN_AUDIT_REQUEST(4, "Begin"),
     FINISH_AUDIT_REQUEST(4, "Finish"),
     LOGIN_REQUEST(1, "Login "),
     LOGOUT_REQUEST(2, "Logout"),
     CHAT_MESSAGE_REQUEST(3, "Chat  ");
-
 
     private final int id;
     private final String description;

@@ -2,16 +2,17 @@ package edu.hm.dako.common;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
 
 /**
- * Nachrichtenaufbau fuer das AuditLog-Protokoll
- * @author Peter Mandl
+ * Nachrichtenaufbau für das AuditLog-Protokoll
+ *
+ * @author Peter Mandl, edited by Lerngruppe
  */
 public class AuditLogPDU implements Serializable {
-
     @Serial
     private static final long serialVersionUID = -6172619032079227589L;
     private static final Logger log = LogManager.getLogger(AuditLogPDU.class);
@@ -47,6 +48,7 @@ public class AuditLogPDU implements Serializable {
 
     /**
      * PDU ausgeben ins Logfile
+     *
      * @param pdu Auszugebende PDU
      */
     public static void printPdu(AuditLogPDU pdu) {
@@ -56,7 +58,8 @@ public class AuditLogPDU implements Serializable {
 
     /**
      * Umwandlung einer Chat-PDU in eine AuditLogPDU
-     * @param chatPDUtoConvert Zu konvertiertende Chat-PDU
+     *
+     * @param chatPDUtoConvert Zu konvertierende Chat-PDU
      * @return AuditLog-PDU
      */
     public static AuditLogPDU convertChatPDUtoAuditLogPDU(ChatPDU chatPDUtoConvert) {
@@ -71,8 +74,9 @@ public class AuditLogPDU implements Serializable {
     }
 
     /**
-     * Umwandlung einers Chat-PDU-Typs in einen AuditLog-PDU-Typ
-     * @param pduType Zu konvertiertender PDU-Typ
+     * Umwandlung eines Chat-PDU-Typs in einen AuditLog-PDU-Typ
+     *
+     * @param pduType Zu konvertierender PDU-Typ
      * @return AuditLog-PDU-Typ
      */
     private static AuditLogPduType convertChatPDUTypeToAuditLogPDUType(PduType pduType) {
@@ -88,10 +92,10 @@ public class AuditLogPDU implements Serializable {
 
     /**
      * Umwandlung einer Chat-PDU in einem String
+     *
      * @return Umgewandelte PDU als String
      */
     public String toString() {
-
         Date dateAndTime = new Date(this.auditTime);
 
         return "\n"
@@ -99,7 +103,7 @@ public class AuditLogPDU implements Serializable {
                 + "\n" + "AuditLogType: " + pduType + "\n" + "userName: " + this.userName + ", "
                 + "\n" + "clientThreadName: " + this.clientThreadName + "\n"
                 + "serverThreadName: " + this.serverThreadName + "\n" + "auditTime: "
-                + dateAndTime.toString() + "\n" + "message: " + this.message + "\n"
+                + dateAndTime + "\n" + "message: " + this.message + "\n"
                 + "**************************************************************************************************** SimplePdu"
                 + "\n";
     }

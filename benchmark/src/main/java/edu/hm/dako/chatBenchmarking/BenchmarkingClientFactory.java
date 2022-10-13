@@ -4,9 +4,11 @@ import edu.hm.dako.chatClient.ClientUserInterface;
 import edu.hm.dako.connection.ConnectionFactory;
 
 /**
- * Uebernimmt die Konfiguration und die Erzeugung bestimmter Client-Typen fuer das Benchmarking. Siehe {@link
- * UserInterfaceInputParameters}
- * Dies beinhaltet die {@link ConnectionFactory}, die Adressen, Ports, Denkzeit etc.
+ * Übernimmt die Konfiguration und die Erzeugung bestimmter Client-Typen für das Benchmarking.
+ * Siehe {@link UserInterfaceInputParameters}
+ * dies beinhaltet die {@link ConnectionFactory}, die Adressen, Ports, Denkzeit etc.
+ *
+ * @author Peter Mandl, edited by Lerngruppe
  */
 public final class BenchmarkingClientFactory {
 
@@ -18,7 +20,6 @@ public final class BenchmarkingClientFactory {
                                      SharedClientStatistics sharedData,
                                      BenchmarkingClientUserInterface benchmarkingGui) {
         try {
-
             // Derzeit sind TCPAdvancedImplementation, UDPAdvancedImplementation nicht implementiert
             return switch (param.getChatServerImplementationType()) {
                 case TCPSimpleImplementation -> new BenchmarkingClientImpl(userInterface,
@@ -33,5 +34,4 @@ public final class BenchmarkingClientFactory {
             throw new RuntimeException(e);
         }
     }
-
 }

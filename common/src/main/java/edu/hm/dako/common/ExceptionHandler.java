@@ -8,11 +8,12 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 
 /**
- * Konstriert Exception Handler
+ * Konstruiert Exception Handler
+ *
+ * @author Peter Mandl, edited by Lerngruppe
  */
-public class  ExceptionHandler {
-
-    private static Logger log = LogManager.getLogger(ExceptionHandler.class);
+public class ExceptionHandler {
+    private static final Logger log = LogManager.getLogger(ExceptionHandler.class);
 
     public static void logExceptionAndTerminate(Exception exception) {
         handleException(exception, true);
@@ -24,8 +25,9 @@ public class  ExceptionHandler {
 
     /**
      * Behandelt Ausnahmen
-     * @param exception Ausnahme
-     * @param terminateVm Kennzeichen, ob Exception zur Beendigung des Programms fuehrt
+     *
+     * @param exception   Ausnahme
+     * @param terminateVm Kennzeichen, ob Exception zur Beendigung des Programms führt
      */
     private static void handleException(Exception exception, boolean terminateVm) {
         try {
@@ -35,9 +37,9 @@ public class  ExceptionHandler {
         } catch (SocketException e) {
             log.error("Exception bei der Socket-Nutzung: " + e);
         } catch (UnknownHostException e) {
-            log.error("Exception bei Adressebelegung: " + e);
+            log.error("Exception bei Adressbelegung: " + e);
         } catch (IOException e) {
-            log.debug("Senden oder Empfangen von Nachrichten nicht moeglich: " + e);
+            log.debug("Senden oder Empfangen von Nachrichten nicht möglich: " + e);
         } catch (InterruptedException e) {
             log.error("Sleep unterbrochen");
         } catch (ClassNotFoundException e) {

@@ -6,39 +6,42 @@ import javax.swing.JProgressBar;
 
 /**
  * Schnittstelle zum Benchmarking-Client
- * Interface zur Uebergabe von Daten fuer die Ausgabe im Benchmarking-Gui-Client
- * @author Peter Mandl
+ * Interface zur Übergabe von Daten für die Ausgabe im Benchmarking-Gui-Client
+ *
+ * @author Peter Mandl, edited by Lerngruppe
  */
 public interface BenchmarkingClientUserInterface {
 
     /**
-     * Uebergabe der Startdaten an die GUI
+     * Übergabe der Startdaten an die GUI
      *
      * @param data Startdaten
      */
     void showStartData(UserInterfaceStartData data);
 
     /**
-     * Uebergabe der Ergebnisdaten an die GUI
+     * Übergabe der Ergebnisdaten an die GUI
+     *
      * @param data Testergebnisse
      */
     void showResultData(UserInterfaceResultData data);
 
     /**
-     * Uebergabe einer Nachricht an die GUI zur Ausgabe in der Messagezeile
+     * Übergabe einer Nachricht an die GUI zur Ausgabe in der Message-Zeile
+     *
      * @param message Nachrichtentext
      */
     void setMessageLine(String message);
 
     /**
-     * Zuruecksetzen des Laufzeitzaehlers auf 0
+     * Zurücksetzen des Laufzeitzählers auf 0
      */
     void resetCurrentRunTime();
 
     /**
-     * Erhoehung des Laufzeitzaehlers
+     * Erhöhung des Laufzeitzählers
      *
-     * @param sec Laufzeiterhoehung in Sekunden
+     * @param sec Laufzeiterhöhung in Sekunden
      */
     void addCurrentRunTime(long sec);
 
@@ -48,14 +51,15 @@ public interface BenchmarkingClientUserInterface {
     void testFinished();
 
     /**
-     * Uebergibt den Progressbar an die GUI
+     * Übergibt den Progressbar an die GUI
      *
      * @return Referenz auf ProgressBar
      */
     JProgressBar getProgressBar();
 
     /**
-     * Uebergibt den Progressbar an die FX-GUI
+     * Übergibt den Progressbar an die FX-GUI
+     *
      * @return Referenz auf ProgressBar
      */
     ProgressBar getProgressBarFx();

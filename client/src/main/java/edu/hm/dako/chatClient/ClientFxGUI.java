@@ -20,18 +20,17 @@ import java.util.List;
 import java.util.Vector;
 
 /**
- * Chat-GUI: Oberflaeche fuer Chat-Nutzer
- * @author Paul Mandl
+ * Chat-GUI: Oberfläche für Chat-Nutzer
+ *
+ * @author Peter Mandl, edited by Lerngruppe
  */
 public class ClientFxGUI extends Application implements ClientUserInterface {
-
     private static final Logger LOG = LogManager.getLogger(ClientFxGUI.class);
     private final ClientModel model = new ClientModel();
     private Stage stage;
     private ClientImpl communicator;
 
     public static void main(String[] args) {
-
         // Log4j2-Logging aus Datei konfigurieren
         LoggerContext context = (org.apache.logging.log4j.core.LoggerContext) LogManager.getContext(false);
         File file = new File("config/log4j/log4j2.chatClient.xml");
@@ -42,12 +41,12 @@ public class ClientFxGUI extends Application implements ClientUserInterface {
 
     /**
      * Kommunikationsschnittstelle zur Kommunikation mit dem Chat-Server aktivieren
+     *
      * @param serverType serverType Servertyp
      * @param port       Serverport
      * @param host       Hostname oder IP-Adresse des Servers
      */
     public void createCommunicator(String serverType, int port, String host) {
-
         communicator = new ClientImpl(this, port, host, serverType);
     }
 
@@ -65,7 +64,7 @@ public class ClientFxGUI extends Application implements ClientUserInterface {
     @Override
     public void start(Stage primaryStage) throws Exception {
         URL resource = getClass().getResource("LogInGui.fxml");
-        FXMLLoader loader = null;
+        FXMLLoader loader;
         if (resource != null) {
             LOG.error("FXML-Datei gelesen: {}", resource);
             loader = new FXMLLoader(resource);
@@ -84,7 +83,7 @@ public class ClientFxGUI extends Application implements ClientUserInterface {
     }
 
     /**
-     * Benutzeroberflaeche fuer Chat erzeugen
+     * Benutzeroberfläche für Chat erzeugen
      */
     public void createNextGui() {
         URL resource = getClass().getResource("LoggedInGui.fxml");
@@ -244,13 +243,13 @@ public class ClientFxGUI extends Application implements ClientUserInterface {
 
     @Override
     public void loginComplete() {
-        LOG.debug("Login erfolreich");
+        LOG.debug("Login erfolgreich");
         createNextGui();
     }
 
     @Override
     public void logoutComplete() {
-        LOG.debug("Abmeldung durchgefuehrt");
+        LOG.debug("Abmeldung durchgeführt");
         LOG.debug("Logout-Vorgang ist nun beendet");
         Platform.exit();
     }

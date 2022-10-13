@@ -1,32 +1,32 @@
 package edu.hm.dako.chatBenchmarking;
 
 import com.sun.management.OperatingSystemMXBean;
-
 import java.lang.management.ManagementFactory;
 
 /**
  * Ermitteln der durchschnittlich verbrauchten CPU-Zeit eines Prozesses
+ *
+ * @author Peter Mandl, edited by Lerngruppe
  */
 public class CpuUtilisationWatch {
 
-    private static final OperatingSystemMXBean osbean = (OperatingSystemMXBean) ManagementFactory
+    private static final OperatingSystemMXBean osBean = (OperatingSystemMXBean) ManagementFactory
             .getOperatingSystemMXBean();
 
+    private static final int nCPUs = osBean.getAvailableProcessors();
 
-    private static final int nCPUs = osbean.getAvailableProcessors();
-
-    private final Long startWallclockTime;
-    private final Long startCpuTime = osbean.getProcessCpuTime();
+    private final Long startWallClockTime;
+    private final Long startCpuTime = osBean.getProcessCpuTime();
 
     public CpuUtilisationWatch() {
-        startWallclockTime = System.nanoTime();
+        startWallClockTime = System.nanoTime();
     }
 
     public float getAverageCpuUtilisation() {
-        float wallclockTimeDelta = System.nanoTime() - startWallclockTime;
-        float cpuTimeDelta = osbean.getProcessCpuTime() - startCpuTime;
+        float wallClockTimeDelta = System.nanoTime() - startWallClockTime;
+        float cpuTimeDelta = osBean.getProcessCpuTime() - startCpuTime;
         cpuTimeDelta = Math.max(cpuTimeDelta, 1);
 
-        return (cpuTimeDelta / (float) nCPUs) / wallclockTimeDelta;
+        return (cpuTimeDelta / (float) nCPUs) / wallClockTimeDelta;
     }
 }

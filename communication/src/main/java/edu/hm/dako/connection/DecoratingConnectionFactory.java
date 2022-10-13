@@ -2,9 +2,10 @@ package edu.hm.dako.connection;
 
 /**
  * Stellt beim Verbindungsaufbau sicher, dass eine {@link Connection} um Logging-Funktionen erweitert wird.
+ *
+ * @author Peter Mandl, edited by Lerngruppe
  */
 public class DecoratingConnectionFactory implements ConnectionFactory {
-
     private final ConnectionFactory wrappedFactory;
 
     public DecoratingConnectionFactory(ConnectionFactory wrappedFactory) {
@@ -13,11 +14,10 @@ public class DecoratingConnectionFactory implements ConnectionFactory {
 
     @Override
     public Connection connectToServer(String remoteServerAddress,
-                                      int serverPort, int localPort, int sendBufferSize,
-                                      int receiveBufferSize) throws Exception {
-        Connection wrappedConnection = wrappedFactory.connectToServer(
-                remoteServerAddress, serverPort, localPort, sendBufferSize,
-                receiveBufferSize);
+                                      int serverPort, int localPort, int sendBufferSize, int receiveBufferSize)
+            throws Exception {
+        Connection wrappedConnection = wrappedFactory.connectToServer(remoteServerAddress, serverPort, localPort,
+                sendBufferSize, receiveBufferSize);
         return new LoggingConnectionDecorator(wrappedConnection);
     }
 }

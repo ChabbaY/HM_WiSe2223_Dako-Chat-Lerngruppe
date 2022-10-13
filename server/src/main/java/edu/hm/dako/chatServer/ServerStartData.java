@@ -1,7 +1,7 @@
 package edu.hm.dako.chatServer;
 
 /**
- * @author Paul Mandl
+ * @author Peter Mandl, edited by Lerngruppe
  */
 public class ServerStartData {
     String startTime;

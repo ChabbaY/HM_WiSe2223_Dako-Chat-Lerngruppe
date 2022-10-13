@@ -25,7 +25,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-import org.apache.commons.configuration2.ex.ConfigurationException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.LoggerContext;
@@ -37,11 +36,11 @@ import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * Benutzeroberflaeche zum Starten des Chat-Servers
- * @author Paul Mandl
+ * Benutzeroberfläche zum Starten des Chat-Servers
+ *
+ * @author Peter Mandl, edited by Lerngruppe
  */
 public class ChatServerGUI extends Application implements ChatServerGuiInterface {
-
     // Standard-Port des Servers
     static final String DEFAULT_SERVER_PORT = "50001";
 
@@ -50,18 +49,19 @@ public class ChatServerGUI extends Application implements ChatServerGuiInterface
     // Interface der Chat-Server-Implementierung
     private static ChatServerInterface chatServer;
 
-    // Zaehler fuer die eingeloggten Clients und die empfangenen Request
+    // Zähler für die eingeloggten Clients und die empfangenen Request
     private static AtomicInteger loggedInClientCounter;
     private static AtomicInteger requestCounter;
 
-    // Daten, die beim Start der GUI uebergeben werden
+    // Daten, die beim Start der GUI übergeben werden
     private final ServerStartData data = new ServerStartData();
 
-    // Moegliche Belegungen des Implementierungsfeldes in der GUI
-    ObservableList<String> implTypeOptions = FXCollections.observableArrayList(
+    // Mögliche Belegungen des Implementierungsfeldes in der GUI
+    final ObservableList<String> implTypeOptions = FXCollections.observableArrayList(
             SystemConstants.IMPL_TCP_SIMPLE, SystemConstants.IMPL_TCP_ADVANCED);
-    ObservableList<String> auditLogServerImplTypeOptions = FXCollections.observableArrayList(
-            SystemConstants.AUDIT_LOG_SERVER_TCP_IMPL, SystemConstants.AUDIT_LOG_SERVER_UDP_IMPL, SystemConstants.AUDIT_LOG_SERVER_RMI_IMPL);
+    final ObservableList<String> auditLogServerImplTypeOptions = FXCollections.observableArrayList(
+            SystemConstants.AUDIT_LOG_SERVER_TCP_IMPL, SystemConstants.AUDIT_LOG_SERVER_UDP_IMPL,
+            SystemConstants.AUDIT_LOG_SERVER_RMI_IMPL);
 
     // Server-Startzeit als String
     private String startTimeAsString;
@@ -70,13 +70,13 @@ public class ChatServerGUI extends Application implements ChatServerGuiInterface
     private Calendar cal;
 
     // Flag, das angibt, ob der Server gestartet werden kann (alle
-    // Plausibilitaetspruefungen erfuellt)
+    // Plausibilitätsprüfungen erfüllt)
     private boolean startable = true;
 
-    // Combobox fuer Eingabe des Implementierungstyps
+    // ComboBox für Eingabe des Implementierungstyps
     private ComboBox<String> comboBoxImplType;
 
-    // Combobox fuer AuditLogServer-Implementierung
+    // ComboBox für AuditLogServer-Implementierung
     private ComboBox<String> comboBoxAuditLogServerType;
 
     // Testfelder, Buttons und Labels der ServerGUI
@@ -105,9 +105,9 @@ public class ChatServerGUI extends Application implements ChatServerGuiInterface
     public ChatServerGUI() {
         loggedInClientCounter = new AtomicInteger(0);
         requestCounter = new AtomicInteger(0);
-        startTimeField = createNotEditableTextfield();
-        receivedRequests = createNotEditableTextfield();
-        loggedInClients = createNotEditableTextfield();
+        startTimeField = createNotEditableTextField();
+        receivedRequests = createNotEditableTextField();
+        loggedInClients = createNotEditableTextField();
     }
 
     public static void main(String[] args) {
@@ -122,8 +122,7 @@ public class ChatServerGUI extends Application implements ChatServerGuiInterface
     }
 
     @Override
-    public void start(final Stage stage) throws Exception {
-
+    public void start(final Stage stage) {
         stage.setTitle("ChatServerGUI");
         stage.setScene(new Scene(pane, 415, 465));
         stage.show();
@@ -157,6 +156,7 @@ public class ChatServerGUI extends Application implements ChatServerGuiInterface
 
     /**
      * Eingabe-Pane erzeugen
+     *
      * @return pane
      */
     private GridPane createInputPane() {
@@ -171,8 +171,8 @@ public class ChatServerGUI extends Application implements ChatServerGuiInterface
         sendBufferSizeLabel = createLabel("Sendepuffer in Byte");
         receiveBufferSizeLabel = createLabel("Empfangspuffer in Byte");
         auditLogServerPortLabel = createLabel("AuditLogServer/RMI-Registry Port");
-        sendBufferSize = createEditableTextfield(SystemConstants.DEFAULT_SENDBUFFER_SIZE);
-        receiveBufferSize = createEditableTextfield(SystemConstants.DEFAULT_RECEIVEBUFFER_SIZE);
+        sendBufferSize = createEditableTextField(SystemConstants.DEFAULT_SEND_BUFFER_SIZE);
+        receiveBufferSize = createEditableTextField(SystemConstants.DEFAULT_RECEIVE_BUFFER_SIZE);
 
         Label auditLogActivate = createLabel("AuditLog aktivieren");
         Label auditLogConnectionType = createLabel("AuditLog-Server Verbindungstyp");
@@ -181,9 +181,9 @@ public class ChatServerGUI extends Application implements ChatServerGuiInterface
         inputPane.setVgap(1);
 
         comboBoxImplType = createImplTypeComboBox(implTypeOptions);
-        serverPort = createEditableTextfield(DEFAULT_SERVER_PORT);
-        auditLogServerHostnameOrIp = createEditableTextfield(SystemConstants.DEFAULT_AUDIT_LOG_SERVER_NAME);
-        auditLogServerPort = createEditableTextfield(SystemConstants.DEFAULT_AUDIT_LOG_SERVER_PORT);
+        serverPort = createEditableTextField(DEFAULT_SERVER_PORT);
+        auditLogServerHostnameOrIp = createEditableTextField(SystemConstants.DEFAULT_AUDIT_LOG_SERVER_NAME);
+        auditLogServerPort = createEditableTextField(SystemConstants.DEFAULT_AUDIT_LOG_SERVER_PORT);
         comboBoxAuditLogServerType = createAuditLogTypeComboBox(auditLogServerImplTypeOptions);
 
         enableAuditLogServerCheckbox = new CheckBox();
@@ -231,6 +231,7 @@ public class ChatServerGUI extends Application implements ChatServerGuiInterface
 
     /**
      * Info-Pain erzeugen
+     *
      * @return pane
      */
     private GridPane createInfoPane() {
@@ -250,7 +251,8 @@ public class ChatServerGUI extends Application implements ChatServerGuiInterface
     }
 
     /**
-     * Pane fuer Buttons erzeugen
+     * Pane für Buttons erzeugen
+     *
      * @return HBox
      */
     private HBox createButtonPane() {
@@ -267,7 +269,8 @@ public class ChatServerGUI extends Application implements ChatServerGuiInterface
 
     /**
      * Label erzeugen
-     * @param value Wert fuer das Label
+     *
+     * @param value Wert für das Label
      * @return Label Referenz auf das Label
      */
     private Label createLabel(String value) {
@@ -278,18 +281,20 @@ public class ChatServerGUI extends Application implements ChatServerGuiInterface
     }
 
     /**
-     * Aufbau der Combobox fuer die Serverauswahl in der GUI
-     * @param options Optionen fuer Implementierungstyp
-     * @return Combobox
+     * Aufbau der ComboBox für die Serverauswahl in der GUI
+     *
+     * @param options Optionen für Implementierungstyp
+     * @return ComboBox
      */
     private ComboBox<String> createImplTypeComboBox(ObservableList<String> options) {
         return getStringComboBox(options);
     }
 
     /**
-     * Aufbau der Combobox fuer Strings in der GUI
-     * @param options Optionen fuer String
-     * @return Combobox
+     * Aufbau der ComboBox für Strings in der GUI
+     *
+     * @param options Optionen für String
+     * @return ComboBox
      */
     private ComboBox<String> getStringComboBox(ObservableList<String> options) {
         ComboBox<String> comboBox = new ComboBox<>(options);
@@ -302,9 +307,10 @@ public class ChatServerGUI extends Application implements ChatServerGuiInterface
     }
 
     /**
-     * Aufbau der Combobox fuer die AuditLog-Server Verbindung
-     * @param options Optionen fuer Verbindungstyp
-     * @return Combobox
+     * Aufbau der ComboBox für die AuditLog-Server Verbindung
+     *
+     * @param options Optionen für Verbindungstyp
+     * @return ComboBox
      */
     private ComboBox<String> createAuditLogTypeComboBox(ObservableList<String> options) {
         return getStringComboBox(options);
@@ -312,8 +318,9 @@ public class ChatServerGUI extends Application implements ChatServerGuiInterface
 
     /**
      * Trennlinie erstellen
+     *
      * @param value Text der Trennlinie
-     * @param size  Groesse der Trennlinie
+     * @param size  Größe der Trennlinie
      * @return Trennlinie
      */
     private HBox createSeparator(String value, int size) {
@@ -336,9 +343,10 @@ public class ChatServerGUI extends Application implements ChatServerGuiInterface
 
     /**
      * Nicht editierbares Feld erzeugen
+     *
      * @return Textfeld
      */
-    private TextField createNotEditableTextfield() {
+    private TextField createNotEditableTextField() {
         TextField textField = new TextField("");
         textField.setMaxSize(155, 28);
         textField.setMinSize(155, 28);
@@ -350,10 +358,11 @@ public class ChatServerGUI extends Application implements ChatServerGuiInterface
 
     /**
      * Erstellung editierbarer Textfelder
+     *
      * @param value Feldinhalt
      * @return textField
      */
-    private TextField createEditableTextfield(String value) {
+    private TextField createEditableTextField(String value) {
         TextField textField = new TextField(value);
         textField.setMaxSize(155, 28);
         textField.setMinSize(155, 28);
@@ -365,7 +374,7 @@ public class ChatServerGUI extends Application implements ChatServerGuiInterface
 
 
     /**
-     * Reaktion auf das Betaetigen des Start-Buttons
+     * Reaktion auf das Betätigen des Start-Buttons
      */
     private void reactOnStartButton() {
         startButton.setOnAction(event -> {
@@ -374,20 +383,20 @@ public class ChatServerGUI extends Application implements ChatServerGuiInterface
             // CHat-Server-Port aus GUI lesen
             int serverPortInt = readServerPort();
 
-            // Zaehler in der GUI initialisieren
+            // Zähler in der GUI initialisieren
             receivedRequests.setText("0");
             loggedInClients.setText("0");
 
-            // Puffergroessen fuer Verbindung zu Chat-Clients aus GUI lesen
+            // Puffergrößen für Verbindung zu Chat-Clients aus GUI lesen
             int sendBufferSizeInt = readSendBufferSize();
             int receiveBufferSizeInt = readReceiveBufferSize();
 
-            // Hostname fuer AuditLog-Server
+            // Hostname für AuditLog-Server
             String auditLogServerHostname;
 
             String auditLogServerImplType = readAuditLogComboBox();
             if (Objects.equals(auditLogServerImplType, SystemConstants.AUDIT_LOG_SERVER_RMI_IMPL)) {
-                // RMI fuer AuditLog-Server ausgewaehlt, GUI-Einstellungen fuer RMI-AuditLog-Server anpassen
+                // RMI für AuditLog-Server ausgewählt, GUI-Einstellungen für RMI-AuditLog-Server anpassen
                 auditLogServerPort.setText(SystemConstants.DEFAULT_AUDIT_LOG_SERVER_RMI_REGISTRY_PORT);
             }
 
@@ -407,7 +416,7 @@ public class ChatServerGUI extends Application implements ChatServerGuiInterface
                     } catch (Exception e) {
                         setAlert(
                                 "Der Server konnte nicht gestartet werden oder die Verbindung zum AuditLogServer konnte " +
-                                        "nicht hergestellt werden, evtl. laeuft ein anderer Server mit dem Port");
+                                        "nicht hergestellt werden, eventuell läuft ein anderer Server mit dem Port");
                         return;
                     }
                 } else {
@@ -415,7 +424,7 @@ public class ChatServerGUI extends Application implements ChatServerGuiInterface
                         startChatServer(implType, serverPortInt, sendBufferSizeInt, receiveBufferSizeInt);
                     } catch (Exception e) {
                         setAlert(
-                                "Der Server konnte nicht gestartet werden, evtl. laeuft ein anderer Server mit dem Port");
+                                "Der Server konnte nicht gestartet werden, eventuell läuft ein anderer Server mit dem Port");
                         return;
                     }
                 }
@@ -435,7 +444,7 @@ public class ChatServerGUI extends Application implements ChatServerGuiInterface
     }
 
     /**
-     * Reaktion auf das Betaetigen des Stop-Buttons
+     * Reaktion auf das Betätigen des Stop-Buttons
      */
     private void reactOnStopButton() {
 
@@ -447,7 +456,7 @@ public class ChatServerGUI extends Application implements ChatServerGuiInterface
                 ExceptionHandler.logException(e);
             }
 
-            // Zaehler fuer Clients und Requests auf 0 stellen
+            // Zähler für Clients und Requests auf 0 stellen
             requestCounter.set(0);
             loggedInClientCounter.set(0);
 
@@ -461,23 +470,23 @@ public class ChatServerGUI extends Application implements ChatServerGuiInterface
             receivedRequests.setText("");
             loggedInClients.setText("");
             auditLogServerPort.setText(SystemConstants.DEFAULT_AUDIT_LOG_SERVER_PORT);
-            sendBufferSize.setText(SystemConstants.DEFAULT_SENDBUFFER_SIZE);
-            receiveBufferSize.setText(SystemConstants.DEFAULT_RECEIVEBUFFER_SIZE);
+            sendBufferSize.setText(SystemConstants.DEFAULT_SEND_BUFFER_SIZE);
+            receiveBufferSize.setText(SystemConstants.DEFAULT_RECEIVE_BUFFER_SIZE);
         });
     }
 
     /**
-     * Reaktion auf das Betaetigen des Finish-Buttons
+     * Reaktion auf das Betätigen des Finish-Buttons
      */
     private void reactOnFinishButton() {
-        LOG.debug("Schliessen-Button betaetigt");
+        LOG.debug("Schliessen-Button betätigt");
         finishButton.setOnAction(event -> {
             try {
                 ChatServerGUI.chatServer.stop();
             } catch (Exception var3) {
-                LOG.debug("Fehler beim Stoppen des Chat-Servers, Chat-Server evtl. noch gar nicht aktiv");
+                LOG.debug("Fehler beim Stoppen des Chat-Servers, Chat-Server eventuell noch gar nicht aktiv");
             }
-            System.out.println("ChatServer-GUI ordnungsgemaess beendet");
+            System.out.println("ChatServer-GUI ordnungsgemäß beendet");
             Platform.exit();
         });
     }
@@ -497,18 +506,17 @@ public class ChatServerGUI extends Application implements ChatServerGuiInterface
     }
 
     /**
-     * Gewaehlten Implementierungstyp aus GUI auslesen
+     * Gewählten Implementierungstyp aus GUI auslesen
      */
     private String readImplTypeComboBox() {
-        return (new String(comboBoxImplType.getValue().toString()));
+        return (comboBoxImplType.getValue());
     }
 
 
-
     private void startChatServerWithAuditLogServer(String implType, int serverPort, int sendBufferSize,
-                                                   int receiveBufferSize, String auditLogServerHostname, int auditLogServerPort,
-                                                   String auditLogServerImplType) throws Exception {
-
+                                                   int receiveBufferSize, String auditLogServerHostname,
+                                                   int auditLogServerPort, String auditLogServerImplType)
+            throws Exception {
         ChatServerImplementationType serverImpl;
         if (implType.equals(SystemConstants.IMPL_TCP_ADVANCED)) {
             serverImpl = ChatServerImplementationType.TCPAdvancedImplementation;
@@ -516,22 +524,18 @@ public class ChatServerGUI extends Application implements ChatServerGuiInterface
             serverImpl = ChatServerImplementationType.TCPSimpleImplementation;
         }
 
-        AuditLogImplementationType auditLogImplementationType;
-        if (auditLogServerImplType.equals(SystemConstants.AUDIT_LOG_SERVER_TCP_IMPL)) {
-            auditLogImplementationType = AuditLogImplementationType.AuditLogServerTCPImplementation;
-        } else if (auditLogServerImplType.equals(SystemConstants.AUDIT_LOG_SERVER_UDP_IMPL)) {
-            auditLogImplementationType = AuditLogImplementationType.AuditLogServerUDPImplementation;
-        } else if (auditLogServerImplType.equals(SystemConstants.AUDIT_LOG_SERVER_RMI_IMPL)) {
-            auditLogImplementationType = AuditLogImplementationType.AuditLogServerRMIImplementation;
-        } else {
-            auditLogImplementationType = AuditLogImplementationType.AuditLogServerTCPImplementation;
-        }
+        AuditLogImplementationType auditLogImplementationType = switch (auditLogServerImplType) {
+            case SystemConstants.AUDIT_LOG_SERVER_UDP_IMPL ->
+                    AuditLogImplementationType.AuditLogServerUDPImplementation;
+            case SystemConstants.AUDIT_LOG_SERVER_RMI_IMPL ->
+                    AuditLogImplementationType.AuditLogServerRMIImplementation;
+            default -> AuditLogImplementationType.AuditLogServerTCPImplementation;
+        };
 
         try {
             LOG.debug("ChatServer soll mit AuditLog gestartet werden");
-            chatServer = ServerFactory.getServerWithAuditLog(serverImpl, serverPort, sendBufferSize,
-                    receiveBufferSize, this,
-                    auditLogImplementationType, auditLogServerHostname, auditLogServerPort);
+            chatServer = ServerFactory.getServerWithAuditLog(serverImpl, serverPort, sendBufferSize, receiveBufferSize,
+                    this, auditLogImplementationType, auditLogServerHostname, auditLogServerPort);
         } catch (Exception e) {
             LOG.error("Fehler beim Starten des Chat-Servers: {}", e.getMessage());
             ExceptionHandler.logException(e);
@@ -557,14 +561,14 @@ public class ChatServerGUI extends Application implements ChatServerGuiInterface
 
     /**
      * Chat-Server starten
-     * @param implType Implementierungstyp, der zu starten ist
-     * @param serverPort Serverport, die der Server als Listener-Port nutzen soll
-     * @param sendBufferSize Sendpuffergroesse, die der Server nutzen soll
-     * @param receiveBufferSize Empfangspuffergroesse, die der Server nutzen soll
+     *
+     * @param implType          Implementierungstyp, der zu starten ist
+     * @param serverPort        Serverport, die der Server als Listener-Port nutzen soll
+     * @param sendBufferSize    Sendepuffergröße, die der Server nutzen soll
+     * @param receiveBufferSize Empfangspuffergröße, die der Server nutzen soll
      */
-    private void startChatServer(String implType, int serverPort, int sendBufferSize,
-                                 int receiveBufferSize) throws Exception {
-
+    private void startChatServer(String implType, int serverPort, int sendBufferSize, int receiveBufferSize)
+            throws Exception {
         ChatServerImplementationType serverImpl;
         if (implType.equals(SystemConstants.IMPL_TCP_ADVANCED)) {
             serverImpl = ChatServerImplementationType.TCPAdvancedImplementation;
@@ -573,8 +577,8 @@ public class ChatServerGUI extends Application implements ChatServerGuiInterface
         }
 
         try {
-            chatServer = ServerFactory.getServer(serverImpl, serverPort, sendBufferSize,
-                    receiveBufferSize, this);
+            chatServer = ServerFactory.getServer(serverImpl, serverPort, sendBufferSize, receiveBufferSize,
+                    this);
         } catch (Exception e) {
             LOG.error("Fehler beim Starten des Chat-Servers: " + e.getMessage());
             ExceptionHandler.logException(e);
@@ -589,7 +593,8 @@ public class ChatServerGUI extends Application implements ChatServerGuiInterface
     }
 
     /**
-     * Lesen des Hostnamens oder der Serveradresse aus der GUI als String
+     * Lesen des HostNamens oder der Serveradresse aus der GUI als String
+     *
      * @return Hostname oder IP-Adresse als String
      */
     private String readAuditLogServerHostnameOrIp() {
@@ -598,6 +603,7 @@ public class ChatServerGUI extends Application implements ChatServerGuiInterface
 
     /**
      * Lesen des Ports des AuditLog-Servers aus der GUI
+     *
      * @return Port
      */
     private int readAuditLogServerPort(String auditLogServerImplType) {
@@ -609,11 +615,11 @@ public class ChatServerGUI extends Application implements ChatServerGuiInterface
                 startable = false;
                 auditLogServerPortLabel.setTextFill(Color.web(SystemConstants.RED_COLOR));
             } else if (auditLogServerImplType.equals(SystemConstants.AUDIT_LOG_SERVER_RMI_IMPL)) {
-                // Falls RMI ausgewaehlt wurde, wird standardmaessig der RMI-Registry-Port 1099 verwendet
+                // Falls RMI ausgewählt wurde, wird standardmäßig der RMI-Registry-Port 1099 verwendet
                 iServerPort = Integer.parseInt(SystemConstants.DEFAULT_AUDIT_LOG_SERVER_RMI_REGISTRY_PORT);
-                LOG.debug("Standard-Port fuer RMI-Registry: {}", iServerPort);
+                LOG.debug("Standard-Port für RMI-Registry: {}", iServerPort);
             } else
-                LOG.debug("Port fuer AuditLog-Server: {}", iServerPort);
+                LOG.debug("Port für AuditLog-Server: {}", iServerPort);
             auditLogServerPortLabel.setTextFill(Color.web(SystemConstants.BLACK_COLOR));
         } else {
             startable = false;
@@ -624,7 +630,8 @@ public class ChatServerGUI extends Application implements ChatServerGuiInterface
     }
 
     /**
-     * Serverport aus GUI auslesen und pruefen
+     * Serverport aus GUI auslesen und prüfen
+     *
      * @return Verwendeter Serverport
      */
     private int readServerPort() {
@@ -648,8 +655,9 @@ public class ChatServerGUI extends Application implements ChatServerGuiInterface
     }
 
     /**
-     * Groesse des Sendepuffers in Byte auslesen und pruefen
-     * @return Eingegebene Sendpuffer-Groesse
+     * Größe des Sendepuffers in Byte auslesen und prüfen
+     *
+     * @return Eingegebene Sendepuffer-Größe
      */
     private int readSendBufferSize() {
 
@@ -658,7 +666,7 @@ public class ChatServerGUI extends Application implements ChatServerGuiInterface
         if (item.matches("[0-9]+")) {
             iSendBufferSize = Integer.parseInt(sendBufferSize.getText());
             if ((iSendBufferSize <= 0)
-                    || (iSendBufferSize > Integer.parseInt(SystemConstants.MAX_SENDBUFFER_SIZE))) {
+                    || (iSendBufferSize > Integer.parseInt(SystemConstants.MAX_SEND_BUFFER_SIZE))) {
                 startable = false;
                 sendBufferSizeLabel.setTextFill(Color.web(SystemConstants.RED_COLOR));
             } else {
@@ -673,18 +681,19 @@ public class ChatServerGUI extends Application implements ChatServerGuiInterface
     }
 
     /**
-     * Groesse des Empfangspuffers in Byte auslesen und pruefen
-     * @return Eingegebene Empfangspuffer-Groesse
+     * Größe des Empfangspuffers in Byte auslesen und prüfen
+     *
+     * @return Eingegebene Empfangspuffer-Größe
      */
     private int readReceiveBufferSize() {
 
         String item = receiveBufferSize.getText();
-        LOG.debug("Empfangspuffergroesse: {}",receiveBufferSize);
+        LOG.debug("Empfangspuffergröße: {}", receiveBufferSize);
         int iReceiveBufferSize = 0;
         if (item.matches("[0-9]+")) {
             iReceiveBufferSize = Integer.parseInt(receiveBufferSize.getText());
             if ((iReceiveBufferSize <= 0)
-                    || (iReceiveBufferSize > Integer.parseInt(SystemConstants.MAX_RECEIVEBUFFER_SIZE))) {
+                    || (iReceiveBufferSize > Integer.parseInt(SystemConstants.MAX_RECEIVE_BUFFER_SIZE))) {
                 startable = false;
                 receiveBufferSizeLabel.setTextFill(Color.web(SystemConstants.RED_COLOR));
             } else {
@@ -702,33 +711,34 @@ public class ChatServerGUI extends Application implements ChatServerGuiInterface
     }
 
     /**
-     * GUI-Feld fuer eingeloggte CLients ueber Event-Liste des JavaFX-GUI-Threads aktualisieren
+     * GUI-Feld für eingeloggte Clients über Event-Liste des JavaFX-GUI-Threads aktualisieren
      */
     private void updateLoggedInClients() {
 
         Platform.runLater(() -> {
-            LOG.debug("runLater: run-Methode wird ausgefuehrt");
+            LOG.debug("runLater: run-Methode wird ausgeführt");
             LOG.debug("runLater: Logged in Clients: {}", loggedInClientCounter.get());
             loggedInClients.setText(String.valueOf(loggedInClientCounter.get()));
         });
     }
 
     /**
-     * GUI-Feld fuer Anzahl empfangener Requests ueber Event-Liste des JavaFX-GUI-Threads aktualisieren
+     * GUI-Feld für Anzahl empfangener Requests über Event-Liste des JavaFX-GUI-Threads aktualisieren
      */
     private void updateNumberOfRequests() {
 
         Platform.runLater(() -> {
 
-            LOG.debug("runLater: run-Methode wird ausgefuehrt");
+            LOG.debug("runLater: run-Methode wird ausgeführt");
             LOG.debug("runLater: Received Requests: " + requestCounter.get());
             receivedRequests.setText(String.valueOf(requestCounter.get()));
         });
     }
 
     /**
-     * Oeffnen eines Dialogfensters, wenn ein Fehler bei der Eingabe auftritt
-     * @param message Meldung fuer Bildschirmanzeige
+     * Öffnen eines Dialogfensters, wenn ein Fehler bei der Eingabe auftritt
+     *
+     * @param message Meldung für Bildschirmanzeige
      */
     private void setAlert(String message) {
         Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -745,22 +755,21 @@ public class ChatServerGUI extends Application implements ChatServerGuiInterface
     }
 
     @Override
-    public void incrNumberOfLoggedInClients() {
-
+    public void increaseNumberOfLoggedInClients() {
         loggedInClientCounter.getAndIncrement();
         LOG.debug("Eingeloggte Clients: " + loggedInClientCounter.get());
         updateLoggedInClients();
     }
 
     @Override
-    public void decrNumberOfLoggedInClients() {
+    public void decreaseNumberOfLoggedInClients() {
         loggedInClientCounter.getAndDecrement();
         LOG.debug("Eingeloggte Clients: " + loggedInClientCounter.get());
         updateLoggedInClients();
     }
 
     @Override
-    public void incrNumberOfRequests() {
+    public void increaseNumberOfRequests() {
         requestCounter.getAndIncrement();
         LOG.debug(requestCounter.get() + " empfangene Message Requests");
         updateNumberOfRequests();

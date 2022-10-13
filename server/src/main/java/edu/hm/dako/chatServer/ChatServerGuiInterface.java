@@ -2,15 +2,15 @@ package edu.hm.dako.chatServer;
 
 /**
  * Interface, das der ServerGUI bereitstellen muss
- * @author Paul Mandl
+ *
+ * @author Peter Mandl, edited by Lerngruppe
  */
 public interface ChatServerGuiInterface {
-
     void showStartData(ServerStartData data);
 
-    void incrNumberOfLoggedInClients();
+    void increaseNumberOfLoggedInClients();
 
-    void decrNumberOfLoggedInClients();
+    void decreaseNumberOfLoggedInClients();
 
-    void incrNumberOfRequests();
+    void increaseNumberOfRequests();
 }

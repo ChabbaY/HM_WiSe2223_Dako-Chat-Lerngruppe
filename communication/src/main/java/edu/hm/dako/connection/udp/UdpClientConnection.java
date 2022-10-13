@@ -2,16 +2,17 @@ package edu.hm.dako.connection.udp;
 
 import edu.hm.dako.connection.Connection;
 
-import java.io.IOException;
 import java.io.Serializable;
 
 /**
  * UDP-Verbindung aus Sicht des Clients
+ *
+ * @author Peter Mandl, edited by Lerngruppe
  */
 public class UdpClientConnection implements Connection {
 
     /**
-     * Timeout fuer {@link UdpSocket#receive(int)} Das ist die maximale Wartezeit beim Empfang von UDP-Datagrammen
+     * Timeout für {@link UdpSocket#receive(int)}, das ist die maximale Wartezeit beim Empfang von UDP-Datagrammen
      */
     private final int receivingTimeout;
     // UDP-Socket der Verbindung
@@ -39,7 +40,7 @@ public class UdpClientConnection implements Connection {
     }
 
     @Override
-    public void close() throws IOException {
+    public void close() {
         clientSocket.close();
     }
 }

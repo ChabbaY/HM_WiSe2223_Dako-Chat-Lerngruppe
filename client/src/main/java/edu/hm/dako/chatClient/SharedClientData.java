@@ -7,26 +7,25 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * Gemeinsame genutzte Daten, die sich der Chat-Client-Thread und die Message-Processing-Threads teilen
  *
- * @author Peter Mandl
+ * @author Peter Mandl, edited by Lerngruppe
  */
 public class SharedClientData {
-
-    // Zaehler fuer die Envents aller Clients fuer
+    // Zähler für die Events aller Clients für
     // Testausgaben
-    public static AtomicInteger logoutEvents = new AtomicInteger(0);
-    public static AtomicInteger loginEvents = new AtomicInteger(0);
-    public static AtomicInteger messageEvents = new AtomicInteger(0);
+    public static final AtomicInteger logoutEvents = new AtomicInteger(0);
+    public static final AtomicInteger loginEvents = new AtomicInteger(0);
+    public static final AtomicInteger messageEvents = new AtomicInteger(0);
 
-    // Loginname des Clients
+    // LoginName des Clients
     public String userName;
 
     // Aktueller Zustand des Clients
     public ClientConversationStatus status;
 
-    // Zaehler fuer gesendete Chat-Nachrichten des Clients
+    // Zähler für gesendete Chat-Nachrichten des Clients
     public AtomicInteger messageCounter;
 
-    // Zaehler fuer Logouts, empfangene Events und Confirms fuer
+    // Zähler für Logouts, empfangene Events und Confirms für
     // Testausgaben
     public AtomicInteger logoutCounter;
     public AtomicInteger eventCounter;

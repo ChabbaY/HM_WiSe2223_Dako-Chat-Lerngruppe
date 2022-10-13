@@ -1,10 +1,6 @@
 package edu.hm.dako.chatServer;
 
-import edu.hm.dako.common.AuditLogPDU;
-import edu.hm.dako.common.AuditLogPduType;
-import edu.hm.dako.common.ChatPDU;
 import edu.hm.dako.common.ExceptionHandler;
-import edu.hm.dako.common.PduType;
 import edu.hm.dako.connection.Connection;
 import edu.hm.dako.connection.ServerSocketInterface;
 import javafx.concurrent.Task;
@@ -17,16 +13,16 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Simple-Chat-Server-Implementierung
- * @author Peter Mandl
+ *
+ * @author Peter Mandl, edited by Lerngruppe
  */
 public class SimpleChatServerImpl extends AbstractChatServer {
-
     private static final Logger LOG = LogManager.getLogger(SimpleChatServerImpl.class);
 
-    // Threadpool fuer Worker-Threads
+    // ThreadPool für Worker-Threads
     private final ExecutorService executorService;
 
-    // Socket fuer den Listener, der alle Verbindungsaufbauwuensche der Clients
+    // Socket für den Listener, der alle Verbindungsaufbauwünsche der Clients
     // entgegennimmt
     private final ServerSocketInterface socket;
 
@@ -35,12 +31,13 @@ public class SimpleChatServerImpl extends AbstractChatServer {
 
     /**
      * Konstruktor
-     * @param executorService Threadpool
-     * @param socket Listen Socket
+     *
+     * @param executorService    ThreadPool
+     * @param socket             Listen Socket
      * @param serverGuiInterface Referenz auf das Server-GUI-Interface
      */
-    public SimpleChatServerImpl(ExecutorService executorService,
-                                ServerSocketInterface socket, ChatServerGuiInterface serverGuiInterface) {
+    public SimpleChatServerImpl(ExecutorService executorService, ServerSocketInterface socket,
+                                ChatServerGuiInterface serverGuiInterface) {
         this.executorService = executorService;
         this.socket = socket;
         this.serverGuiInterface = serverGuiInterface;
@@ -54,14 +51,14 @@ public class SimpleChatServerImpl extends AbstractChatServer {
 
     /**
      * Konstruktor
-     * @param executorService Threadpool
-     * @param socket Listen Socket
+     *
+     * @param executorService    ThreadPool
+     * @param socket             Listen Socket
      * @param serverGuiInterface Referenz auf das Server-GUI-Interface
-     * @param auditLogConnection Referenz auf Auditlog-Server-Verbindung
+     * @param auditLogConnection Referenz auf AuditLog-Server-Verbindung
      */
     public SimpleChatServerImpl(ExecutorService executorService, ServerSocketInterface socket,
-                                ChatServerGuiInterface serverGuiInterface,
-                                AuditLogConnection auditLogConnection) {
+                                ChatServerGuiInterface serverGuiInterface, AuditLogConnection auditLogConnection) {
         this.executorService = executorService;
         this.socket = socket;
         this.serverGuiInterface = serverGuiInterface;
@@ -72,9 +69,8 @@ public class SimpleChatServerImpl extends AbstractChatServer {
         this.auditLogConnection = auditLogConnection;
 
         /* Nur zum Test
-        // Ersten AuditLog-Satz senden
-        try {
-            ChatPDU beginPdu = new ChatPDU();
+        // ersten AuditLog-Satz senden
+        try {ChatPDU beginPdu = new ChatPDU();
             beginPdu.setPduType(PduType.UNDEFINED);
             beginPdu.setMessage("Beginn des Audit-Logs");
             beginPdu.setUserName("Chat-Server");
@@ -92,18 +88,18 @@ public class SimpleChatServerImpl extends AbstractChatServer {
         Task<Void> task = new Task<>() {
             @Override
             protected Void call() {
-                // Clientliste erzeugen
+                // ClientListe erzeugen
                 clients = SharedChatClientList.getInstance();
 
                 while (!Thread.currentThread().isInterrupted() && !socket.isClosed()) {
                     try {
-                        // Auf ankommende Verbindungsaufbauwuensche warten
+                        // Auf ankommende Verbindungsaufbauwünsche warten
                         System.out.println("SimpleChatServer wartet auf Verbindungsanfragen von Clients...");
                         Connection connection = socket.accept();
                         LOG.debug("Neuer Verbindungsaufbauwunsch empfangen");
 
                         if (auditLogConnection == null) {
-                            // Neuen Workerthread starten ohne AuditLog-Verbindung
+                            // Neuen WorkerThread starten ohne AuditLog-Verbindung
                             executorService.submit(new SimpleChatWorkerThreadImpl(connection, clients,
                                     counter, serverGuiInterface));
                         } else {
@@ -115,7 +111,7 @@ public class SimpleChatServerImpl extends AbstractChatServer {
                         if (socket.isClosed()) {
                             LOG.debug("Socket wurde geschlossen");
                         } else {
-                            LOG.error("Exception beim Entgegennehmen von Verbindungsaufbauwuenschen: " + e);
+                            LOG.error("Exception beim Entgegennehmen von Verbindungsaufbauwünschen: " + e);
                             ExceptionHandler.logException(e);
                         }
                     }
@@ -123,7 +119,6 @@ public class SimpleChatServerImpl extends AbstractChatServer {
                 return null;
             }
         };
-
         Thread th = new Thread(task);
         th.setDaemon(true);
         th.start();
@@ -131,7 +126,6 @@ public class SimpleChatServerImpl extends AbstractChatServer {
 
     @Override
     public void stop() throws Exception {
-
         // Alle Verbindungen zu aktiven Clients abbauen
         Vector<String> sendList = clients.getClientNameList();
         for (String s : new Vector<>(sendList)) {
@@ -147,7 +141,7 @@ public class SimpleChatServerImpl extends AbstractChatServer {
             }
         }
 
-        // Loeschen der Userliste
+        // Löschen der Userliste
         clients.deleteAll();
         Thread.currentThread().interrupt();
 
@@ -156,15 +150,14 @@ public class SimpleChatServerImpl extends AbstractChatServer {
         LOG.debug("Listen-Socket geschlossen");
 
         // Verbindung zu AuditLog-Server schliessen
-
         if (auditLogConnection != null) {
             auditLogConnection.close();
             LOG.debug("AuditLogServer Connection closed");
         }
 
-        // Threadpool schliessen
+        // ThreadPool schliessen
         executorService.shutdown();
-        LOG.debug("Threadpool freigegeben");
+        LOG.debug("ThreadPool freigegeben");
 
         System.out.println("SimpleChatServer beendet sich");
     }

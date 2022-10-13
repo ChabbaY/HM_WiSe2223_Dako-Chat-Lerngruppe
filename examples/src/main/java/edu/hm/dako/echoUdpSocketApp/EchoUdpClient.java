@@ -7,18 +7,17 @@ import java.net.InetAddress;
 
 /**
  * Echo Client auf Basis von UDP Datagram-Sockets
- * @author P.Mandl
+ * @author Peter Mandl, edited by Lerngruppe
  * @version 2.0
  */
 public class EchoUdpClient {
-
     protected DatagramSocket socket;
     protected InetAddress serverAddress;
     protected int serverPort;
 
     /**
      * Konstruktor
-     * @param serverPort Portnummer des Echo-Servers
+     * @param serverPort PortNummer des Echo-Servers
      * @throws IOException Fehler beim Anlegen des Sockets
      */
     public EchoUdpClient(int serverPort) throws IOException {
@@ -51,11 +50,10 @@ public class EchoUdpClient {
     }
 
     /**
-     * Ausfuehrung der Echo-Verarbeitung
-     * @throws IOException - Fehler beim Senden oder Empfangen
+     * Ausführung der Echo-Verarbeitung
      */
-    public void execute() throws IOException {
-        String myMessage = "Des is de Nachricht, die zruck kemma soi";
+    public void execute() {
+        String myMessage = "Des is de Nachricht, die zurück komma soi";
 
         try {
             sendPacket(myMessage, myMessage.length(), serverAddress, serverPort);
@@ -74,7 +72,7 @@ public class EchoUdpClient {
     /**
      * Datagram senden
      * @param message Zu sendende Nachricht als String
-     * @param length Laenge der Nachricht
+     * @param length Länge der Nachricht
      * @param serverAddress Adresse des Serverrechners
      * @param serverPort Port des Servers
      * @throws IOException Fehler beim Senden

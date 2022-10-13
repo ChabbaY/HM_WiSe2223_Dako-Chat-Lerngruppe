@@ -8,15 +8,15 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 /**
- * Modelldaten fuer FX-GUI
- * @author Paul Mandl
+ * Modelldaten für FX-GUI
+ *
+ * @author Peter Mandl, edited by Lerngruppe
  */
 public class ClientModel {
-
     private final StringProperty userName = new SimpleStringProperty();
-    public ObservableList<String> users = FXCollections.observableArrayList();
-    public ObservableList<String> chats = FXCollections.observableArrayList();
-    public BooleanProperty block = new SimpleBooleanProperty();
+    public final ObservableList<String> users = FXCollections.observableArrayList();
+    public final ObservableList<String> chats = FXCollections.observableArrayList();
+    public final BooleanProperty block = new SimpleBooleanProperty();
 
     public StringProperty userNameProperty() {
         return userName;

@@ -3,11 +3,12 @@ package edu.hm.dako.connection.udp;
 import java.net.InetAddress;
 
 /**
- * UDP ist ein zustandloses Protokoll, in dem es eigentlich keine Verbindung gibt. Hier werden Verbindungsinformationen
+ * UDP ist ein zustandsloses Protokoll, in dem es eigentlich keine Verbindung gibt. Hier werden Verbindungsinformationen
  * der ankommenden Datagramme gespeichert, damit der Server seine Antwort an den richtigen Client schicken kann.
+ *
+ * @author Peter Mandl, edited by Lerngruppe
  */
 public class UdpPseudoConnectionContext {
-
     // IP-Adresse
     private InetAddress remoteAddress;
 
@@ -27,10 +28,11 @@ public class UdpPseudoConnectionContext {
     }
 
     /**
-     * Aufbau einer Pseudoverbindung ueber UDP
+     * Aufbau einer Pseudoverbindung über UDP
+     *
      * @param remoteAddress Entfernte Adresse
-     * @param remotePort Entfernter Port
-     * @param object Objekt, das uebertragen wird
+     * @param remotePort    Entfernter Port
+     * @param object        Objekt, das übertragen wird
      */
     public UdpPseudoConnectionContext(InetAddress remoteAddress, int remotePort, Object object) {
         this.remoteAddress = remoteAddress;
