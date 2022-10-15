@@ -186,7 +186,7 @@ public class BenchmarkingClientFxGUI extends Application implements Benchmarking
             progressBarFx.setMaxSize(1050, 30);
         }
 
-        // Reakionsroutinen für Buttons einrichten
+        // Reaktionsroutinen für Buttons einrichten
         reactOnStartButton();
         reactOnNewButton();
         reactOnFinishButton();
@@ -234,8 +234,8 @@ public class BenchmarkingClientFxGUI extends Application implements Benchmarking
 
         final GridPane inputPane = new GridPane();
 
-        optionListImplType = createCombobox(implTypeOptions);
-        optionListMeasureType = createCombobox(measureTypeOptions);
+        optionListImplType = createComboBox(implTypeOptions);
+        optionListMeasureType = createComboBox(measureTypeOptions);
         optionListImplType.setValue(SystemConstants.IMPL_TCP_SIMPLE);
         optionListMeasureType.setValue("Variable Threads");
 
@@ -249,35 +249,35 @@ public class BenchmarkingClientFxGUI extends Application implements Benchmarking
         // Textfelder zum Pane hinzufügen und Labels ergänzen
         numberOfClientThreads = createLabel("Anzahl Client-Threads");
         inputPane.add(numberOfClientThreads, 1, 3);
-        textFieldNumberOfClientThreads = createEditableTextfield(inputPane, 3, 3, "1");
+        textFieldNumberOfClientThreads = createEditableTextField(inputPane, 3, 3, "1");
 
         numberOfMessagesPerClients = createLabel("Anzahl Nachrichten je Client");
         inputPane.add(numberOfMessagesPerClients, 1, 5);
-        textFieldNumberOfMessagesPerClients = createEditableTextfield(inputPane, 3, 5, "10");
+        textFieldNumberOfMessagesPerClients = createEditableTextField(inputPane, 3, 5, "10");
 
         numberOfMaxRetries = createLabel("Max. Anzahl Wiederholungen");
         inputPane.add(numberOfMaxRetries, 1, 7);
-        textFieldNumberOfMaxRetries = createEditableTextfield(inputPane, 3, 7, "1");
+        textFieldNumberOfMaxRetries = createEditableTextField(inputPane, 3, 7, "1");
 
         messageLength = createLabel("Nachrichtenl\u00e4nge in Byte");
         inputPane.add(messageLength, 5, 3);
-        textFieldMessageLength = createEditableTextfield(inputPane, 7, 3, "10");
+        textFieldMessageLength = createEditableTextField(inputPane, 7, 3, "10");
 
         responseTimeout = createLabel("Response-Timeout in ms");
         inputPane.add(responseTimeout, 5, 5);
-        textFieldResponseTimeout = createEditableTextfield(inputPane, 7, 5, "2000");
+        textFieldResponseTimeout = createEditableTextField(inputPane, 7, 5, "2000");
 
         thinkTime = createLabel("Denkzeit in ms");
         inputPane.add(thinkTime, 5, 7);
-        textFieldThinkTime = createEditableTextfield(inputPane, 7, 7, "100");
+        textFieldThinkTime = createEditableTextField(inputPane, 7, 7, "100");
 
         serverport = createLabel("Serverport");
         inputPane.add(serverport, 9, 3);
-        textFieldServerport = createEditableTextfield(inputPane, 11, 3, "50001");
+        textFieldServerport = createEditableTextField(inputPane, 11, 3, "50001");
 
         serverIpAddress = createLabel("Server-IP-Adresse");
         inputPane.add(serverIpAddress, 9, 5);
-        textFieldServerIpAddress = createEditableTextfield(inputPane, 11, 5, "localhost");
+        textFieldServerIpAddress = createEditableTextField(inputPane, 11, 5, "localhost");
 
         return fillPane(inputPane);
     }
@@ -313,40 +313,40 @@ public class BenchmarkingClientFxGUI extends Application implements Benchmarking
         // Textfelder zum Pane hinzufügen und Label ergänzen
 
         runTimePane.add(createLabel("Geplante Requests"), 1, 1);
-        textFieldPlannedRequests = createNotEditableTextfield(runTimePane, 3, 1);
+        textFieldPlannedRequests = createNotEditableTextField(runTimePane, 3, 1);
 
         runTimePane.add(createLabel("Gesendete Requests"), 5, 1);
-        textFieldSentRequests = createNotEditableTextfield(runTimePane, 7, 1);
+        textFieldSentRequests = createNotEditableTextField(runTimePane, 7, 1);
 
         runTimePane.add(createLabel("Empfangene Responses"), 9, 1);
-        textFieldReceivedResponses = createNotEditableTextfield(runTimePane, 11, 1);
+        textFieldReceivedResponses = createNotEditableTextField(runTimePane, 11, 1);
 
         runTimePane.add(createLabel("Testbeginn"), 1, 3);
-        textFieldTestBegin = createNotEditableTextfield(runTimePane, 3, 3);
+        textFieldTestBegin = createNotEditableTextField(runTimePane, 3, 3);
 
         runTimePane.add(createLabel("Testende"), 5, 3);
-        textFieldTestEnd = createNotEditableTextfield(runTimePane, 7, 3);
+        textFieldTestEnd = createNotEditableTextField(runTimePane, 7, 3);
 
         runTimePane.add(createLabel("Testdauer in s"), 9, 3);
-        textFieldTestDuration = createNotEditableTextfield(runTimePane, 11, 3);
+        textFieldTestDuration = createNotEditableTextField(runTimePane, 11, 3);
 
         runTimePane.add(createLabel("Kalkulierte Event-Nachrichten"), 1, 5);
-        textFieldPlannedEventMessages = createNotEditableTextfield(runTimePane, 3, 5);
+        textFieldPlannedEventMessages = createNotEditableTextField(runTimePane, 3, 5);
 
         runTimePane.add(createLabel("Gesendete Event-Nachrichten"), 5, 5);
-        textFieldSentEventMessages = createNotEditableTextfield(runTimePane, 7, 5);
+        textFieldSentEventMessages = createNotEditableTextField(runTimePane, 7, 5);
 
         runTimePane.add(createLabel("Wiederholte Event-Nachrichten"), 9, 5);
-        textFieldRetriedEvents = createNotEditableTextfield(runTimePane, 11, 5);
+        textFieldRetriedEvents = createNotEditableTextField(runTimePane, 11, 5);
 
         runTimePane.add(createLabel("Empfangene Confirm-Nachrichten"), 1, 7);
-        textFieldReceivedConfirmEvents = createNotEditableTextfield(runTimePane, 3, 7);
+        textFieldReceivedConfirmEvents = createNotEditableTextField(runTimePane, 3, 7);
 
         runTimePane.add(createLabel("Verlorene Confirm-Nachrichten"), 5, 7);
-        textFieldLostConfirmEvents = createNotEditableTextfield(runTimePane, 7, 7);
+        textFieldLostConfirmEvents = createNotEditableTextField(runTimePane, 7, 7);
 
         runTimePane.add(createLabel("Anzahl \u00dcbertragungswiederholungen"), 9, 7);
-        textFieldNumberOfRetries = createNotEditableTextfield(runTimePane, 11, 7);
+        textFieldNumberOfRetries = createNotEditableTextField(runTimePane, 11, 7);
 
         return fillPane(runTimePane);
     }
@@ -361,46 +361,46 @@ public class BenchmarkingClientFxGUI extends Application implements Benchmarking
 
         // Textfelder zum Pane hinzufügen und Label ergänzen
         resultPane.add(createLabel("Mittlere RTT in ms"), 1, 1);
-        textFieldAvgRTT = createNotEditableTextfield(resultPane, 3, 1);
+        textFieldAvgRTT = createNotEditableTextField(resultPane, 3, 1);
 
         resultPane.add(createLabel("Maximale RTT in ms"), 5, 1);
-        textFieldMaxRTT = createNotEditableTextfield(resultPane, 7, 1);
+        textFieldMaxRTT = createNotEditableTextField(resultPane, 7, 1);
 
         resultPane.add(createLabel("Minimale RTT in ms"), 9, 1);
-        textFieldMinRTT = createNotEditableTextfield(resultPane, 11, 1);
+        textFieldMinRTT = createNotEditableTextField(resultPane, 11, 1);
 
         resultPane.add(createLabel("Interquartilsabstand in ms"), 1, 3);
-        textFieldInterquartilRange = createNotEditableTextfield(resultPane, 3, 3);
+        textFieldInterquartilRange = createNotEditableTextField(resultPane, 3, 3);
 
         resultPane.add(createLabel("Spannweite in ms"), 5, 3);
-        textFieldRange = createNotEditableTextfield(resultPane, 7, 3);
+        textFieldRange = createNotEditableTextField(resultPane, 7, 3);
 
         resultPane.add(createLabel("Standardabweichung in ms"), 9, 3);
-        textFieldStandardDeviation = createNotEditableTextfield(resultPane, 11, 3);
+        textFieldStandardDeviation = createNotEditableTextField(resultPane, 11, 3);
 
         resultPane.add(createLabel("10%-Percentile in ms"), 1, 5);
-        textField10Percentile = createNotEditableTextfield(resultPane, 3, 5);
+        textField10Percentile = createNotEditableTextField(resultPane, 3, 5);
 
         resultPane.add(createLabel("25%-Percentile in ms"), 5, 5);
-        textField25Percentile = createNotEditableTextfield(resultPane, 7, 5);
+        textField25Percentile = createNotEditableTextField(resultPane, 7, 5);
 
         resultPane.add(createLabel("50%-Percentile in ms"), 9, 5);
-        textField50Percentile = createNotEditableTextfield(resultPane, 11, 5);
+        textField50Percentile = createNotEditableTextField(resultPane, 11, 5);
 
         resultPane.add(createLabel("75%-Percentile in ms"), 1, 7);
-        textField75Percentile = createNotEditableTextfield(resultPane, 3, 7);
+        textField75Percentile = createNotEditableTextField(resultPane, 3, 7);
 
         resultPane.add(createLabel("90%-Percentile in ms"), 5, 7);
-        textField90Percentile = createNotEditableTextfield(resultPane, 7, 7);
+        textField90Percentile = createNotEditableTextField(resultPane, 7, 7);
 
         resultPane.add(createLabel("Mittlere Serverzeit in ms"), 1, 11);
-        textFieldAvgServerTime = createNotEditableTextfield(resultPane, 3, 11);
+        textFieldAvgServerTime = createNotEditableTextField(resultPane, 3, 11);
 
         resultPane.add(createLabel("Maximale Heap-Belegung in MiB"), 5, 11);
-        textFieldMaxHeapUsage = createNotEditableTextfield(resultPane, 7, 11);
+        textFieldMaxHeapUsage = createNotEditableTextField(resultPane, 7, 11);
 
         resultPane.add(createLabel("Mittlere CPU-Auslastung in %"), 9, 11);
-        textFieldAvgCpuUsage = createNotEditableTextfield(resultPane, 11, 11);
+        textFieldAvgCpuUsage = createNotEditableTextField(resultPane, 11, 11);
 
         if (dim.getHeight() >= MIN_SCREEN_SIZE) {
             resultPane.add(createLabel(""), 1, 13);
@@ -506,7 +506,7 @@ public class BenchmarkingClientFxGUI extends Application implements Benchmarking
      * @param rowIndex Zeilenindex
      * @return textField Referenz auf erzeugtes Textfeld
      */
-    private TextField createNotEditableTextfield(GridPane pane, int columnIndex, int rowIndex) {
+    private TextField createNotEditableTextField(GridPane pane, int columnIndex, int rowIndex) {
         TextField textField = new TextField();
         pane.add(textField, columnIndex, rowIndex);
         textField.setMaxSize(155, 28);
@@ -529,7 +529,7 @@ public class BenchmarkingClientFxGUI extends Application implements Benchmarking
      * @param rowIndex Zeilenindex
      * @return textField Referenz auf erzeugtes Textfeld
      */
-    private TextField createEditableTextfield(GridPane pane, int columnIndex, int rowIndex, String value) {
+    private TextField createEditableTextField(GridPane pane, int columnIndex, int rowIndex, String value) {
         TextField textField = new TextField(value);
         pane.add(textField, columnIndex, rowIndex);
         textField.setMaxSize(155, 28);
@@ -579,7 +579,7 @@ public class BenchmarkingClientFxGUI extends Application implements Benchmarking
      * @param options ComboBox-Optionen
      * @return comboBox Referenz auf erzeugte ComboBox
      */
-    private ComboBox<String> createCombobox(ObservableList<String> options) {
+    private ComboBox<String> createComboBox(ObservableList<String> options) {
         ComboBox<String> comboBox = new ComboBox<>(options);
         comboBox.setMinSize(155, 28);
         comboBox.setMaxSize(155, 28);

@@ -10,24 +10,54 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author Peter Mandl, edited by Lerngruppe
  */
 public class SharedClientData {
-    // Zähler für die Events aller Clients für
-    // Testausgaben
+    /**
+     * Zähler für die Events aller Clients für Testausgaben
+     */
     public static final AtomicInteger logoutEvents = new AtomicInteger(0);
+
+    /**
+     * Zähler für die Events aller Clients für Testausgaben
+     */
     public static final AtomicInteger loginEvents = new AtomicInteger(0);
+
+    /**
+     * Zähler für die Events aller Clients für Testausgaben
+     */
     public static final AtomicInteger messageEvents = new AtomicInteger(0);
 
-    // LoginName des Clients
+    /**
+     * LoginName des Clients
+     */
     public String userName;
 
-    // Aktueller Zustand des Clients
+    /**
+     * Aktueller Zustand des Clients
+     */
     public ClientConversationStatus status;
 
-    // Zähler für gesendete Chat-Nachrichten des Clients
+    /**
+     * Zähler für gesendete Chat-Nachrichten des Clients
+     */
     public AtomicInteger messageCounter;
 
-    // Zähler für Logouts, empfangene Events und Confirms für
-    // Testausgaben
+    /**
+     * Zähler für Logouts für Testausgaben
+     */
     public AtomicInteger logoutCounter;
+
+    /**
+     * Zähler für empfangene Events für Testausgaben
+     */
     public AtomicInteger eventCounter;
+
+    /**
+     * Zähler für Confirms für Testausgaben
+     */
     public AtomicInteger confirmCounter;
+
+    /**
+     * Konstruktor
+     */
+    public SharedClientData() {
+    }
 }

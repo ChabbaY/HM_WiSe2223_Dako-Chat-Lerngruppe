@@ -88,14 +88,39 @@ public interface ClientUserInterface {
                                      long numberOfReceivedConfirms, long numberOfLostConfirms, long numberOfRetries,
                                      long numberOfReceivedChatMessages);
 
+    /**
+     * getter
+     *
+     * @return number of sent events
+     */
     long getNumberOfSentEvents();
 
+    /**
+     * getter
+     *
+     * @return number of received confirms
+     */
     long getNumberOfReceivedConfirms();
 
+    /**
+     * getter
+     *
+     * @return number of lost confirms
+     */
     long getNumberOfLostConfirms();
 
+    /**
+     * getter
+     *
+     * @return number of retries
+     */
     long getNumberOfRetries();
 
+    /**
+     * getter
+     *
+     * @return number of received chat messages
+     */
     long getNumberOfReceivedChatMessages();
 
     /**

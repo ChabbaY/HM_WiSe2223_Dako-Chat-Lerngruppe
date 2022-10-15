@@ -40,26 +40,56 @@ public class UdpPseudoConnectionContext {
         this.object = object;
     }
 
+    /**
+     * getter
+     *
+     * @return remoteAddress: entfernte Adresse
+     */
     public InetAddress getRemoteAddress() {
         return remoteAddress;
     }
 
+    /**
+     * setter
+     *
+     * @param remoteAddress entfernte Adresse
+     */
     public void setRemoteAddress(InetAddress remoteAddress) {
         this.remoteAddress = remoteAddress;
     }
 
+    /**
+     * getter
+     *
+     * @return remotePort: entfernter Port
+     */
     public int getRemotePort() {
         return remotePort;
     }
 
+    /**
+     * setter
+     *
+     * @param remotePort entfernter Port
+     */
     public void setRemotePort(int remotePort) {
         this.remotePort = remotePort;
     }
 
+    /**
+     * getter
+     *
+     * @return object: Objekt, das übertragen wird
+     */
     public Object getObject() {
         return object;
     }
 
+    /**
+     * setter
+     *
+     * @param object Objekt, das übertragen wird
+     */
     public void setObject(Object object) {
         this.object = object;
     }

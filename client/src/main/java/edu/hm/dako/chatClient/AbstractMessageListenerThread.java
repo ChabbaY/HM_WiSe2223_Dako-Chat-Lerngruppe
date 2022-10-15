@@ -12,20 +12,38 @@ import org.apache.logging.log4j.Logger;
  * @author Peter Mandl, edited by Lerngruppe
  */
 public abstract class AbstractMessageListenerThread extends Thread {
+    /**
+     * referencing the logger
+     */
     private static final Logger LOG = LogManager.getLogger(AbstractMessageListenerThread.class);
 
-    // Kennzeichen zum Beenden der Bearbeitung
+    /**
+     * Kennzeichen zum Beenden der Bearbeitung
+     */
     protected boolean finished = false;
 
-    // Verbindung zum Server
+    /**
+     * Verbindung zum Server
+     */
     protected final Connection connection;
 
-    // Schnittstelle zum User-Interface
+    /**
+     * Schnittstelle zum User-Interface
+     */
     protected final ClientUserInterface userInterface;
 
-    // Gemeinsame Daten zwischen Client-Thread und Message-Processing-Thread
+    /**
+     * Gemeinsame Daten zwischen Client-Thread und Message-Processing-Thread
+     */
     protected final SharedClientData sharedClientData;
 
+    /**
+     * Konstruktor
+     *
+     * @param userInterface Schnittstelle zum User-Interface
+     * @param con Verbindung zum Server
+     * @param sharedData Gemeinsame Daten zwischen Client-Thread und Message-Processing-Thread
+     */
     public AbstractMessageListenerThread(ClientUserInterface userInterface, Connection con, SharedClientData sharedData) {
         this.userInterface = userInterface;
         this.connection = con;

@@ -36,6 +36,7 @@ public class TcpConnection implements Connection {
      * @param receiveBufferSize Größe des Empfangspuffers in Byte
      * @param keepAlive         Option KEEP_ALIVE
      * @param TcpNoDelay        Option TCP_NO_DELAY
+     * @throws IOException      if it fails to establish a connection
      */
     public TcpConnection(ServerSocket serverSocket, int sendBufferSize, int receiveBufferSize, boolean keepAlive,
                          boolean TcpNoDelay) throws IOException {
@@ -70,6 +71,7 @@ public class TcpConnection implements Connection {
      * @param receiveBufferSize   Größe des Empfangspuffers in Byte
      * @param keepAlive           Option KEEP_ALIVE
      * @param TcpNoDelay          Option TCP_NO_DELAY
+     * @throws IOException        if it fails to establish a connection
      */
     public TcpConnection(String remoteServerAddress, int serverPort, String localHost,
                          int localPort, int sendBufferSize, int receiveBufferSize,

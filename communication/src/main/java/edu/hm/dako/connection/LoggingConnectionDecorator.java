@@ -18,6 +18,11 @@ public class LoggingConnectionDecorator implements Connection {
 
     private final Connection wrappedConnection;
 
+    /**
+     * Konstruktor
+     *
+     * @param wrappedConnection Connection für die geloggt werden soll
+     */
     public LoggingConnectionDecorator(Connection wrappedConnection) {
         this.wrappedConnection = wrappedConnection;
     }

@@ -6,8 +6,14 @@ package edu.hm.dako.connection;
  * @author Peter Mandl, edited by Lerngruppe
  */
 public class DecoratingConnectionFactory implements ConnectionFactory {
+    // ConnectionFactory that should be logged
     private final ConnectionFactory wrappedFactory;
 
+    /**
+     * Konstruktor
+     *
+     * @param wrappedFactory ConnectionFactory that should be logged
+     */
     public DecoratingConnectionFactory(ConnectionFactory wrappedFactory) {
         this.wrappedFactory = wrappedFactory;
     }

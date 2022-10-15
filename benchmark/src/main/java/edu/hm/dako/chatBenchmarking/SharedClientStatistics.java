@@ -603,7 +603,7 @@ public class SharedClientStatistics {
             distributionMetrics.setPercentile75(percentile.evaluate(75) / 1000000.0);
             distributionMetrics.setPercentile90(percentile.evaluate(90) / 1000000.0);
 
-            distributionMetrics.setInterquartilRange(
+            distributionMetrics.setInterQuartilRange(
                     distributionMetrics.percentile75 - distributionMetrics.percentile25);
 
             // Maximum berechnen
@@ -881,7 +881,7 @@ public class SharedClientStatistics {
                     measureType, implType, numberOfClients, numberOfMessages,
                     distributionMetrics.getPercentile10(), distributionMetrics.getPercentile25(), distributionMetrics.getPercentile50(),
                     distributionMetrics.getPercentile75(), distributionMetrics.getPercentile90(), distributionMetrics.getRange(),
-                    distributionMetrics.getInterquartilRange(), distributionMetrics.getMinimum(), distributionMetrics.getMaximum(),
+                    distributionMetrics.getInterQuartilRange(), distributionMetrics.getMinimum(), distributionMetrics.getMaximum(),
                     distributionMetrics.getMean(), distributionMetrics.getStandardDeviation(),
                     this.getAverageServerTime() / 1000000.0, this.numberOfAllMessages,
                     this.getNumberOfSentRequests(), this.getNumberOfReceivedResponses(),

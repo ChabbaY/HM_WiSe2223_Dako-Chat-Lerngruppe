@@ -13,7 +13,7 @@
 <?import javafx.scene.text.Font?>
 <VBox xmlns:fx="http://javafx.com/fxml/1" alignment="CENTER_LEFT" padding="$x2" prefHeight="340.0" prefWidth="290.0"
       spacing="10.0" xmlns="http://javafx.com/javafx/8"
-      fx:controller="edu.hm.dako.chatClient.LogInGuiController">
+      fx:controller="edu.hm.dako.chatClient.LogInGUIController">
     <TextField fx:id="txtUsername" prefHeight="25.0" prefWidth="150.0" promptText="Benutzername"
                onKeyPressed="#handleKeyPressed"/>
     <Separator layoutX="15.0" layoutY="147.0" prefWidth="200.0"/>

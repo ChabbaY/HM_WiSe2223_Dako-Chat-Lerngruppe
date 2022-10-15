@@ -11,6 +11,11 @@ import java.net.InetAddress;
  * @author Peter Mandl, edited by Lerngruppe
  */
 public class UdpClientConnectionFactory implements ConnectionFactory {
+    /**
+     * Fabrik für das Erzeugen von Verbindungen zum Server
+     */
+    public UdpClientConnectionFactory() {
+    }
     @Override
     public Connection connectToServer(String remoteServerAddress, int serverPort,
                                       int localPort, int sendBufferSize, int receiveBufferSize) throws Exception {
@@ -18,9 +23,8 @@ public class UdpClientConnectionFactory implements ConnectionFactory {
         udpSocket.setRemoteAddress(InetAddress.getByName(remoteServerAddress));
         udpSocket.setRemotePort(serverPort);
 
-        // Maximale Wartezeit beim Empfang einer Nachricht in Millisekunden.
-        // Wenn in dieser Zeit keine Nachricht kommt, wird das Empfangen abgebrochen.
-        // Mit verschiedenen Einstellungen experimentieren.
+        // Maximale Wartezeit beim Empfang einer Nachricht in Millisekunden. Wenn in dieser Zeit keine Nachricht kommt,
+        // wird das Empfangen abgebrochen. Mit verschiedenen Einstellungen experimentieren.
         int defaultResponseTimeout = 5000;//TODO try different settings
 
         return new UdpClientConnection(udpSocket, defaultResponseTimeout);

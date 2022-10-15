@@ -1,18 +1,29 @@
 package edu.hm.dako.chatServer;
 
 /**
- * Gemeinsame Attribute für alle Implementierungen
+ * shared attributes for all implementations
  *
  * @author Peter Mandl, edited by Lerngruppe
  */
 public abstract class AbstractChatServer implements ChatServerInterface {
-    // Gemeinsam für alle WorkerThreads verwaltete Liste aller eingeloggten
-    // Clients
+    /**
+     * Konstruktor
+     */
+    public AbstractChatServer() {
+    }
+
+    /**
+     * shared between all worker threads: managed list of all logged in clients
+     */
     protected SharedChatClientList clients;
 
-    // Zähler für Test
+    /**
+     * counter for test
+      */
     protected SharedServerCounter counter;
 
-    // Referenz auf Server GUI für die Meldung von Ereignissen
-    protected ChatServerGuiInterface serverGuiInterface;
+    /**
+     * referencing server GUI to register events
+      */
+    protected ChatServerGUIInterface serverGuiInterface;
 }

@@ -20,27 +20,69 @@ import java.rmi.Naming;
  * @author Peter Mandl, edited by Lerngruppe
  */
 public class AuditLogConnection {
-
+    /**
+     * Verbindungstyp Konstante TCP
+     */
     public static final int AUDIT_LOG_CONNECTION_TYPE_TCP = 1;
+
+    /**
+     * Verbindungstyp Konstante UDP
+     */
     public static final int AUDIT_LOG_CONNECTION_TYPE_UDP = 2;
+
+    /**
+     * Verbindungstyp Konstante RMI
+     */
     public static final int AUDIT_LOG_CONNECTION_TYPE_RMI = 3;
 
-    // Puffergrößen
+    /**
+     * Puffergröße
+     */
     static final int DEFAULT_SEND_BUFFER_AUDIT_LOG_SIZE = 400000;
+
+    /**
+     * Puffergröße
+     */
     static final int DEFAULT_RECEIVE_BUFFER_AUDIT_LOG_SIZE = 40000;
+
+    /**
+     * Referenz auf den logger
+     */
     private static final Logger LOG = LogManager.getLogger(AuditLogConnection.class);
 
-    // Verbindungstyp
-    private final int connectionType; // UDP, TCP oder RMI
+    /**
+     * Verbindungstyp (UDP, TCP oder RMI)
+     */
+    private final int connectionType;
+
+    /**
+     * UDP Verbindung zum Audit Log Server
+     */
     protected UdpClientConnection udpConnectionToAuditLogServer = null;
+
+    /**
+     * TCP Verbindung zum Audit Log Server
+     */
     protected TcpConnection tcpConnectionToAuditLogServer = null;
+
+    /**
+     * RMI Verbindung zum Audit Log Server
+     */
     protected AuditLogRmiInterface auditLogRemoteObject = null;
 
-    // Hostname und Port des AuditLog-Servers
+    /**
+     * Hostname des AuditLog-Servers
+     */
     final String auditLogServer;
+
+    /**
+     * Port des AuditLog-Servers
+     */
     final int auditLogPort;
 
-    // Zählt abgehende AuditLog-Sätze
+    /**
+     * Zählt abgehende AuditLog-Sätze
+     */
     private long counter = 0;
 
     /**

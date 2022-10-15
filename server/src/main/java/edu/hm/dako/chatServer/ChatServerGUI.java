@@ -40,7 +40,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  *
  * @author Peter Mandl, edited by Lerngruppe
  */
-public class ChatServerGUI extends Application implements ChatServerGuiInterface {
+public class ChatServerGUI extends Application implements ChatServerGUIInterface {
     // Standard-Port des Servers
     static final String DEFAULT_SERVER_PORT = "50001";
 
@@ -100,16 +100,10 @@ public class ChatServerGUI extends Application implements ChatServerGuiInterface
     private final TextField loggedInClients;
 
     /**
-     * Konstruktion der ServerGUI
+     * Benutzeroberfläche zum Starten des Chat-Servers
+     *
+     * @param args currently ignored //TODO parametrize
      */
-    public ChatServerGUI() {
-        loggedInClientCounter = new AtomicInteger(0);
-        requestCounter = new AtomicInteger(0);
-        startTimeField = createNotEditableTextField();
-        receivedRequests = createNotEditableTextField();
-        loggedInClients = createNotEditableTextField();
-    }
-
     public static void main(String[] args) {
 
         // Log4j2-Logging aus Datei konfigurieren
@@ -119,6 +113,17 @@ public class ChatServerGUI extends Application implements ChatServerGuiInterface
 
         // Anwendung starten
         launch(args);
+    }
+
+    /**
+     * Konstruktion der ServerGUI
+     */
+    public ChatServerGUI() {
+        loggedInClientCounter = new AtomicInteger(0);
+        requestCounter = new AtomicInteger(0);
+        startTimeField = createNotEditableTextField();
+        receivedRequests = createNotEditableTextField();
+        loggedInClients = createNotEditableTextField();
     }
 
     @Override

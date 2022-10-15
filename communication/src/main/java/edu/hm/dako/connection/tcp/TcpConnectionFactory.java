@@ -13,19 +13,28 @@ import java.io.IOException;
  * @author Peter Mandl, edited by Lerngruppe
  */
 public class TcpConnectionFactory implements ConnectionFactory {
-    // Maximale Anzahl an Verbindungsaufbauversuchen zum Server, die ein Client
-    // unternimmt, bevor er abbricht
+    /**
+     * Maximale Anzahl an Verbindungsaufbauversuchen zum Server, die ein Client unternimmt, bevor er abbricht
+      */
     private static final int MAX_CONNECTION_ATTEMPTS = 3;
     private static final Logger log = LogManager.getLogger(TcpConnectionFactory.class);
-    // Zählt die Verbindungsaufbauversuche, bis eine Verbindung vom Server
-    // angenommen wird
+    /**
+     * Zählt die Verbindungsaufbauversuche, bis eine Verbindung vom Server angenommen wird
+     */
     private long connectionTryCounter = 0;
+
+    /**
+     * Erzeugen von TCP-Verbindungen zum Server
+     */
+    public TcpConnectionFactory() {
+    }
 
     /**
      * Baut eine Verbindung zum Server auf. Der Verbindungsaufbau wird mehrmals versucht.
      */
-    public Connection connectToServer(String remoteServerAddress, int serverPort,
-                                      int localPort, int sendBufferSize, int receiveBufferSize) throws IOException {
+    @Override
+    public Connection connectToServer(String remoteServerAddress, int serverPort, int localPort, int sendBufferSize,
+                                      int receiveBufferSize) throws IOException {
         TcpConnection connection = null;
         boolean connected = false;
 

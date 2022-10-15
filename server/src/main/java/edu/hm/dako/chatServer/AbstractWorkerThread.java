@@ -11,30 +11,55 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author Peter Mandl, edited by Lerngruppe
  */
 public abstract class AbstractWorkerThread extends Thread {
-    // Verbindung-Handle
+    /**
+     * Verbindung-Handle
+     */
     protected final Connection connection;
 
-    // Kennzeichen zum Beenden des Worker-Threads
+    /**
+     * Kennzeichen zum Beenden des Worker-Threads
+     */
     protected boolean finished = false;
 
-    // Username des durch den Worker-Thread bedienten Clients
+    /**
+     * Username des durch den Worker-Thread bedienten Clients
+     */
     protected String userName = null;
 
-    // Client-ThreadName
+    /**
+     * Client-ThreadName
+      */
     protected String clientThreadName = null;
 
-    // Startzeit für die Serverbearbeitungszeit
+    /**
+     * Startzeit für die Serverbearbeitungszeit
+     */
     protected long startTime;
 
-    // Gemeinsam für alle WorkerThreads verwaltete Liste aller eingeloggten Clients
+    /**
+     * Gemeinsam für alle WorkerThreads verwaltete Liste aller eingeloggten Clients
+     */
     protected final SharedChatClientList clients;
 
-    // Referenzen auf globale Zähler für Testausgaben
+    /**
+     * Referenz auf globalen Zähler für Testausgaben
+     */
     protected final AtomicInteger logoutCounter;
+
+    /**
+     * Referenz auf globalen Zähler für Testausgaben
+     */
     protected final AtomicInteger eventCounter;
+
+    /**
+     * Referenz auf globalen Zähler für Testausgaben
+     */
     protected final AtomicInteger confirmCounter;
 
-    protected final ChatServerGuiInterface serverGuiInterface;
+    /**
+     * Referenz auf GUI des Chat-Servers
+     */
+    protected final ChatServerGUIInterface serverGuiInterface;
 
     /**
      * Konstruktor
@@ -45,7 +70,7 @@ public abstract class AbstractWorkerThread extends Thread {
      * @param serverGuiInterface Referenz auf GUI des Chat-Servers
      */
     public AbstractWorkerThread(Connection con, SharedChatClientList clients, SharedServerCounter counter,
-                                ChatServerGuiInterface serverGuiInterface) {
+                                ChatServerGUIInterface serverGuiInterface) {
         this.connection = con;
         this.clients = clients;
         this.logoutCounter = counter.logoutCounter;

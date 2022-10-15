@@ -18,6 +18,12 @@ public class UdpClientConnection implements Connection {
     // UDP-Socket der Verbindung
     private final UdpSocket clientSocket;
 
+    /**
+     * UDP-Verbindung aus Sicht des Clients
+     *
+     * @param clientSocket UDP-Socket der Verbindung
+     * @param receivingTimeout die maximale Wartezeit beim Empfang von UDP-Datagrammen
+     */
     public UdpClientConnection(UdpSocket clientSocket, int receivingTimeout) {
         this.clientSocket = clientSocket;
         this.receivingTimeout = receivingTimeout;

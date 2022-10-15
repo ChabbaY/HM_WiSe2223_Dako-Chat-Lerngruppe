@@ -11,6 +11,9 @@ public class EndOfFileException extends Exception {
     @Serial
     private static final long serialVersionUID = 2L;
 
+    /**
+     * End of File bei Verbindung, verursacht durch einen Verbindungsabbau des Partners
+     */
     public EndOfFileException() {
         super("End of File Exception");
     }

@@ -37,7 +37,7 @@ public final class ServerFactory {
      */
     public static ChatServerInterface getServer(ChatServerImplementationType implType, int serverPort,
                                                 int sendBufferSize, int receiveBufferSize,
-                                                ChatServerGuiInterface serverGuiInterface) throws Exception {
+                                                ChatServerGUIInterface serverGuiInterface) throws Exception {
         LOG.debug("ChatServer (" + implType.toString() + ") wird gestartet, Serverport: "
                 + serverPort + ", Sendepuffer: " + sendBufferSize + ", Empfangspuffer: "
                 + receiveBufferSize);
@@ -45,21 +45,19 @@ public final class ServerFactory {
                 + ") wird gestartet, Listen-Port: " + serverPort + ", Sendepuffer: "
                 + sendBufferSize + ", Empfangspuffer: " + receiveBufferSize);
 
-        switch (implType) {
-            case TCPSimpleImplementation:
-                try {
-                    TcpServerSocket tcpServerSocket = new TcpServerSocket(serverPort, sendBufferSize,
-                            receiveBufferSize);
-                    return new SimpleChatServerImpl(Executors.newCachedThreadPool(),
-                            getDecoratedServerSocket(tcpServerSocket), serverGuiInterface);
-                } catch (Exception e) {
-                    throw new Exception(e);
-                }
-                // Weitere Implementierungstypen derzeit nicht implementiert
-            default:
-                System.out.println("Derzeit nur TCPSimpleImplementation implementiert!");
-                throw new RuntimeException("Unknown type: " + implType);//TODO more implementations
+        if (implType == ChatServerImplementationType.TCPSimpleImplementation) {
+            try {
+                TcpServerSocket tcpServerSocket = new TcpServerSocket(serverPort, sendBufferSize,
+                        receiveBufferSize);
+                return new SimpleChatServerImpl(Executors.newCachedThreadPool(),
+                        getDecoratedServerSocket(tcpServerSocket), serverGuiInterface);
+            } catch (Exception e) {
+                throw new Exception(e);
+            }
+            // Weitere Implementierungstypen derzeit nicht implementiert
         }
+        System.out.println("Derzeit nur TCPSimpleImplementation implementiert!");
+        throw new RuntimeException("Unknown type: " + implType);//TODO more implementations
     }
 
     /**
@@ -78,7 +76,7 @@ public final class ServerFactory {
      */
     public static ChatServerInterface getServerWithAuditLog(ChatServerImplementationType implType, int serverPort,
                                                             int sendBufferSize, int receiveBufferSize,
-                                                            ChatServerGuiInterface serverGuiInterface,
+                                                            ChatServerGUIInterface serverGuiInterface,
                                                             AuditLogImplementationType auditLogImplementationType,
                                                             String auditLogServerHostnameOrIP, int auditLogServerPort) throws Exception {
         // Zunächst Verbindung zum AuditLog-Server aufbauen
@@ -109,22 +107,20 @@ public final class ServerFactory {
         }
 
         // Dann Chat-Server mit Verbindungsendpunkt erzeugen
-        switch (implType) {
-            case TCPSimpleImplementation:
-                try {
-                    TcpServerSocket tcpServerSocket = new TcpServerSocket(serverPort, sendBufferSize,
-                            receiveBufferSize);
-                    return new SimpleChatServerImpl(Executors.newCachedThreadPool(),
-                            getDecoratedServerSocket(tcpServerSocket), serverGuiInterface, auditLogConnection);
-                } catch (Exception e) {
-                    throw new Exception(e);
-                }
+        if (implType == ChatServerImplementationType.TCPSimpleImplementation) {
+            try {
+                TcpServerSocket tcpServerSocket = new TcpServerSocket(serverPort, sendBufferSize,
+                        receiveBufferSize);
+                return new SimpleChatServerImpl(Executors.newCachedThreadPool(),
+                        getDecoratedServerSocket(tcpServerSocket), serverGuiInterface, auditLogConnection);
+            } catch (Exception e) {
+                throw new Exception(e);
+            }
 
-                // Weitere Implementierungstypen derzeit nicht implementiert
-            default:
-                System.out.println("Derzeit nur TCPSimpleImplementation implementiert!");
-                throw new RuntimeException("Unknown type: " + implType);
+            // Weitere Implementierungstypen derzeit nicht implementiert
         }
+        System.out.println("Derzeit nur TCPSimpleImplementation implementiert!");
+        throw new RuntimeException("Unknown type: " + implType);
     }
 
     /**

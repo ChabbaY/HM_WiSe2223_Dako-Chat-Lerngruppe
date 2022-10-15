@@ -13,8 +13,18 @@ import org.apache.logging.log4j.Logger;
  * @author Peter Mandl, edited by Lerngruppe
  */
 public class SimpleMessageListenerThreadImpl extends AbstractMessageListenerThread {
+    /**
+     * referencing the logger
+     */
     private static final Logger LOG = LogManager.getLogger(SimpleMessageListenerThreadImpl.class);
 
+    /**
+     * Konstruktor
+     *
+     * @param userInterface GUI
+     * @param con Server connection
+     * @param sharedData shared client data
+     */
     public SimpleMessageListenerThreadImpl(ClientUserInterface userInterface, Connection con,
                                            SharedClientData sharedData) {
         super(userInterface, con, sharedData);
@@ -129,14 +139,14 @@ public class SimpleMessageListenerThreadImpl extends AbstractMessageListenerThre
 
         LOG.debug("MessageEventCounter: " + events);
 
-        // Empfangene Chat-Nachricht an User Interface zur
-        // Darstellung übergeben
+        // Empfangene Chat-Nachricht an User Interface zur Darstellung übergeben
         userInterface.setMessageLine(receivedPdu.getEventUserName(), receivedPdu.getMessage());
     }
 
     /**
      * Bearbeitung aller vom Server ankommenden Nachrichten
      */
+    @Override
     public void run() {
         ChatPDU receivedPdu = null;
 
@@ -159,8 +169,7 @@ public class SimpleMessageListenerThreadImpl extends AbstractMessageListenerThre
                         switch (receivedPdu.getPduType()) {
                             // Login-Bestätigung vom Server angekommen
                             case LOGIN_RESPONSE -> loginResponseAction(receivedPdu);
-                            // Meldung vom Server, dass sich die Liste der
-                            // angemeldeten User erweitert hat
+                            // Meldung vom Server, dass sich die Liste der angemeldeten User erweitert hat
                             case LOGIN_EVENT -> loginEventAction(receivedPdu);
                             case LOGOUT_EVENT -> logoutEventAction(receivedPdu);
                             // Chat-Nachricht vom Server gesendet
@@ -171,13 +180,11 @@ public class SimpleMessageListenerThreadImpl extends AbstractMessageListenerThre
                         break;
                     case REGISTERED:
                         switch (receivedPdu.getPduType()) {
-                            // Die eigene zuletzt gesendete Chat-Nachricht wird vom
-                            // Server bestätigt
+                            // Die eigene zuletzt gesendete Chat-Nachricht wird vom Server bestätigt
                             case CHAT_MESSAGE_RESPONSE -> chatMessageResponseAction(receivedPdu);
                             // Chat-Nachricht vom Server gesendet
                             case CHAT_MESSAGE_EVENT -> chatMessageEventAction(receivedPdu);
-                            // Meldung vom Server, dass sich die Liste der
-                            // angemeldeten User erweitert hat
+                            // Meldung vom Server, dass sich die Liste der angemeldeten User erweitert hat
                             case LOGIN_EVENT -> loginEventAction(receivedPdu);
                             case LOGOUT_EVENT -> logoutEventAction(receivedPdu);
                             default -> LOG.debug("Ankommende PDU im Zustand " + sharedClientData.status
@@ -190,8 +197,7 @@ public class SimpleMessageListenerThreadImpl extends AbstractMessageListenerThre
                             case CHAT_MESSAGE_EVENT -> chatMessageEventAction(receivedPdu);
                             // Bestätigung des eigenen Logout
                             case LOGOUT_RESPONSE -> logoutResponseAction(receivedPdu);
-                            // Meldung vom Server, dass sich die Liste der
-                            // angemeldeten User verändert hat
+                            // Meldung vom Server, dass sich die Liste der angemeldeten User verändert hat
                             case LOGIN_EVENT -> loginEventAction(receivedPdu);
                             case LOGOUT_EVENT -> logoutEventAction(receivedPdu);
                             default -> LOG.debug("Ankommende PDU im Zustand " + sharedClientData.status

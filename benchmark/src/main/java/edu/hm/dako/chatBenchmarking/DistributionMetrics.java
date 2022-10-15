@@ -15,7 +15,7 @@ public class DistributionMetrics {
     // 10 % Percentile, alle RTT-Werte, die zu den kleinsten 10 % gehören
     double percentile10;
 
-    // 10 % Percentile = 25%-Quartil, alle RTT-Werte, die zu den kleinsten 25 % gehoeren
+    // 10 % Percentile = 25%-Quartil, alle RTT-Werte, die zu den kleinsten 25 % gehören
     double percentile25;
 
     // Median = 50%-Quartil
@@ -27,12 +27,12 @@ public class DistributionMetrics {
     // 90 % Percentile
     double percentile90;
 
-    // Stannweite (zwischen Minimum und Maximum)
+    // Standweite (zwischen Minimum und Maximum)
     double range;
 
     // Interquartilsabstand, Wertebereich, in dem sich die mittleren 50 % der gemessenen RTT-Werte
     // befinden (IQR)
-    double interquartilRange;
+    double interQuartilRange;
 
     // Arithmetisches Mittel
     double mean;
@@ -51,7 +51,7 @@ public class DistributionMetrics {
         percentile50 = 0;
         percentile75 = 0;
         percentile90 = 0;
-        interquartilRange = 0;
+        interQuartilRange = 0;
         range = 0;
         mean = 0;
         variance = 0;
@@ -114,12 +114,12 @@ public class DistributionMetrics {
         this.percentile90 = percentile90;
     }
 
-    public double getInterquartilRange() {
-        return interquartilRange;
+    public double getInterQuartilRange() {
+        return interQuartilRange;
     }
 
-    public void setInterquartilRange(double interquartilRange) {
-        this.interquartilRange = interquartilRange;
+    public void setInterQuartilRange(double interQuartilRange) {
+        this.interQuartilRange = interQuartilRange;
     }
 
     public double getRange() {

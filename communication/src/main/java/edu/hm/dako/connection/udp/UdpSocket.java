@@ -177,6 +177,8 @@ public class UdpSocket {
     }
 
     /**
+     * getter
+     *
      * @return Lokale Adresse
      */
     public String getLocalAddress() {
@@ -184,6 +186,8 @@ public class UdpSocket {
     }
 
     /**
+     * getter
+     *
      * @return lokalen Port
      */
     public int getLocalPort() {
@@ -191,27 +195,46 @@ public class UdpSocket {
     }
 
     /**
+     * getter
+     *
      * @return Remote Adresse
      */
     public InetAddress getRemoteAddress() {
         return remoteAddress;
     }
 
+    /**
+     * setter
+     *
+     * @param remoteAddress entfernte Adresse
+     */
     public void setRemoteAddress(InetAddress remoteAddress) {
         this.remoteAddress = remoteAddress;
     }
 
     /**
+     * getter
+     *
      * @return Remote Port
      */
     public int getRemotePort() {
         return remotePort;
     }
 
+    /**
+     * setter
+     *
+     * @param remotePort entfernter Port
+     */
     public void setRemotePort(int remotePort) {
         this.remotePort = remotePort;
     }
 
+    /**
+     * getter
+     *
+     * @return isClosed: true when connection closed
+     */
     public boolean isClosed() {
         return socket.isClosed();
     }

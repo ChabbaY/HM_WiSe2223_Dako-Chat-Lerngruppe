@@ -19,9 +19,19 @@ import java.util.Vector;
  * @author Peter Mandl, edited by Lerngruppe
  */
 public class SimpleChatWorkerThreadImpl extends AbstractWorkerThread {
+    /**
+     * referencing the logger
+     */
     private static final Logger LOG = LogManager.getLogger(SimpleChatWorkerThreadImpl.class);
 
+    /**
+     * connection to the audit log server
+     */
     protected AuditLogConnection auditLogConnection;
+
+    /**
+     * true if the audit log server has been enabled on server start
+     */
     protected final boolean auditLogServerEnabled;
 
     /**
@@ -33,7 +43,7 @@ public class SimpleChatWorkerThreadImpl extends AbstractWorkerThread {
      * @param serverGuiInterface Referenz auf GUI des Chat-Servers
      */
     public SimpleChatWorkerThreadImpl(Connection con, SharedChatClientList clients, SharedServerCounter counter,
-                                      ChatServerGuiInterface serverGuiInterface) {
+                                      ChatServerGUIInterface serverGuiInterface) {
         super(con, clients, counter, serverGuiInterface);
         this.auditLogConnection = null;
         this.auditLogServerEnabled = false;
@@ -51,7 +61,7 @@ public class SimpleChatWorkerThreadImpl extends AbstractWorkerThread {
      * @param auditLogConnection Verbindung zum AuditLog-Server
      */
     public SimpleChatWorkerThreadImpl(Connection con, SharedChatClientList clients,
-                                      SharedServerCounter counter, ChatServerGuiInterface serverGuiInterface,
+                                      SharedServerCounter counter, ChatServerGUIInterface serverGuiInterface,
                                       AuditLogConnection auditLogConnection) {
         super(con, clients, counter, serverGuiInterface);
 

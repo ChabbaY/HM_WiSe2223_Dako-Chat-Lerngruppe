@@ -12,6 +12,11 @@ public class UdpServerConnection implements Connection {
 
     private UdpPseudoConnectionContext udpRemoteObject; // Empfangene Request-PDU
 
+    /**
+     * Konstruktor
+     *
+     * @param serverSocket socket des server zu dem verbunden wird
+     */
     public UdpServerConnection(UdpSocket serverSocket) {
         this.serverSocket = serverSocket;
         udpRemoteObject = new UdpPseudoConnectionContext();

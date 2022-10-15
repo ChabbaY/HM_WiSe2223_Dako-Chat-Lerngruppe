@@ -37,7 +37,7 @@ public class SimpleChatServerImpl extends AbstractChatServer {
      * @param serverGuiInterface Referenz auf das Server-GUI-Interface
      */
     public SimpleChatServerImpl(ExecutorService executorService, ServerSocketInterface socket,
-                                ChatServerGuiInterface serverGuiInterface) {
+                                ChatServerGUIInterface serverGuiInterface) {
         this.executorService = executorService;
         this.socket = socket;
         this.serverGuiInterface = serverGuiInterface;
@@ -58,7 +58,7 @@ public class SimpleChatServerImpl extends AbstractChatServer {
      * @param auditLogConnection Referenz auf AuditLog-Server-Verbindung
      */
     public SimpleChatServerImpl(ExecutorService executorService, ServerSocketInterface socket,
-                                ChatServerGuiInterface serverGuiInterface, AuditLogConnection auditLogConnection) {
+                                ChatServerGUIInterface serverGuiInterface, AuditLogConnection auditLogConnection) {
         this.executorService = executorService;
         this.socket = socket;
         this.serverGuiInterface = serverGuiInterface;

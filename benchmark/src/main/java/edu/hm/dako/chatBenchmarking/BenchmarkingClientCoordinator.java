@@ -321,7 +321,7 @@ public class BenchmarkingClientCoordinator extends Thread
         resultData.setPercentile90(distributionMetrics.getPercentile90());
         resultData.setStandardDeviation(distributionMetrics.getStandardDeviation());
         resultData.setRange(distributionMetrics.getRange());
-        resultData.setInterQuartilRange(distributionMetrics.getInterquartilRange());
+        resultData.setInterQuartilRange(distributionMetrics.getInterQuartilRange());
         resultData.setMinimum(distributionMetrics.getMinimum());
         resultData.setMaximum(distributionMetrics.getMaximum());
 

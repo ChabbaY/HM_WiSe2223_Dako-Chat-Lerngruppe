@@ -21,12 +21,15 @@ import java.util.regex.Pattern;
  *
  * @author Peter Mandl, edited by Lerngruppe
  */
-public class LogInGuiController implements Initializable {
+public class LogInGUIController implements Initializable {
     private static final Pattern IPV6_PATTERN = Pattern
             .compile("^(?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}$");
     private static final Pattern IPV4_PATTERN = Pattern
             .compile("(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)");
-    private static final Logger log = LogManager.getLogger(LogInGuiController.class);
+    /**
+     * referencing the logger
+     */
+    private static final Logger log = LogManager.getLogger(LogInGUIController.class);
     private String userName;
     @FXML
     private TextField txtUsername;
@@ -42,15 +45,31 @@ public class LogInGuiController implements Initializable {
     private Label lblServerPort;
     private ClientFxGUI appController;
 
-    public void setAppController(ClientFxGUI appController) {
-        this.appController = appController;
-    }
-
+    /**
+     * login on enter pressed
+     *
+     * @param event KeyEvent
+     */
     @FXML
     public void handleKeyPressed(KeyEvent event) {
         if (event.getCode() == KeyCode.ENTER) {
             performLogin();
         }
+    }
+
+    /**
+     * Konstruktor
+     */
+    public LogInGUIController() {
+    }
+
+    /**
+     * setter
+     *
+     * @param appController appController
+     */
+    public void setAppController(ClientFxGUI appController) {
+        this.appController = appController;
     }
 
     /**
@@ -114,10 +133,18 @@ public class LogInGuiController implements Initializable {
         }
     }
 
+    /**
+     * getter
+     *
+     * @return userName
+     */
     public String getUserName() {
         return userName;
     }
 
+    /**
+     * System exit
+     */
     public void exitButtonReaction() {
         System.exit(0);
     }

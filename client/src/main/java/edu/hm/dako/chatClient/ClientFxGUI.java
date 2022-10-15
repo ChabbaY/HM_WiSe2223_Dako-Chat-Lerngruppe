@@ -25,11 +25,19 @@ import java.util.Vector;
  * @author Peter Mandl, edited by Lerngruppe
  */
 public class ClientFxGUI extends Application implements ClientUserInterface {
+    /**
+     * referencing the logger
+     */
     private static final Logger LOG = LogManager.getLogger(ClientFxGUI.class);
     private final ClientModel model = new ClientModel();
     private Stage stage;
     private ClientImpl communicator;
 
+    /**
+     * Chat-GUI: Oberfläche für Chat-Nutzer
+     *
+     * @param args currently ignored
+     */
     public static void main(String[] args) {
         // Log4j2-Logging aus Datei konfigurieren
         LoggerContext context = (org.apache.logging.log4j.core.LoggerContext) LogManager.getContext(false);
@@ -37,6 +45,12 @@ public class ClientFxGUI extends Application implements ClientUserInterface {
         context.setConfigLocation(file.toURI());
 
         launch(args);
+    }
+
+    /**
+     * Konstruktor
+     */
+    public ClientFxGUI() {
     }
 
     /**
@@ -50,10 +64,20 @@ public class ClientFxGUI extends Application implements ClientUserInterface {
         communicator = new ClientImpl(this, port, host, serverType);
     }
 
+    /**
+     * getter
+     *
+     * @return communicator
+     */
     public ClientImpl getCommunicator() {
         return communicator;
     }
 
+    /**
+     * getter
+     *
+     * @return model
+     */
     public ClientModel getModel() {
         return model;
     }
@@ -73,7 +97,7 @@ public class ClientFxGUI extends Application implements ClientUserInterface {
             throw new Exception();
         }
         Parent root = loader.load();
-        LogInGuiController lc = loader.getController();
+        LogInGUIController lc = loader.getController();
         lc.setAppController(this);
         primaryStage.setTitle("Anmelden");
         primaryStage.setScene(new Scene(root, 280, 320));
@@ -86,7 +110,7 @@ public class ClientFxGUI extends Application implements ClientUserInterface {
      * Benutzeroberfläche für Chat erzeugen
      */
     public void createNextGui() {
-        URL resource = getClass().getResource("LoggedInGui.fxml");
+        URL resource = getClass().getResource("LoggedInGUI.fxml");
         FXMLLoader loader = null;
         if (resource != null) {
             LOG.error("FXML-Datei gelesen: {}", resource);
@@ -97,7 +121,7 @@ public class ClientFxGUI extends Application implements ClientUserInterface {
         try {
             assert loader != null;
             Parent root = loader.load();
-            LoggedInGuiController lc1 = loader.getController();
+            LoggedInGUIController lc1 = loader.getController();
             lc1.setAppController(this);
 
             Platform.runLater(() -> {
@@ -117,11 +141,14 @@ public class ClientFxGUI extends Application implements ClientUserInterface {
         });
     }
 
+    /**
+     * close old and open new GUI
+     */
     public void switchToLogInGui() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("LogInGui.fxml"));
             Parent root = loader.load();
-            LogInGuiController lc = loader.getController();
+            LogInGUIController lc = loader.getController();
             lc.setAppController(this);
             Platform.runLater(() -> {
                 stage.setTitle("Anmelden");

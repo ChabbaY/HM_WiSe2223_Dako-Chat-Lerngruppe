@@ -18,9 +18,8 @@ import java.io.IOException;
  *
  * @author Peter Mandl, edited by Lerngruppe
  */
-public class LoggedInGuiController {
-    private static final Logger LOG = LogManager.getLogger(LoggedInGuiController.class);
-
+public class LoggedInGUIController {
+    private static final Logger LOG = LogManager.getLogger(LoggedInGUIController.class);
 
     @FXML
     private Button btnSubmit;
@@ -37,6 +36,11 @@ public class LoggedInGuiController {
 
     private ClientFxGUI appController;
 
+    /**
+     * submit on enter pressed
+     *
+     * @param event KeyEvent
+     */
     @FXML
     public void handleEnterPressed(KeyEvent event) {
         if (event.getCode() == KeyCode.ENTER) {
@@ -45,7 +49,15 @@ public class LoggedInGuiController {
     }
 
     /**
+     * Konstruktor
+     */
+    public LoggedInGUIController() {
+    }
+
+    /**
      * Controller initialisieren
+     *
+     * @param appController Controller
      */
     public void setAppController(ClientFxGUI appController) {
         this.appController = appController;

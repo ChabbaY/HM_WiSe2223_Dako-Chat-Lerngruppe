@@ -20,26 +20,59 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author Peter Mandl, edited by Lerngruppe
  */
 public abstract class AbstractChatClient implements ClientCommunication {
+    /**
+     * referencing the logger
+     */
     private static final Logger LOG = LogManager.getLogger(AbstractChatClient.class);
 
-    // Username (Login-Kennung) des Clients
+    /**
+     * Username (Login-Kennung) des Clients
+     */
     protected String userName;
+
+    /**
+     * Kennung des Threads
+     */
     protected String threadName;
+
+    /**
+     * lokaler Port
+     */
     protected int localPort;
+
+    /**
+     * Server Port
+     */
     protected int serverPort;
+
+    /**
+     * Server Adresse
+     */
     protected String remoteServerAddress;
+
+    /**
+     * Referenz auf die Client GUI
+     */
     protected final ClientUserInterface userInterface;
 
-    // Connection Factory
+    /**
+     * Connection Factory
+     */
     protected ConnectionFactory connectionFactory;
 
-    // und Verbindung zum Server
+    /**
+     * und Verbindung zum Server
+     */
     protected Connection connection;
 
-    // Gemeinsame Daten des Client-Threads und des Message-Listener-Threads
+    /**
+     * Gemeinsame Daten des Client-Threads und des Message-Listener-Threads
+     */
     protected final SharedClientData sharedClientData;
 
-    // Thread, der die ankommenden Nachrichten für den Client verarbeitet
+    /**
+     * Thread, der die ankommenden Nachrichten für den Client verarbeitet
+     */
     protected Thread messageListenerThread;
 
     /**
@@ -54,9 +87,7 @@ public abstract class AbstractChatClient implements ClientCommunication {
         this.serverPort = serverPort;
         this.remoteServerAddress = remoteServerAddress;
 
-        /*
-         * Verbindung zum Server aufbauen
-         */
+        // Verbindung zum Server aufbauen
         try {
             connectionFactory = getDecoratedFactory(new TcpConnectionFactory());
             connection = connectionFactory.connectToServer(remoteServerAddress, serverPort, localPort, 20000,
@@ -67,9 +98,7 @@ public abstract class AbstractChatClient implements ClientCommunication {
 
         LOG.debug("Verbindung zum Server steht");
 
-        /*
-         * Gemeinsame Datenstruktur aufbauen
-         */
+        //Gemeinsame Datenstruktur aufbauen
         sharedClientData = new SharedClientData();
         sharedClientData.logoutCounter = new AtomicInteger(0);
         sharedClientData.eventCounter = new AtomicInteger(0);

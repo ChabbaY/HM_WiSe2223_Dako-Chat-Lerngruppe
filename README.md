@@ -41,7 +41,7 @@ Der Chat-Server wird Clients werden über den Aufruf von ChatServerStarter gesta
 Clients werden über den Aufruf von ChatClientStarter gestartet. In der Client-GUI kann dann die Kommunikationsart durch Angabe des Servertyps angegeben werden.
 
 ### Benchmark-Client starten
-Ein Benchmark zur Lasterzeugung und Leistungsmessung wird über den Aufruf von BenchmarkingClientStarter initiiert. Über eine GUI können dann die Parameter eignegeben werden (Kommunikationsart durch Angabe des Servertyps, Chat-Server-Adresse, Anzahl an Clients, Anzahl an Nachrichten pro Client, Nachrichtenlänge, ...).
+Ein Benchmark zur Lasterzeugung und Leistungsmessung wird über den Aufruf von BenchmarkingClientStarter initiiert. Über eine GUI können dann die Parameter eingegeben werden (Kommunikationsart durch Angabe des Servertyps, Chat-Server-Adresse, Anzahl an Clients, Anzahl an Nachrichten pro Client, Nachrichtenlänge, ...).
 Über diese GUI kann der Ablauf der Lasterzeugung auch verfolgt werden. Am Ende eines Laufs werden statistische Daten zum Benchmark ausgegeben, die auch in einer Datei protokolliert werden.
 (siehe Datei Benchmarking-ChatApp-Protokolldatei).
 
@@ -57,7 +57,7 @@ Der AuditLog-Server ist mit Java TCP Sockets, Java Datagramm Sockets und mit Jav
 
 
 ## Projektinhalt
-Das Projekt ist als Gradle-Multiprojekt organisiert (siehe settings.gradle)
+Das Projekt ist als Gradle-Multi-Projekt organisiert (siehe settings.gradle)
 die gesamte Anwendung befindet sich im Gradle-Projekt dako. 
 
 Im Folgenden werden die einzelnen Ordner kurz erläutert:
@@ -80,8 +80,8 @@ In diesem Ordner befinden sich die Implementierungen der verschiedenen Kommunika
 ### server
 In diesem Ordner befindet sich der Chat-Server mit User Interface als eigenes Gradle-Unterprojekt.
 
-### auditlogserver
-Einfache Beispiel-Implementierungen für einen Auditlog-Server, den die Studierenden in einer Studienarbeit anfertigen sollen.
+### audit log server
+Einfache Beispiel-Implementierungen für einen Audit-Log-Server, den die Studierenden in einer Studienarbeit anfertigen sollen.
 
 ### config
 In diesem Ordner liegen die CheckStyle-Konfiguration und die Log4j-Konfiguration.
