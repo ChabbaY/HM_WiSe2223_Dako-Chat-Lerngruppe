@@ -6,6 +6,7 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.MulticastSocket;
 import java.net.NetworkInterface;
+import java.nio.charset.StandardCharsets;
 
 /**
  * Multicast Receiver
@@ -76,7 +77,8 @@ public class UdpMulticastReceiver {
                 s.receive(packet);
 
                 // ... und ausgeben
-                String receivedMessage = new String(packet.getData(), 0, packet.getLength());
+                String receivedMessage = new String(packet.getData(), 0, packet.getLength(),
+                        StandardCharsets.UTF_8);
                 System.out.print("Packet received in Multicast group: >");
                 System.out.println(receivedMessage + "<");
             } catch (IOException e) {

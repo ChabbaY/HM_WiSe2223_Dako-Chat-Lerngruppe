@@ -16,6 +16,7 @@ public class UDPClientConnectionFactory implements ConnectionFactory {
      */
     public UDPClientConnectionFactory() {
     }
+
     @Override
     public Connection connectToServer(String remoteServerAddress, int serverPort,
                                       int localPort, int sendBufferSize, int receiveBufferSize) throws Exception {

@@ -4,22 +4,22 @@ plugins {
 }
 
 application {
-    mainClass.set("edu.hm.dako.chatClient.ChatClientStarter")
+    mainClass.set('edu.hm.dako.chatclient.ClientStarter')
 }
 
 jar.enabled = true
 
 javafx {
     //version = "17.0.2"
-    version = "18"
+    version = '18'
     modules = ['javafx.controls', 'javafx.fxml']
 }
 
 sourceSets {
     main {
         resources {
-            srcDirs = ["src/main/java"]
-            includes = ["**/*.fxml"]
+            srcDirs = ['src/main/java']
+            includes = ['**/*.fxml']
         }
     }
 }
@@ -38,7 +38,7 @@ task createChatClientJar(type: Jar) {
     // remove deprecated warning for gradle 7
     duplicatesStrategy = DuplicatesStrategy.INCLUDE
     manifest {
-        attributes 'Main-Class': 'edu.hm.dako.chatClient.ChatClientStarter'
+        attributes 'Main-Class': 'edu.hm.dako.chatclient.ClientStarter'
     }
     archiveBaseName.set('chatClient')
     from {

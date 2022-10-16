@@ -154,7 +154,8 @@ public class TCPConnection implements Connection {
             }
 
             if (socket.getReuseAddress()) {
-                log.debug("SO_REUSE_ADDRESS ist für den Port aktiviert, Port kann gleich wieder ohne Wartezeit verwendet werden");
+                log.debug("SO_REUSE_ADDRESS ist für den Port aktiviert, Port kann gleich wieder ohne Wartezeit" +
+                        "verwendet werden");
             } else {
                 log.debug("SO_REUSE_ADDRESS ist für den Port nicht aktiviert");
             }

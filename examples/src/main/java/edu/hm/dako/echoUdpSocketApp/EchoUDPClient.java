@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.nio.charset.StandardCharsets;
 
 /**
  * Echo Client auf Basis von UDP Datagram-Sockets
@@ -92,14 +93,16 @@ public class EchoUDPClient {
      * @param serverPort Port des Servers
      * @throws IOException Fehler beim Senden
      */
-    protected void sendPacket(String message, int length, InetAddress serverAddress, int serverPort) throws IOException {
+    protected void sendPacket(String message, int length, InetAddress serverAddress, int serverPort)
+            throws IOException {
         byte[] buffer;
-        buffer = message.getBytes();
+        buffer = message.getBytes(StandardCharsets.UTF_8);
 
         DatagramPacket packet = new DatagramPacket(buffer, length, serverAddress, serverPort);
         try {
             socket.send(packet);
-            String sendMessage = new String(packet.getData(), 0, packet.getLength());
+            String sendMessage = new String(packet.getData(), 0, packet.getLength(),
+                    StandardCharsets.UTF_8);
             System.out.println("Message sent : " + length + " Bytes >" + sendMessage + "<");
         } catch (IOException e) {
             System.out.println("Exception in send");
@@ -117,7 +120,8 @@ public class EchoUDPClient {
         DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
         try {
             socket.receive(packet);
-            String receivedMessage = new String(packet.getData(), 0, packet.getLength());
+            String receivedMessage = new String(packet.getData(), 0, packet.getLength(),
+                    StandardCharsets.UTF_8);
             System.out.println("Echo received: " + packet.getLength() +
                     " Bytes >" + receivedMessage + "<");
         } catch (IOException e) {

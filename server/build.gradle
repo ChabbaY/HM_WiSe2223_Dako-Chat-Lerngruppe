@@ -4,24 +4,24 @@ plugins {
 }
 
 application {
-    mainClass.set("edu.hm.dako.chatServer.ChatServerStarter")
+    mainClass.set('edu.hm.dako.chatserver.ServerStarter')
 }
 
 jar.enabled = true
 
 javafx {
-    version = "18"
+    version = '18'
     modules = ['javafx.controls', 'javafx.fxml']
 }
 
 sourceSets {
     main {
         resources {
-            srcDirs = ["src/main/java"]
-            includes = ["**/*.fxml"]
-            }
+            srcDirs = ['src/main/java']
+            includes = ['**/*.fxml']
         }
     }
+}
 
 dependencies {
     implementation project(':common')
@@ -34,16 +34,16 @@ dependencies {
 // build chatserver jar file
 task createChatServerJar(type: Jar) {
 
-        // remove deprecated warning for gradle 7
-        duplicatesStrategy = DuplicatesStrategy.INCLUDE
+    // remove deprecated warning for gradle 7
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
 
-        manifest {
-            attributes 'Main-Class': 'edu.hm.dako.chatServer.ChatServerStarter'
-        }
-        archiveBaseName.set('chatServer')
-        from {
-            configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
-        } with jar
+    manifest {
+        attributes 'Main-Class': 'edu.hm.dako.chatserver.ServerStarter'
+    }
+    archiveBaseName.set('chatServer')
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    } with jar
 }
 
 task build(overwrite: true, dependsOn: [checkstyleMain, createChatServerJar])

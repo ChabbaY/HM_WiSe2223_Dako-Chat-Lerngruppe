@@ -15,7 +15,7 @@ import java.io.IOException;
 public class TCPConnectionFactory implements ConnectionFactory {
     /**
      * Maximale Anzahl an Verbindungsaufbauversuchen zum Server, die ein Client unternimmt, bevor er abbricht
-      */
+     */
     private static final int MAX_CONNECTION_ATTEMPTS = 3;
     private static final Logger log = LogManager.getLogger(TCPConnectionFactory.class);
     /**

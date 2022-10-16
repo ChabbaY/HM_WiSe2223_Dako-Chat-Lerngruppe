@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
+import java.nio.charset.StandardCharsets;
 
 /**
  * Multicast Sender
@@ -48,7 +49,7 @@ public class UdpMulticastSender {
         //Integer port = (Integer) s.getLocalPort();
         String messageToSend = message.concat(((Integer) s.getLocalPort()).toString());
 
-        buffer = messageToSend.getBytes();
+        buffer = messageToSend.getBytes(StandardCharsets.UTF_8);
         DatagramPacket packet = new DatagramPacket(buffer,
                 buffer.length, group, MY_MULTICAST_PORT);
 

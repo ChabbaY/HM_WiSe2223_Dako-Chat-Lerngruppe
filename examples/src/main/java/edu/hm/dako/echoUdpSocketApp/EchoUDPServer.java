@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.nio.charset.StandardCharsets;
 
 /**
  * Echo-Server auf Basis von UDP Datagram-Sockets
@@ -79,7 +80,8 @@ public class EchoUDPServer {
             throw e;
         }
 
-        String receivedMessage = new String(packet.getData(), 0, packet.getLength());
+        String receivedMessage = new String(packet.getData(), 0, packet.getLength(),
+                StandardCharsets.UTF_8);
         System.out.println("Message received: " + packet.getLength() +
                 " Bytes >" + receivedMessage + "<");
         return packet;
@@ -99,7 +101,8 @@ public class EchoUDPServer {
 
         try {
             socket.send(packet);
-            String sendMessage = new String(packet.getData(), 0, packet.getLength());
+            String sendMessage = new String(packet.getData(), 0, packet.getLength(),
+                    StandardCharsets.UTF_8);
             System.out.println("Response sent:    " + length + " Bytes >" + sendMessage + "<");
         } catch (IOException e) {
             System.out.println("Exception in send");

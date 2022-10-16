@@ -1,7 +1,7 @@
-edu.hm.dako.auditLogServer
-edu.hm.dako.chatBenchmarking
-edu.hm.dako.chatClient
-edu.hm.dako.chatServer
+edu.hm.dako.auditlogserver
+edu.hm.dako.chatbenchmarking
+edu.hm.dako.chatclient
+edu.hm.dako.chatserver
 edu.hm.dako.common
 edu.hm.dako.connection
 edu.hm.dako.connection.tcp

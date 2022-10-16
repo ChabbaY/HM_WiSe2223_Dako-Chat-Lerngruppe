@@ -4,22 +4,22 @@ plugins {
 }
 
 application {
-    mainClass.set("edu.hm.dako.chatBenchmarking.ChatBenchmarkingStarter")
+    mainClass.set('edu.hm.dako.chatbenchmarking.BenchmarkingStarter')
 }
 
 jar.enabled = true
 
 javafx {
     //version = "17.0.2"
-    version = "18"
+    version = '18'
     modules = ['javafx.controls', 'javafx.fxml']
 }
 
 sourceSets {
     main {
         resources {
-            srcDirs = ["src/main/java"]
-            includes = ["**/*.fxml"]
+            srcDirs = ['src/main/java']
+            includes = ['**/*.fxml']
         }
     }
 }
@@ -40,7 +40,7 @@ task createBenchmarkJar(type: Jar) {
     // remove deprecated warning for gradle 7
     duplicatesStrategy = DuplicatesStrategy.INCLUDE
     manifest {
-        attributes 'Main-Class': 'edu.hm.dako.chatBenchmarking.ChatBenchmarkingStarter'
+        attributes 'Main-Class': 'edu.hm.dako.chatbenchmarking.BenchmarkingStarter'
     }
     archiveBaseName.set('chatBenchmark')
     from {
