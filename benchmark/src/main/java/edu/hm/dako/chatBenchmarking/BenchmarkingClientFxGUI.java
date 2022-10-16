@@ -160,6 +160,12 @@ public class BenchmarkingClientFxGUI extends Application implements Benchmarking
     }
 
     /**
+     * Konstruktor
+     */
+    public BenchmarkingClientFxGUI() {
+    }
+
+    /**
      * Startmethode für FX-Application
      */
     @Override

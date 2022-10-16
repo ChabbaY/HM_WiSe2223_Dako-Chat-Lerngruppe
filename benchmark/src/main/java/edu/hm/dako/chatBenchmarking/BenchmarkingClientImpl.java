@@ -22,34 +22,89 @@ import java.util.concurrent.atomic.AtomicLong;
  */
 public class BenchmarkingClientImpl extends AbstractChatClient
         implements Runnable, ClientUserInterface {
-
+    /**
+     * referencing the logger
+     */
     private static final Logger log = LogManager.getLogger(ClientImpl.class);
-    // Kennzeichen, ob zuletzt erwartete Chat-Response-PDU des Clients
-    // angekommen ist
+
+    /**
+     * Kennzeichen, ob zuletzt erwartete Chat-Response-PDU des Clients angekommen ist
+     */
     private final AtomicBoolean chatResponseReceived = new AtomicBoolean();
-    // Serverzeit des letzten Chat-Message-Requests
+
+    /**
+     * Serverzeit des letzten Chat-Message-Requests
+     */
     private final AtomicLong lastServerTime = new AtomicLong(0);
-    /*
+
+    /**
      * Parameter für den Benchmarking-Lauf
      */
     protected final int clientNumber;
+
+    /**
+     * Parameter für den Benchmarking-Lauf
+     */
     protected final int messageLength;
+
+    /**
+     * Parameter für den Benchmarking-Lauf
+     */
     protected final int numberOfMessagesToSend;
+
+    /**
+     * Parameter für den Benchmarking-Lauf
+     */
     protected final int responseTimeout;
+
+    /**
+     * Parameter für den Benchmarking-Lauf
+     */
     protected final int nrOfRetries;
+
+    /**
+     * Parameter für den Benchmarking-Lauf
+     */
     protected final int clientThinkTime;
+
+    /**
+     * Parameter für den Benchmarking-Lauf
+     */
     protected final ChatServerImplementationType implementationType;
-    // Schnittstelle zur BenchmarkingGui, um den Progressbar zu verändern
+
+    /**
+     * Schnittstelle zur BenchmarkingGui, um den Progressbar zu verändern
+     */
     protected final BenchmarkingClientUserInterface benchmarkingGui;
-    // Gemeinsame Daten aller Threads zur Erfassung statistischer Daten
+
+    /**
+     * Gemeinsame Daten aller Threads zur Erfassung statistischer Daten
+     */
     protected final SharedClientStatistics sharedStatistics;
-    /*
-     * StatistikZählerstände für eine beendete Chat-Session
+
+    /**
+     * Statistik-Zählerstand für eine beendete Chat-Session
      */
     private long numberOfSentEvents;
+
+    /**
+     * Statistik-Zählerstand für eine beendete Chat-Session
+     */
     private long numberOfReceivedConfirms;
+
+    /**
+     * Statistik-Zählerstand für eine beendete Chat-Session
+     */
     private long numberOfLostConfirms;
+
+    /**
+     * Statistik-Zählerstand für eine beendete Chat-Session
+     */
     private long numberOfRetries;
+
+    /**
+     * Statistik-Zählerstand für eine beendete Chat-Session
+     */
     private long numberOfReceivedChatMessages;
 
     /**

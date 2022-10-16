@@ -7,19 +7,19 @@ import java.io.Serializable;
 /**
  * Verbindung aus Sicht des Servers über UDP
  */
-public class UdpServerConnection implements Connection {
-    private final UdpSocket serverSocket;
+public class UDPServerConnection implements Connection {
+    private final UDPSocket serverSocket;
 
-    private UdpPseudoConnectionContext udpRemoteObject; // Empfangene Request-PDU
+    private UDPPseudoConnectionContext udpRemoteObject; // Empfangene Request-PDU
 
     /**
      * Konstruktor
      *
      * @param serverSocket socket des server zu dem verbunden wird
      */
-    public UdpServerConnection(UdpSocket serverSocket) {
+    public UDPServerConnection(UDPSocket serverSocket) {
         this.serverSocket = serverSocket;
-        udpRemoteObject = new UdpPseudoConnectionContext();
+        udpRemoteObject = new UDPPseudoConnectionContext();
     }
 
     /**
@@ -31,14 +31,14 @@ public class UdpServerConnection implements Connection {
     @Override
     public Serializable receive(int timeout) throws Exception {
         Object pdu = serverSocket.receive(timeout);
-        udpRemoteObject = new UdpPseudoConnectionContext(serverSocket.getRemoteAddress(), serverSocket.getRemotePort(),
+        udpRemoteObject = new UDPPseudoConnectionContext(serverSocket.getRemoteAddress(), serverSocket.getRemotePort(),
                 pdu);
         return (Serializable) udpRemoteObject.getObject();
     }
 
     public Serializable receive() throws Exception {
         Object pdu = serverSocket.receive(0);
-        udpRemoteObject = new UdpPseudoConnectionContext(serverSocket.getRemoteAddress(), serverSocket.getRemotePort(),
+        udpRemoteObject = new UDPPseudoConnectionContext(serverSocket.getRemoteAddress(), serverSocket.getRemotePort(),
                 pdu);
         return (Serializable) udpRemoteObject.getObject();
     }

@@ -1,6 +1,6 @@
 package edu.hm.dako.echoTcpApp;
 
-import edu.hm.dako.connection.tcp.TcpConnection;
+import edu.hm.dako.connection.tcp.TCPConnection;
 
 /**
  * WorkerThread für multithreaded Server
@@ -9,10 +9,15 @@ import edu.hm.dako.connection.tcp.TcpConnection;
  */
 public class EchoWorkerThread extends Thread {
     private static int nrWorkerThread = 0;
-    private final TcpConnection con;
+    private final TCPConnection con;
     private boolean connect;
 
-    public EchoWorkerThread(TcpConnection con) {
+    /**
+     * Konstruktor
+     *
+     * @param con Connection
+     */
+    public EchoWorkerThread(TCPConnection con) {
         this.con = con;
         connect = true;
         nrWorkerThread++;
@@ -22,6 +27,7 @@ public class EchoWorkerThread extends Thread {
     /**
      * ThreadImplementierung
      */
+    @Override
     public void run() {
         System.out.println(this.getName() + " gestartet");
         while (connect) {

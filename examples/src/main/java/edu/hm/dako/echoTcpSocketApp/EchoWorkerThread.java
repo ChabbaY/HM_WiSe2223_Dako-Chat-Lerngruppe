@@ -10,9 +10,20 @@ import java.net.Socket;
  * @author Peter Mandl, edited by Lerngruppe
  */
 public class EchoWorkerThread extends Thread {
-    Socket connection; // Verbindungssocket
-    ObjectOutputStream out; // Ausgabestrom der Verbindung
-    ObjectInputStream in; // Eingabestrom der Verbindung
+    /**
+     * Verbindungssocket
+     */
+    Socket connection;
+
+    /**
+     * Ausgabestrom der Verbindung
+     */
+    ObjectOutputStream out;
+
+    /**
+     * Eingabestrom der Verbindung
+     */
+    ObjectInputStream in;
 
     private boolean connect;
 
@@ -38,6 +49,7 @@ public class EchoWorkerThread extends Thread {
     /**
      * Thread für die Verbindung
      */
+    @Override
     public void run() {
         System.out.println(this.getName() + " gestartet");
         while (connect) {

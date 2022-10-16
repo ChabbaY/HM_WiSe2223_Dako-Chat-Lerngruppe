@@ -7,32 +7,58 @@ import edu.hm.dako.common.ChatServerImplementationType;
  * @author Peter Mandl, edited by Lerngruppe
  */
 public class UserInterfaceInputParameters {
-    // Anzahl zu startender Client-Threads
+    /**
+     * Anzahl zu startender Client-Threads
+     */
     private int numberOfClients;
-    // Nachrichtenlänge
-    private int messageLength;
-    // Denkzeit zwischen zwei Requests
-    private int clientThinkTime;
-    // Anzahl der Nachrichten pro Client-Thread
-    private int numberOfMessages;
-
-    // Maximale Anzahl an Übertragungswiederholungen bei
-    // verbindungslosen Protokollen
-    private int numberOfRetries;
-    // Maximale Wartezeit in ms auf eine Antwort des Servers
-    // bei verbindungslosen Protokollen
-    // Typ der Implementierung
-    private int responseTimeout;
-
-    private ChatServerImplementationType implementationType;
-
-    // Typ der Messung für das Messprotokoll
-    private MeasurementType measurementType;
-    private int remoteServerPort;        // UDP- oder TCP-Port des Servers, Default: 50001
-    private String remoteServerAddress; // Server-IP-Adresse, Default: "127.0.0.1"
 
     /**
-     * Konstruktor Belegung der InputParameter mit Standardwerten
+     * Nachrichtenlänge
+     */
+    private int messageLength;
+
+    /**
+     * Denkzeit zwischen zwei Requests
+     */
+    private int clientThinkTime;
+
+    /**
+     * Anzahl der Nachrichten pro Client-Thread
+     */
+    private int numberOfMessages;
+
+    /**
+     * Maximale Anzahl an Übertragungswiederholungen bei verbindungslosen Protokollen
+     */
+    private int numberOfRetries;
+
+    /**
+     * Maximale Wartezeit in ms auf eine Antwort des Servers bei verbindungslosen Protokollen
+     */
+    private int responseTimeout;
+
+    /**
+     * Typ der Implementierung
+     */
+    private ChatServerImplementationType implementationType;
+
+    /**
+     * Typ der Messung für das Messprotokoll
+     */
+    private MeasurementType measurementType;
+
+    /**
+     * UDP- oder TCP-Port des Servers, Default: 50001
+     */
+    private int remoteServerPort;
+
+    /**
+     * Server-IP-Adresse, Default: "127.0.0.1"
+     */
+    private String remoteServerAddress;
+
+    /**
+     * Konstruktor: Belegung der InputParameter mit Standardwerten
      */
     public UserInterfaceInputParameters() {
         numberOfClients = 2;
@@ -84,82 +110,182 @@ public class UserInterfaceInputParameters {
         return returnString;
     }
 
+    /**
+     * getter
+     *
+     * @return numberOfClients
+     */
     public int getNumberOfClients() {
         return numberOfClients;
     }
 
+    /**
+     * setter
+     *
+     * @param numberOfClients numberOfClients
+     */
     public void setNumberOfClients(int numberOfClients) {
         this.numberOfClients = numberOfClients;
     }
 
+    /**
+     * getter
+     *
+     * @return messageLength
+     */
     public int getMessageLength() {
         return messageLength;
     }
 
+    /**
+     * setter
+     *
+     * @param messageLength messageLength
+     */
     public void setMessageLength(int messageLength) {
         this.messageLength = messageLength;
     }
 
+    /**
+     * getter
+     *
+     * @return clientThinkTime
+     */
     public int getClientThinkTime() {
         return clientThinkTime;
     }
 
+    /**
+     * setter
+     *
+     * @param clientThinkTime clientThinkTime
+     */
     public void setClientThinkTime(int clientThinkTime) {
         this.clientThinkTime = clientThinkTime;
     }
 
+    /**
+     * getter
+     *
+     * @return numberOfMessages
+     */
     public int getNumberOfMessages() {
         return numberOfMessages;
     }
 
+    /**
+     * setter
+     *
+     * @param numberOfMessages numberOfMessages
+     */
     public void setNumberOfMessages(int numberOfMessages) {
         this.numberOfMessages = numberOfMessages;
     }
 
+    /**
+     * getter
+     *
+     * @return implementationType
+     */
     public ChatServerImplementationType getChatServerImplementationType() {
         return implementationType;
     }
 
+    /**
+     * setter
+     *
+     * @param implementationType implementationType
+     */
     public void setChatServerImplementationType(ChatServerImplementationType implementationType) {
         this.implementationType = implementationType;
     }
 
+    /**
+     * getter
+     *
+     * @return numberOfRetries
+     */
     public int getNumberOfRetries() {
         return numberOfRetries;
     }
 
+    /**
+     * setter
+     *
+     * @param numberOfRetries numberOfRetries
+     */
     public void setNumberOfRetries(int numberOfRetries) {
         this.numberOfRetries = numberOfRetries;
     }
 
+    /**
+     * getter
+     *
+     * @return responseTimeout
+     */
     public int getResponseTimeout() {
         return responseTimeout;
     }
 
-    public void setResponseTimeout(int responseTimer) {
-        this.responseTimeout = responseTimer;
+    /**
+     * setter
+     *
+     * @param responseTimeout responseTimeout
+     */
+    public void setResponseTimeout(int responseTimeout) {
+        this.responseTimeout = responseTimeout;
     }
 
+    /**
+     * getter
+     *
+     * @return measurementType
+     */
     public MeasurementType getMeasurementType() {
         return measurementType;
     }
 
+    /**
+     * setter
+     *
+     * @param measurementType measurementType
+     */
     public void setMeasurementType(MeasurementType measurementType) {
         this.measurementType = measurementType;
     }
 
+    /**
+     * getter
+     *
+     * @return remoteServerPort
+     */
     public int getRemoteServerPort() {
         return remoteServerPort;
     }
 
+    /**
+     * setter
+     *
+     * @param remoteServerPort remoteServerPort
+     */
     public void setRemoteServerPort(int remoteServerPort) {
         this.remoteServerPort = remoteServerPort;
     }
 
+    /**
+     * getter
+     *
+     * @return remoteServerAddress
+     */
     public String getRemoteServerAddress() {
         return remoteServerAddress;
     }
 
+    /**
+     * setter
+     *
+     * @param remoteServerAddress remoteServerAddress
+     */
     public void setRemoteServerAddress(String remoteServerAddress) {
         this.remoteServerAddress = remoteServerAddress;
     }
@@ -170,9 +296,14 @@ public class UserInterfaceInputParameters {
      * @author Mandl
      */
     public enum MeasurementType {
-        // Variation der ThreadAnzahl
+        /**
+         * Variation der ThreadAnzahl
+         */
         VarThreads,
-        // Variation der Nachrichtenlänge
+
+        /**
+         * Variation der Nachrichtenlänge
+         */
         VarMsgLength
     }
 }

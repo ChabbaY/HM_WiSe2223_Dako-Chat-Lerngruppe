@@ -7,7 +7,12 @@ import java.rmi.Naming;
  * @author Peter Mandl, edited by Lerngruppe
  *
  */
-public class oneClient {
+public class OneClient {
+   /**
+    * Beispiel für einen RMI Client
+    *
+    * @param args currently ignored
+    */
    public static void main(String[] args)
     {
        try {
@@ -30,5 +35,11 @@ public class oneClient {
        {
           System.out.println("Exception = " + ex ) ;
        }
+    }
+
+   /**
+    * Konstruktor
+    */
+   public OneClient() {
     }
 }

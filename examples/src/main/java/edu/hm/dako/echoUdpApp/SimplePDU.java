@@ -1,8 +1,5 @@
 package edu.hm.dako.echoUdpApp;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import java.io.Serial;
 import java.io.Serializable;
 
@@ -13,28 +10,34 @@ import java.io.Serializable;
 public class SimplePDU implements Serializable {
     @Serial
     private static final long serialVersionUID = -6172619032079227588L;
-    private static final Logger log = LogManager.getLogger(SimplePDU.class);
 
-    // Name des Client-Threads, der den Request absendet
+    /**
+     * Name des Client-Threads, der den Request absendet
+     */
     private String clientThreadName;
 
-    // Name des Threads, der den Request im Server
+    /**
+     * Name des Threads, der den Request im Server
+     */
     private String serverThreadName;
 
-    // Nutzdaten (eigentliche Chat-Nachricht in Textform)
+    /**
+     * Nutzdaten (eigentliche Chat-Nachricht in Textform)
+     */
     private String message;
 
+    /**
+     * Konstruktor
+     *
+     * @param message Nachricht
+     */
     public SimplePDU(String message) {
         this.message = message;
         clientThreadName = null;
         serverThreadName = null;
     }
 
-    public static void printPdu(SimplePDU pdu) {
-        // System.out.println(pdu);
-        log.debug(pdu);
-    }
-
+    @Override
     public String toString() {
         return "\n"
                 + "SimplePdu ****************************************************************************************************"
@@ -45,19 +48,39 @@ public class SimplePDU implements Serializable {
                 + "\n";
     }
 
+    /**
+     * setter
+     *
+     * @param threadName client thread name
+     */
     public void setClientThreadName(String threadName) {
         this.clientThreadName = threadName;
     }
 
+    /**
+     * setter
+     *
+     * @param threadName server thread name
+     */
     public void setServerThreadName(String threadName) {
         this.serverThreadName = threadName;
     }
 
+    /**
+     * getter
+     *
+     * @return message
+     */
     public String getMessage() {
         return (message);
     }
 
-    public void setMessage(String msg) {
-        this.message = msg;
+    /**
+     * setter
+     *
+     * @param message message
+     */
+    public void setMessage(String message) {
+        this.message = message;
     }
 }

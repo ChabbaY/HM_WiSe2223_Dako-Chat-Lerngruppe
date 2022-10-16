@@ -4,9 +4,11 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 
 /**
+ * Schnittstelle für RMI
+ *
  * @author Peter Mandl, edited by Lerngruppe
  */
-public interface AuditLogRmiInterface extends Remote {
+public interface AuditLogRMIInterface extends Remote {
     /**
      * Chat-Nachricht in das Audit-Log schreiben
      *

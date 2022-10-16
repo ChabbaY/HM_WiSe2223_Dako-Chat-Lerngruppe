@@ -7,5 +7,18 @@ package edu.hm.dako.common;
  */
 
 public enum AuditLogImplementationType {
-    AuditLogServerTCPImplementation, AuditLogServerUDPImplementation, AuditLogServerRMIImplementation
+    /**
+     * TCP Implementierung
+     */
+    AuditLogServerTCPImplementation,
+
+    /**
+     * UDP Implementierung
+     */
+    AuditLogServerUDPImplementation,
+
+    /**
+     * RMI Implementierung
+     */
+    AuditLogServerRMIImplementation
 }

@@ -1,26 +1,42 @@
-package edu.hm.dako.echoTcpApp;
+package edu.hm.dako.echoUdpApp;
 
-import edu.hm.dako.connection.tcp.TcpConnection;
-import edu.hm.dako.connection.tcp.TcpConnectionFactory;
+import edu.hm.dako.connection.udp.UDPClientConnection;
+import edu.hm.dako.connection.udp.UDPClientConnectionFactory;
 
 /**
- * Echo Client
+ * Echo Client(UDP)
  *
  * @author Peter Mandl, edited by Lerngruppe
  */
-public class EchoTcpClient {
-    static final int NR_OF_MSG = 10; // Anzahl zu sendender Nachrichten
-    static final int MAX_LENGTH = 100; // Nachrichtenlänge
-    final TcpConnectionFactory tcpFactory;
-    TcpConnection con = null;
+public class EchoUDPClient {
+    /**
+     * Anzahl zu sendender Nachrichten
+     */
+    static final int NR_OF_MSG = 5;
 
-    EchoTcpClient() {
-        tcpFactory = new TcpConnectionFactory();
+    /**
+     * Nachrichtenlänge
+     */
+    static final int MAX_LENGTH = 10;
+    final UDPClientConnectionFactory udpFactory;
+    UDPClientConnection con = null;
+
+    /**
+     * Konstruktor
+     */
+    EchoUDPClient() {
+        udpFactory = new UDPClientConnectionFactory();
         System.out.println("Client gestartet");
     }
 
+    /**
+     * Echo Client(UDP)
+     *
+     * @param args currently ignored
+     */
     public static void main(String[] args) {
-        EchoTcpClient client = new EchoTcpClient();
+        EchoUDPClient client = new EchoUDPClient();
+
         try {
             client.connect();
             for (int i = 0; i < NR_OF_MSG; i++) {
@@ -29,6 +45,7 @@ public class EchoTcpClient {
             }
             client.close();
         } catch (Exception e) {
+
             System.exit(1);
         }
     }
@@ -36,7 +53,7 @@ public class EchoTcpClient {
     /**
      * Einfache Echo-PDU erzeugen
      *
-     * @return PDU ChatPDU
+     * @return PDU
      */
     private static SimplePDU createMessage() {
         char[] charArray = new char[MAX_LENGTH];
@@ -49,12 +66,12 @@ public class EchoTcpClient {
     /**
      * Verbindung zum Server aufbauen
      *
-     * @throws Exception Fehler beim Verbindungsaufbau
+     * @throws Exception Fehler in der Verbindung zum Server
      */
     private void connect() throws Exception {
         try {
-            con = (TcpConnection) tcpFactory.connectToServer("localhost", 55000, 0,
-                    400000, 400000);
+            con = (UDPClientConnection) udpFactory.connectToServer("localhost", 55000,
+                    0, 400000, 400000);
             System.out.println("Verbindung steht");
         } catch (Exception e) {
             System.out.println("Exception during connect");
@@ -63,9 +80,9 @@ public class EchoTcpClient {
     }
 
     /**
-     * Echo-Request Senden und Echo-Response empfangen
+     * Echo-Request senden und Echo-Response empfangen
      *
-     * @throws Exception Fehler beim Empfang
+     * @throws Exception Fehler in der Verbindung zum Server
      */
     private void echo() throws Exception {
         SimplePDU requestPDU = createMessage();
@@ -86,10 +103,13 @@ public class EchoTcpClient {
      */
     private void close() throws Exception {
         try {
+            SimplePDU closePdu = new SimplePDU("CLOSE");
+            con.send(closePdu);
+            System.out.println("CLOSE gesendet: " + closePdu.getMessage());
             con.close();
             System.out.println("Verbindung abgebaut");
         } catch (Exception e) {
-            System.out.println("Exception during close");
+            System.out.println("Exception beim close");
             throw new Exception();
         }
     }

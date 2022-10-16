@@ -13,19 +13,41 @@ import java.net.Socket;
  * @version 2.0.0
  */
 
-public class EchoTcpClient {
-    static final int NR_OF_MSG = 5; // Anzahl zu sendender Nachrichten
-    static final int SERVER_PORT = 55000; // Port des Servers
-    static final String SERVER_HOST = "localhost"; // Serverrechner
+public class EchoTCPClient {
+    /**
+     * Anzahl zu sendender Nachrichten
+     */
+    static final int NR_OF_MSG = 5;
 
-    Socket connection; // Verbindungssocket
-    ObjectOutputStream out; // Ausgabestrom der Verbindung
-    ObjectInputStream in; // Eingabestrom der Verbindung
+    /**
+     * Port des Servers
+     */
+    static final int SERVER_PORT = 55000;
+
+    /**
+     * Serverrechner
+     */
+    static final String SERVER_HOST = "localhost";
+
+    /**
+     * Verbindungssocket
+     */
+    Socket connection;
+
+    /**
+     * Ausgabestrom der Verbindung
+     */
+    ObjectOutputStream out;
+
+    /**
+     * Eingabestrom der Verbindung
+     */
+    ObjectInputStream in;
 
     /**
      * Konstruktor
      */
-    EchoTcpClient() {
+    EchoTCPClient() {
         System.out.println("Client gestartet");
         out = null;
         in = null;
@@ -39,7 +61,7 @@ public class EchoTcpClient {
      */
     public static void main(String[] args) {
 
-        new EchoTcpClient().execute();
+        new EchoTCPClient().execute();
     }
 
     /**

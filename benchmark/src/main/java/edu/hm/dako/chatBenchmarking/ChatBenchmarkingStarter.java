@@ -6,7 +6,18 @@ package edu.hm.dako.chatBenchmarking;
  * @author Peter Mandl, edited by Lerngruppe
  */
 public class ChatBenchmarkingStarter {
+    /**
+     * starts the benchmarking server
+     *
+     * @param args currently ignored //TODO parametrize
+     */
     public static void main(String[] args) {
         BenchmarkingClientFxGUI.main(args);
+    }
+
+    /**
+     * Konstruktor
+     */
+    public ChatBenchmarkingStarter() {
     }
 }

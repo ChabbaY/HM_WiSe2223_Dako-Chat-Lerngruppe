@@ -10,8 +10,8 @@ import java.net.SocketException;
  *
  * @author Peter Mandl, edited by Lerngruppe
  */
-public class UdpServerSocket implements ServerSocketInterface {
-    private final UdpSocket socket;
+public class UDPServerSocket implements ServerSocketInterface {
+    private final UDPSocket socket;
 
     /**
      * Konstruktor
@@ -21,13 +21,13 @@ public class UdpServerSocket implements ServerSocketInterface {
      * @param receiveBufferSize größe des Empfangspuffers
      * @throws SocketException error creating or accessing the socket
      */
-    public UdpServerSocket(int serverPort, int sendBufferSize, int receiveBufferSize) throws SocketException {
-        this.socket = new UdpSocket(serverPort, sendBufferSize, receiveBufferSize);
+    public UDPServerSocket(int serverPort, int sendBufferSize, int receiveBufferSize) throws SocketException {
+        this.socket = new UDPSocket(serverPort, sendBufferSize, receiveBufferSize);
     }
 
     @Override
     public Connection accept() {
-        return new UdpServerConnection(socket);
+        return new UDPServerConnection(socket);
     }
 
     @Override

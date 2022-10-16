@@ -2,10 +2,10 @@ package edu.hm.dako.chatServer;
 
 import edu.hm.dako.common.AuditLogImplementationType;
 import edu.hm.dako.common.ChatServerImplementationType;
-import edu.hm.dako.connection.LoggingConnectionDecorator;
+import edu.hm.dako.connection.ConnectionLogger;
 import edu.hm.dako.connection.Connection;
 import edu.hm.dako.connection.ServerSocketInterface;
-import edu.hm.dako.connection.tcp.TcpServerSocket;
+import edu.hm.dako.connection.tcp.TCPServerSocket;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -17,10 +17,19 @@ import java.util.concurrent.Executors;
  * @author Peter Mandl, edited by Lerngruppe
  */
 public final class ServerFactory {
+    /**
+     * referencing the logger
+     */
     private static final Logger LOG = LogManager.getLogger(ServerFactory.class);
-    private static Connection connection;
+
+    /**
+     * connection to audit log server
+     */
     private static AuditLogConnection auditLogConnection = null;
 
+    /**
+     * Konstruktor
+     */
     private ServerFactory() {
     }
 
@@ -47,7 +56,7 @@ public final class ServerFactory {
 
         if (implType == ChatServerImplementationType.TCPSimpleImplementation) {
             try {
-                TcpServerSocket tcpServerSocket = new TcpServerSocket(serverPort, sendBufferSize,
+                TCPServerSocket tcpServerSocket = new TCPServerSocket(serverPort, sendBufferSize,
                         receiveBufferSize);
                 return new SimpleChatServerImpl(Executors.newCachedThreadPool(),
                         getDecoratedServerSocket(tcpServerSocket), serverGuiInterface);
@@ -109,7 +118,7 @@ public final class ServerFactory {
         // Dann Chat-Server mit Verbindungsendpunkt erzeugen
         if (implType == ChatServerImplementationType.TCPSimpleImplementation) {
             try {
-                TcpServerSocket tcpServerSocket = new TcpServerSocket(serverPort, sendBufferSize,
+                TCPServerSocket tcpServerSocket = new TCPServerSocket(serverPort, sendBufferSize,
                         receiveBufferSize);
                 return new SimpleChatServerImpl(Executors.newCachedThreadPool(),
                         getDecoratedServerSocket(tcpServerSocket), serverGuiInterface, auditLogConnection);
@@ -120,7 +129,7 @@ public final class ServerFactory {
             // Weitere Implementierungstypen derzeit nicht implementiert
         }
         System.out.println("Derzeit nur TCPSimpleImplementation implementiert!");
-        throw new RuntimeException("Unknown type: " + implType);
+        throw new RuntimeException("Unknown type: " + implType);//TODO more implementations
     }
 
     /**
@@ -148,7 +157,7 @@ public final class ServerFactory {
     private record DecoratingServerSocket(ServerSocketInterface wrappedServerSocket) implements ServerSocketInterface {
         @Override
         public Connection accept() throws Exception {
-            return new LoggingConnectionDecorator(wrappedServerSocket.accept());
+            return new ConnectionLogger(wrappedServerSocket.accept());
         }
 
         @Override

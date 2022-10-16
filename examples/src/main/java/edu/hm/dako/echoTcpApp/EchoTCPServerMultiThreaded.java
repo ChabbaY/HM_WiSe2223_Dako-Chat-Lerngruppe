@@ -1,20 +1,25 @@
 package edu.hm.dako.echoTcpApp;
 
-import edu.hm.dako.connection.tcp.TcpConnection;
-import edu.hm.dako.connection.tcp.TcpServerSocket;
+import edu.hm.dako.connection.tcp.TCPConnection;
+import edu.hm.dako.connection.tcp.TCPServerSocket;
 
 /**
  * Multithreaded Echo Client
  *
  * @author Peter Mandl, edited by Lerngruppe
  */
-public class EchoTcpServerMultiThreaded {
-    TcpServerSocket serverSocket = null;
-    final TcpConnection con = null;
+public class EchoTCPServerMultiThreaded {
+    TCPServerSocket serverSocket = null;
+    final TCPConnection con = null;
 
+    /**
+     * Multithreaded Echo Client
+     *
+     * @param args currently ignored
+     */
     public static void main(String[] args) {
         System.out.println("Server gestartet");
-        EchoTcpServerMultiThreaded server = new EchoTcpServerMultiThreaded();
+        EchoTCPServerMultiThreaded server = new EchoTCPServerMultiThreaded();
         try {
             server.createSocket();
         } catch (Exception e) {
@@ -26,7 +31,7 @@ public class EchoTcpServerMultiThreaded {
         while (listening) {
             try {
                 System.out.println("Server wartet auf Verbindungsanfragen ...");
-                TcpConnection con = server.waitForConnection();
+                TCPConnection con = server.waitForConnection();
                 EchoWorkerThread w1 = new EchoWorkerThread(con);
                 w1.start();
             } catch (Exception e3) {
@@ -38,13 +43,19 @@ public class EchoTcpServerMultiThreaded {
     }
 
     /**
+     * Konstruktor
+     */
+    public EchoTCPServerMultiThreaded() {
+    }
+
+    /**
      * Server-Socket erzeugen
      *
      * @throws Exception Fehler beim Erzeugen eines Sockets
      */
     private void createSocket() throws Exception {
         try {
-            serverSocket = new TcpServerSocket(55000, 400000, 400000);
+            serverSocket = new TCPServerSocket(55000, 400000, 400000);
         } catch (Exception e) {
             System.out.println("Exception");
             throw new Exception();
@@ -57,9 +68,9 @@ public class EchoTcpServerMultiThreaded {
      * @return Verbindung zum Client
      * @throws Exception Fehler bei der Entgegennahme der Verbindung
      */
-    private TcpConnection waitForConnection() throws Exception {
+    private TCPConnection waitForConnection() throws Exception {
         try {
-            TcpConnection con = (TcpConnection) serverSocket.accept();
+            TCPConnection con = (TCPConnection) serverSocket.accept();
             System.out.println("Verbindung akzeptiert");
             return (con);
         } catch (Exception e) {

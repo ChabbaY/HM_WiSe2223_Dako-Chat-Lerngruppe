@@ -7,20 +7,33 @@ import java.net.InetAddress;
 
 /**
  * Echo Client auf Basis von UDP Datagram-Sockets
+ *
  * @author Peter Mandl, edited by Lerngruppe
  * @version 2.0
  */
-public class EchoUdpClient {
+public class EchoUDPClient {
+    /**
+     * server socket
+     */
     protected DatagramSocket socket;
+
+    /**
+     * server address
+     */
     protected InetAddress serverAddress;
+
+    /**
+     * server port
+     */
     protected int serverPort;
 
     /**
      * Konstruktor
+     *
      * @param serverPort PortNummer des Echo-Servers
      * @throws IOException Fehler beim Anlegen des Sockets
      */
-    public EchoUdpClient(int serverPort) throws IOException {
+    public EchoUDPClient(int serverPort) throws IOException {
         try {
             socket = new DatagramSocket();
             serverAddress = InetAddress.getLocalHost();
@@ -34,12 +47,13 @@ public class EchoUdpClient {
 
     /**
      * Hauptprogramm
+     *
      * @param args - Argumente (nicht verwendet)
      */
     public static void main(String[] args) {
         final int serverPort = 56000;
         try {
-            EchoUdpClient echoClient = new EchoUdpClient(serverPort);
+            EchoUDPClient echoClient = new EchoUDPClient(serverPort);
             System.out.println("UDP Echo Client started");
             echoClient.execute();
             System.out.println("UDP Echo Client finished");
@@ -71,6 +85,7 @@ public class EchoUdpClient {
 
     /**
      * Datagram senden
+     *
      * @param message Zu sendende Nachricht als String
      * @param length Länge der Nachricht
      * @param serverAddress Adresse des Serverrechners
@@ -94,6 +109,7 @@ public class EchoUdpClient {
 
     /**
      * Senden einer Nachricht an den Echo-Server
+     *
      * @throws IOException - Fehler beim Empfangen des Echos
      */
     protected void receivePacket() throws IOException {

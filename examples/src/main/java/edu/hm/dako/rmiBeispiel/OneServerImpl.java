@@ -9,19 +9,22 @@ import java.rmi.server.UnicastRemoteObject;
  *
  * @author Peter Mandl, edited by Lerngruppe
  */
-public class oneServerImpl extends UnicastRemoteObject implements OneInterface {
+public class OneServerImpl extends UnicastRemoteObject implements OneInterface {
     @Serial
     private static final long serialVersionUID = -12345L;
 
     /**
      * Standardkonstruktor muss RemoteException werfen
+     *
+     * @throws RemoteException communication related exception
      */
-    public oneServerImpl() throws RemoteException {
+    public OneServerImpl() throws RemoteException {
     }
 
     /**
      * Operation 1
      */
+    @Override
     public int op1(String s) throws RemoteException {
         try {
             System.out.println("op1 aufgerufen mit Parameter: " + s);
@@ -34,6 +37,7 @@ public class oneServerImpl extends UnicastRemoteObject implements OneInterface {
     /**
      * Operation 2
      */
+    @Override
     public long op2(String s) throws RemoteException {
         try {
             System.out.println("op2 aufgerufen mit Parameter: " + s);

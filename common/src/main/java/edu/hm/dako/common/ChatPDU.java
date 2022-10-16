@@ -16,68 +16,109 @@ public class ChatPDU implements Serializable {
     @Serial
     private static final long serialVersionUID = -6172619032079227585L;
 
+    /**
+     * constant for no error
+     */
     public final static int NO_ERROR = 0;
+
+    /**
+     * constant that a login error occurred
+     */
     public final static int LOGIN_ERROR = 1;
 
+    /**
+     * referencing the logger
+     */
     private static final Logger log = LogManager.getLogger(ChatPDU.class);
 
-    // Kommandos bzw. PDU-Typen
-    private PduType pduType;
+    /**
+     * Kommandos bzw. PDU-Typen
+     */
+    private PDUType pduType;
 
-    // Login-Name des Clients
+    /**
+     * Login-Name des Clients
+     */
     private String userName;
 
-    // Name des Clients, von dem ein Event initiiert wurde
+    /**
+     * Name des Clients, von dem ein Event initiiert wurde
+     */
     private String eventUserName;
 
-    // Name des Client-Threads, der den Request absendet
+    /**
+     * Name des Client-Threads, der den Request absendet
+     */
     private String clientThreadName;
 
-    // Name des Threads, der den Request im Server
+    /**
+     * Name des Threads, der den Request im Server
+     */
     private String serverThreadName;
 
-    // Zählt die übertragenen Nachrichten eines Clients,
-    // optional nutzbar für unsichere Transportmechanismen bearbeitet
+    /**
+     * Zählt die übertragenen Nachrichten eines Clients, optional nutzbar für unsichere Transportmechanismen bearbeitet
+     */
     private long sequenceNumber;
 
-    // Nutzdaten (eigentliche Chat-Nachricht in Textform)
+    /**
+     * Nutzdaten (eigentliche Chat-Nachricht in Textform)
+     */
     private String message;
 
-    // Liste aller angemeldeten User
+    /**
+     * Liste aller angemeldeten User
+     */
     private Vector<String> clients;
 
-    // Zeit in Nanosekunden, die der Server für die komplette Bearbeitung einer
-    // Chat-Nachricht benötigt (inklusive kompletter Verteilung an alle
-    // angemeldeten User).
-    // Diese Zeit wird vom Server vor dem Absenden der Response eingetragen
+    /**
+     * Zeit in Nanosekunden, die der Server für die komplette Bearbeitung einer Chat-Nachricht benötigt
+     * (inklusive kompletter Verteilung an alle angemeldeten User). Diese Zeit wird vom Server vor dem Absenden der
+     * Response eingetragen
+     */
     private long serverTime;
 
-    // Conversation-Status aus Sicht des Servers
+    /**
+     * Conversation-Status aus Sicht des Servers
+     */
     private ClientConversationStatus clientStatus;
 
-    // Fehlercode, derzeit nur 1 Fehlercode definiert
+    /**
+     * Fehlercode, derzeit nur 1 Fehlercode definiert
+     */
     private int errorCode;
 
-    // Daten zur statistischen Auswertung, die mit der Logout-Response-PDU
-    // mitgesendet werden:
-    // Anzahl der verarbeiteten Chat-Nachrichten des Clients
+    /**
+     * Daten zur statistischen Auswertung, die mit der Logout-Response-PDU mitgesendet werden:
+     * Anzahl der verarbeiteten Chat-Nachrichten des Clients
+     */
     private long numberOfReceivedChatMessages;
 
-    // Anzahl an gesendeten Events an andere Clients
+    /**
+     * Anzahl an gesendeten Events an andere Clients
+     */
     private long numberOfSentEvents;
 
-    // Anzahl an empfangenen Bestätigungen der anderen Clients
+    /**
+     * Anzahl an empfangenen Bestätigungen der anderen Clients
+     */
     private long numberOfReceivedConfirms;
 
-    // Anzahl verlorener bzw. nicht zugestellten Bestätigungen anderer Clients
+    /**
+     * Anzahl verlorener bzw. nicht zugestellten Bestätigungen anderer Clients
+     */
     private long numberOfLostConfirms;
 
-    // Anzahl der Wiederholungen von Nachrichten (nur bei verbindungslosen
-    // Transportsystemen)
+    /**
+     * Anzahl der Wiederholungen von Nachrichten (nur bei verbindungslosen Transportsystemen)
+     */
     private long numberOfRetries;
 
+    /**
+     * Konstruktor
+     */
     public ChatPDU() {
-        pduType = PduType.UNDEFINED;
+        pduType = PDUType.UNDEFINED;
         userName = null;
         eventUserName = null;
         clientThreadName = null;
@@ -101,7 +142,7 @@ public class ChatPDU implements Serializable {
      * @param cmd     Pdu-Typ
      * @param clients ClientListe
      */
-    public ChatPDU(PduType cmd, Vector<String> clients) {
+    public ChatPDU(PDUType cmd, Vector<String> clients) {
         this.pduType = cmd;
         this.clients = clients;
     }
@@ -112,7 +153,7 @@ public class ChatPDU implements Serializable {
      * @param cmd     Pdu-Typ
      * @param message Chat-Nachricht
      */
-    public ChatPDU(PduType cmd, String message) {
+    public ChatPDU(PDUType cmd, String message) {
         this.pduType = cmd;
         this.message = message;
     }
@@ -137,7 +178,7 @@ public class ChatPDU implements Serializable {
      */
     public static ChatPDU createLogoutEventPdu(String userName, Vector<String> clientList, ChatPDU receivedPdu) {
         ChatPDU pdu = new ChatPDU();
-        pdu.setPduType(PduType.LOGOUT_EVENT);
+        pdu.setPduType(PDUType.LOGOUT_EVENT);
         pdu.setUserName(userName);
         pdu.setEventUserName(userName);
         pdu.setServerThreadName(Thread.currentThread().getName());
@@ -157,7 +198,7 @@ public class ChatPDU implements Serializable {
      */
     public static ChatPDU createLoginEventPdu(String userName, Vector<String> clientList, ChatPDU receivedPdu) {
         ChatPDU pdu = new ChatPDU();
-        pdu.setPduType(PduType.LOGIN_EVENT);
+        pdu.setPduType(PDUType.LOGIN_EVENT);
         pdu.setServerThreadName(Thread.currentThread().getName());
         pdu.setClientThreadName(receivedPdu.getClientThreadName());
         pdu.setUserName(userName);
@@ -177,7 +218,7 @@ public class ChatPDU implements Serializable {
      */
     public static ChatPDU createLoginResponsePdu(String eventInitiator, ChatPDU receivedPdu) {
         ChatPDU pdu = new ChatPDU();
-        pdu.setPduType(PduType.LOGIN_RESPONSE);
+        pdu.setPduType(PDUType.LOGIN_RESPONSE);
         pdu.setServerThreadName(Thread.currentThread().getName());
         pdu.setClientThreadName(receivedPdu.getClientThreadName());
         pdu.setUserName(eventInitiator);
@@ -194,7 +235,7 @@ public class ChatPDU implements Serializable {
      */
     public static ChatPDU createChatMessageEventPdu(String userName, ChatPDU receivedPdu) {
         ChatPDU pdu = new ChatPDU();
-        pdu.setPduType(PduType.CHAT_MESSAGE_EVENT);
+        pdu.setPduType(PDUType.CHAT_MESSAGE_EVENT);
         pdu.setServerThreadName(Thread.currentThread().getName());
         pdu.setClientThreadName(receivedPdu.getClientThreadName());
         pdu.setUserName(userName);
@@ -222,7 +263,7 @@ public class ChatPDU implements Serializable {
                                                   long numberOfRetries, long numberOfReceivedChatMessages,
                                                   String clientThreadName) {
         ChatPDU pdu = new ChatPDU();
-        pdu.setPduType(PduType.LOGOUT_RESPONSE);
+        pdu.setPduType(PDUType.LOGOUT_RESPONSE);
         pdu.setServerThreadName(Thread.currentThread().getName());
         pdu.setClientThreadName(clientThreadName);
         pdu.setClientStatus(ClientConversationStatus.UNREGISTERED);
@@ -256,7 +297,7 @@ public class ChatPDU implements Serializable {
                                                        long numberOfReceivedChatMessages, String clientThreadName,
                                                        long serverTime) {
         ChatPDU pdu = new ChatPDU();
-        pdu.setPduType(PduType.CHAT_MESSAGE_RESPONSE);
+        pdu.setPduType(PDUType.CHAT_MESSAGE_RESPONSE);
         pdu.setServerThreadName(Thread.currentThread().getName());
 
         pdu.setClientThreadName(clientThreadName);
@@ -287,7 +328,7 @@ public class ChatPDU implements Serializable {
      */
     public static ChatPDU createLoginErrorResponsePdu(ChatPDU receivedPdu, int errorCode) {
         ChatPDU pdu = new ChatPDU();
-        pdu.setPduType(PduType.LOGIN_RESPONSE);
+        pdu.setPduType(PDUType.LOGIN_RESPONSE);
         pdu.setServerThreadName(Thread.currentThread().getName());
         pdu.setClientThreadName(receivedPdu.getClientThreadName());
         pdu.setUserName(receivedPdu.getUserName());
@@ -305,7 +346,7 @@ public class ChatPDU implements Serializable {
      */
     public static ChatPDU createLoginEventConfirm(String userName, ChatPDU receivedPdu) {
         ChatPDU pdu = new ChatPDU();
-        pdu.setPduType(PduType.LOGIN_EVENT_CONFIRM);
+        pdu.setPduType(PDUType.LOGIN_EVENT_CONFIRM);
         pdu.setClientStatus(ClientConversationStatus.REGISTERED);
         pdu.setClientThreadName(Thread.currentThread().getName());
         pdu.setServerThreadName(receivedPdu.getServerThreadName());
@@ -323,7 +364,7 @@ public class ChatPDU implements Serializable {
      */
     public static ChatPDU createLogoutEventConfirm(String userName, ChatPDU receivedPdu) {
         ChatPDU pdu = new ChatPDU();
-        pdu.setPduType(PduType.LOGOUT_EVENT_CONFIRM);
+        pdu.setPduType(PDUType.LOGOUT_EVENT_CONFIRM);
         pdu.setClientStatus(ClientConversationStatus.UNREGISTERING);
         pdu.setServerThreadName(receivedPdu.getServerThreadName());
         pdu.setUserName(userName);
@@ -340,7 +381,7 @@ public class ChatPDU implements Serializable {
      */
     public static ChatPDU createChatMessageEventConfirm(String userName, ChatPDU receivedPdu) {
         ChatPDU pdu = new ChatPDU();
-        pdu.setPduType(PduType.CHAT_MESSAGE_EVENT_CONFIRM);
+        pdu.setPduType(PDUType.CHAT_MESSAGE_EVENT_CONFIRM);
         pdu.setClientStatus(ClientConversationStatus.REGISTERED);
         pdu.setClientThreadName(Thread.currentThread().getName());
         pdu.setServerThreadName(receivedPdu.getServerThreadName());
@@ -349,6 +390,7 @@ public class ChatPDU implements Serializable {
         return pdu;
     }
 
+    @Override
     public String toString() {
         return "\n"
                 + "ChatPdu ****************************************************************************************************"
@@ -368,131 +410,291 @@ public class ChatPDU implements Serializable {
                 + "\n";
     }
 
-    public PduType getPduType() {
+    /**
+     * getter
+     *
+     * @return pduType
+     */
+    public PDUType getPduType() {
         return pduType;
     }
 
-    public void setPduType(PduType pduType) {
+    /**
+     * setter
+     *
+     * @param pduType pduType
+     */
+    public void setPduType(PDUType pduType) {
         this.pduType = pduType;
     }
 
+    /**
+     * getter
+     *
+     * @return clients
+     */
     public Vector<String> getClients() {
         return clients;
     }
 
+    /**
+     * setter
+     *
+     * @param clients clients
+     */
     public void setClients(Vector<String> clients) {
         this.clients = clients;
     }
 
+    /**
+     * getter
+     *
+     * @return userName
+     */
     public String getUserName() {
         return userName;
     }
 
+    /**
+     * setter
+     *
+     * @param userName userName
+     */
     public void setUserName(String userName) {
         this.userName = userName;
     }
 
+    /**
+     * getter
+     *
+     * @return eventUserName
+     */
     public String getEventUserName() {
         return eventUserName;
     }
 
-    public void setEventUserName(String name) {
-        this.eventUserName = name;
+    /**
+     * setter
+     *
+     * @param eventUserName eventUserName
+     */
+    public void setEventUserName(String eventUserName) {
+        this.eventUserName = eventUserName;
     }
 
+    /**
+     * getter
+     *
+     * @return clientThreadName
+     */
     public String getClientThreadName() {
         return (clientThreadName);
     }
 
-    public void setClientThreadName(String threadName) {
-        this.clientThreadName = threadName;
+    /**
+     * setter
+     *
+     * @param clientThreadName clientThreadName
+     */
+    public void setClientThreadName(String clientThreadName) {
+        this.clientThreadName = clientThreadName;
     }
 
+    /**
+     * getter
+     *
+     * @return serverThreadName
+     */
     public String getServerThreadName() {
         return (serverThreadName);
     }
 
-    public void setServerThreadName(String threadName) {
-        this.serverThreadName = threadName;
+    /**
+     * setter
+     *
+     * @param serverThreadName serverThreadName
+     */
+    public void setServerThreadName(String serverThreadName) {
+        this.serverThreadName = serverThreadName;
     }
 
+    /**
+     * getter
+     *
+     * @return message
+     */
     public String getMessage() {
         return (message);
     }
 
-    public void setMessage(String msg) {
-        this.message = msg;
+    /**
+     * setter
+     *
+     * @param message message
+     */
+    public void setMessage(String message) {
+        this.message = message;
     }
 
+    /**
+     * getter
+     *
+     * @return serverTime
+     */
     public long getServerTime() {
         return (serverTime);
     }
 
-    public void setServerTime(long time) {
-        this.serverTime = time;
+    /**
+     * setter
+     *
+     * @param serverTime serverTime
+     */
+    public void setServerTime(long serverTime) {
+        this.serverTime = serverTime;
     }
 
+    /**
+     * getter
+     *
+     * @return sequenceNumber
+     */
     public long getSequenceNumber() {
         return (sequenceNumber);
     }
 
+    /**
+     * setter
+     *
+     * @param sequenceNumber sequenceNumber
+     */
     public void setSequenceNumber(long sequenceNumber) {
         this.sequenceNumber = sequenceNumber;
     }
 
+    /**
+     * getter
+     *
+     * @return clientStatus
+     */
     public ClientConversationStatus getClientStatus() {
         return clientStatus;
     }
 
+    /**
+     * setter
+     *
+     * @param clientStatus clientStatus
+     */
     public void setClientStatus(ClientConversationStatus clientStatus) {
         this.clientStatus = clientStatus;
     }
 
+    /**
+     * getter
+     *
+     * @return numberOfSentEvents
+     */
     public long getNumberOfSentEvents() {
         return (numberOfSentEvents);
     }
 
-    public void setNumberOfSentEvents(long nr) {
-        this.numberOfSentEvents = nr;
+    /**
+     * setter
+     *
+     * @param numberOfSentEvents numberOfSentEvents
+     */
+    public void setNumberOfSentEvents(long numberOfSentEvents) {
+        this.numberOfSentEvents = numberOfSentEvents;
     }
 
+    /**
+     * getter
+     *
+     * @return numberOfReceivedConfirms
+     */
     public long getNumberOfReceivedConfirms() {
         return (numberOfReceivedConfirms);
     }
 
-    public void setNumberOfReceivedEventConfirms(long nr) {
-        this.numberOfReceivedConfirms = nr;
+    /**
+     * setter
+     *
+     * @param numberOfReceivedEventConfirms numberOfReceivedConfirms
+     */
+    public void setNumberOfReceivedEventConfirms(long numberOfReceivedEventConfirms) {
+        this.numberOfReceivedConfirms = numberOfReceivedEventConfirms;
     }
 
+    /**
+     * getter
+     *
+     * @return numberOfLostConfirms
+     */
     public long getNumberOfLostConfirms() {
         return (numberOfLostConfirms);
     }
 
-    public void setNumberOfLostEventConfirms(long nr) {
-        this.numberOfLostConfirms = nr;
+    /**
+     * setter
+     *
+     * @param numberOfLostEventConfirms numberOfLostConfirms
+     */
+    public void setNumberOfLostEventConfirms(long numberOfLostEventConfirms) {
+        this.numberOfLostConfirms = numberOfLostEventConfirms;
     }
 
+    /**
+     * getter
+     *
+     * @return numberOfRetries
+     */
     public long getNumberOfRetries() {
         return (numberOfRetries);
     }
 
-    public void setNumberOfRetries(long nr) {
-        this.numberOfRetries = nr;
+    /**
+     * setter
+     *
+     * @param numberOfRetries numberOfRetries
+     */
+    public void setNumberOfRetries(long numberOfRetries) {
+        this.numberOfRetries = numberOfRetries;
     }
 
+    /**
+     * getter
+     *
+     * @return numberOfReceivedChatMessages
+     */
     public long getNumberOfReceivedChatMessages() {
         return (numberOfReceivedChatMessages);
     }
 
-    public void setNumberOfReceivedChatMessages(long nr) {
-        this.numberOfReceivedChatMessages = nr;
+    /**
+     * setter
+     *
+     * @param numberOfReceivedChatMessages numberOfReceivedChatMessages
+     */
+    public void setNumberOfReceivedChatMessages(long numberOfReceivedChatMessages) {
+        this.numberOfReceivedChatMessages = numberOfReceivedChatMessages;
     }
 
+    /**
+     * getter
+     *
+     * @return errorCode
+     */
     public int getErrorCode() {
         return (errorCode);
     }
 
-    public void setErrorCode(int code) {
-        this.errorCode = code;
+    /**
+     * setter
+     *
+     * @param errorCode errorCode
+     */
+    public void setErrorCode(int errorCode) {
+        this.errorCode = errorCode;
     }
 }

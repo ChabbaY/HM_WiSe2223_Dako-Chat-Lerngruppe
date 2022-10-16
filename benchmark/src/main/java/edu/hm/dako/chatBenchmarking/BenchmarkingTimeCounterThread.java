@@ -17,6 +17,11 @@ public class BenchmarkingTimeCounterThread extends Thread {
 
     private boolean running = true;
 
+    /**
+     * Konstruktor
+     *
+     * @param clientGui reference to benchmarking GUI
+     */
     public BenchmarkingTimeCounterThread(BenchmarkingClientUserInterface clientGui) {
         setName("TimeCounterThread");
         this.out = clientGui;
@@ -25,6 +30,7 @@ public class BenchmarkingTimeCounterThread extends Thread {
     /**
      * Run-Methode für den Thread: Erzeugt alle n Sekunden einen Zähler und sendet ihn an die Ausgabe
      */
+    @Override
     public void run() {
         log.debug(getName() + " gestartet");
 

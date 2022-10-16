@@ -1,14 +1,14 @@
 package edu.hm.dako.chatServer;
 
-import edu.hm.dako.connection.udp.UdpClientConnection;
-import edu.hm.dako.connection.udp.UdpClientConnectionFactory;
 import edu.hm.dako.common.AuditLogPDU;
-import edu.hm.dako.common.AuditLogPduType;
+import edu.hm.dako.common.AuditLogPDUType;
+import edu.hm.dako.common.AuditLogRMIInterface;
 import edu.hm.dako.common.ChatPDU;
 import edu.hm.dako.common.ExceptionHandler;
-import edu.hm.dako.common.AuditLogRmiInterface;
-import edu.hm.dako.connection.tcp.TcpConnection;
-import edu.hm.dako.connection.tcp.TcpConnectionFactory;
+import edu.hm.dako.connection.tcp.TCPConnection;
+import edu.hm.dako.connection.udp.UDPClientConnection;
+import edu.hm.dako.connection.udp.UDPClientConnectionFactory;
+import edu.hm.dako.connection.tcp.TCPConnectionFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -58,17 +58,17 @@ public class AuditLogConnection {
     /**
      * UDP Verbindung zum Audit Log Server
      */
-    protected UdpClientConnection udpConnectionToAuditLogServer = null;
+    protected UDPClientConnection udpConnectionToAuditLogServer = null;
 
     /**
      * TCP Verbindung zum Audit Log Server
      */
-    protected TcpConnection tcpConnectionToAuditLogServer = null;
+    protected TCPConnection tcpConnectionToAuditLogServer = null;
 
     /**
      * RMI Verbindung zum Audit Log Server
      */
-    protected AuditLogRmiInterface auditLogRemoteObject = null;
+    protected AuditLogRMIInterface auditLogRemoteObject = null;
 
     /**
      * Hostname des AuditLog-Servers
@@ -115,14 +115,14 @@ public class AuditLogConnection {
             switch (connectionType) {
                 case AUDIT_LOG_CONNECTION_TYPE_UDP -> {
                     // Verbindung zum AuditLog-Server und Verbindungsparameter
-                    UdpClientConnectionFactory udpFactory = new UdpClientConnectionFactory();
-                    udpConnectionToAuditLogServer = (UdpClientConnection) udpFactory.connectToServer(auditLogServer,
+                    UDPClientConnectionFactory udpFactory = new UDPClientConnectionFactory();
+                    udpConnectionToAuditLogServer = (UDPClientConnection) udpFactory.connectToServer(auditLogServer,
                             auditLogPort, 0, DEFAULT_SEND_BUFFER_AUDIT_LOG_SIZE, DEFAULT_RECEIVE_BUFFER_AUDIT_LOG_SIZE);
                     LOG.debug("Verbindung zmu AuditLog-UDP-Server steht");
                 }
                 case AUDIT_LOG_CONNECTION_TYPE_TCP -> {
-                    TcpConnectionFactory tcpFactory = new TcpConnectionFactory();
-                    tcpConnectionToAuditLogServer = (TcpConnection) tcpFactory.connectToServer(auditLogServer,
+                    TCPConnectionFactory tcpFactory = new TCPConnectionFactory();
+                    tcpConnectionToAuditLogServer = (TCPConnection) tcpFactory.connectToServer(auditLogServer,
                             auditLogPort, 0, DEFAULT_SEND_BUFFER_AUDIT_LOG_SIZE, DEFAULT_RECEIVE_BUFFER_AUDIT_LOG_SIZE);
                     LOG.debug("Verbindung zum AuditLog-TCP-Server steht");
                 }
@@ -131,7 +131,7 @@ public class AuditLogConnection {
                     LOG.debug("Adresse des AuditLogRmiServers: {}", rmiAddress);
 
                     // RMI-Objekt-Referenz besorgen
-                    auditLogRemoteObject = (AuditLogRmiInterface) Naming.lookup(rmiAddress);
+                    auditLogRemoteObject = (AuditLogRMIInterface) Naming.lookup(rmiAddress);
                     LOG.debug("Lookup AuditLogRmiServer erfolgreich");
                     LOG.debug("Verbindung zum AuditLog-RMI-Server steht");
                 }
@@ -152,7 +152,7 @@ public class AuditLogConnection {
      * @param type Typ der AuditLog-PDU, der zu senden ist
      * @throws Exception Fehler beim Senden zum AuditLog-Server
      */
-    public synchronized void send(ChatPDU pdu, AuditLogPduType type) throws Exception {
+    public synchronized void send(ChatPDU pdu, AuditLogPDUType type) throws Exception {
         // AuditLog-Satz erzeugen
         AuditLogPDU auditLogPdu = createAuditLogPdu(pdu);
         auditLogPdu.setPduType(type);
@@ -184,7 +184,7 @@ public class AuditLogConnection {
         try {
             AuditLogPDU closePdu = new AuditLogPDU();
             closePdu.setUserName("Chat-Server");
-            closePdu.setPduType(AuditLogPduType.FINISH_AUDIT_REQUEST);
+            closePdu.setPduType(AuditLogPDUType.FINISH_AUDIT_REQUEST);
 
             if (connectionType == AUDIT_LOG_CONNECTION_TYPE_UDP) {
                 udpConnectionToAuditLogServer.send(closePdu);
@@ -212,7 +212,7 @@ public class AuditLogConnection {
      */
     private AuditLogPDU createAuditLogPdu(ChatPDU chatPdu) {
         AuditLogPDU pdu = new AuditLogPDU();
-        pdu.setPduType(AuditLogPduType.UNDEFINED);
+        pdu.setPduType(AuditLogPDUType.UNDEFINED);
         pdu.setAuditTime(System.currentTimeMillis());
         pdu.setUserName(chatPdu.getUserName());
         pdu.setClientThreadName(chatPdu.getClientThreadName());

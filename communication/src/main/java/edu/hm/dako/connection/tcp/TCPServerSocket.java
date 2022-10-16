@@ -14,8 +14,8 @@ import java.net.InetSocketAddress;
  *
  * @author Peter Mandl, edited by Lerngruppe
  */
-public class TcpServerSocket implements ServerSocketInterface {
-    private static final Logger log = LogManager.getLogger(TcpServerSocket.class);
+public class TCPServerSocket implements ServerSocketInterface {
+    private static final Logger log = LogManager.getLogger(TCPServerSocket.class);
 
     private static java.net.ServerSocket serverSocket;
     final int sendBufferSize;
@@ -30,7 +30,7 @@ public class TcpServerSocket implements ServerSocketInterface {
      * @throws BindException Port schon belegt
      * @throws IOException   I/O-Fehler bei der Socket-Erzeugung
      */
-    public TcpServerSocket(int port, int sendBufferSize, int receiveBufferSize)
+    public TCPServerSocket(int port, int sendBufferSize, int receiveBufferSize)
             throws BindException, IOException {
         this.sendBufferSize = sendBufferSize;
         this.receiveBufferSize = receiveBufferSize;
@@ -54,7 +54,7 @@ public class TcpServerSocket implements ServerSocketInterface {
 
     @Override
     public Connection accept() throws IOException {
-        return new TcpConnection(serverSocket, sendBufferSize, receiveBufferSize, false, true);
+        return new TCPConnection(serverSocket, sendBufferSize, receiveBufferSize, false, true);
     }
 
     @Override

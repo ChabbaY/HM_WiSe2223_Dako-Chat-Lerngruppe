@@ -17,31 +17,67 @@ import java.util.concurrent.TimeUnit;
  *
  * @author Peter Mandl, edited by Lerngruppe
  */
-public class BenchmarkingClientCoordinator extends Thread
-        implements BenchmarkingStartInterface, ClientUserInterface {
+public class BenchmarkingClientCoordinator extends Thread implements BenchmarkingStartInterface, ClientUserInterface {
+    /**
+     * referencing the logger
+     */
     private static final Logger log = LogManager.getLogger(BenchmarkingClientCoordinator.class);
-    // Übergebene Parameter vom User-Interface
+
+    /**
+     * Übergebene Parameter vom User-Interface
+     */
     UserInterfaceInputParameters params;
-    // GUI-Schnittstelle
+
+    /**
+     * GUI-Schnittstelle
+     */
     BenchmarkingClientUserInterface benchmarkingClientGui;
-    // Anzahl aller Requests, die auszuführen sind
+
+    /**
+     * Anzahl aller Requests, die auszuführen sind
+     */
     long numberOfAllRequests;
-    // Startzeit des Tests
+
+    /**
+     * Startzeit des Tests
+     */
     long startTime;
-    // Startzeit als String
+
+    /**
+     * Startzeit als String
+     */
     String startTimeAsString;
-    // Kalender zur Umrechnung der Startzeit
+
+    /**
+     * Kalender zur Umrechnung der Startzeit
+     */
     Calendar cal;
-    // Thread zur Zeitzählung für die Dauer des Tests
+
+    /**
+     * Thread zur Zeitzählung für die Dauer des Tests
+     */
     BenchmarkingTimeCounterThread timeCounterThread;
-    // Daten aller Client-Threads zur Verwaltung der Statistik
+    /**
+     * Daten aller Client-Threads zur Verwaltung der Statistik
+     */
     private SharedClientStatistics sharedData;
     private CpuUtilisationWatch cpuUtilisationWatch;
-    // Kennzeichen, ob gerade ein Test läuft (es darf nur einer zu einer Zeit
-    // laufen)
+
+    /**
+     * Kennzeichen, ob gerade ein Test läuft (es darf nur einer zu einer Zeit laufen)
+     */
     private boolean running = false;
-    // Kennzeichen, ob Test in der GUI gestoppt wurde
+
+    /**
+     * Kennzeichen, ob Test in der GUI gestoppt wurde
+     */
     private boolean abortedFlag = false;
+
+    /**
+     * Konstruktor
+     */
+    public BenchmarkingClientCoordinator() {
+    }
 
     /**
      * Methode liefert die aktuelle Zeit als String
@@ -267,8 +303,8 @@ public class BenchmarkingClientCoordinator extends Thread
 
     @Override
     // Wird nicht genutzt, nur für BenchmarkingClientImpl relevant
-    public synchronized void setSessionStatisticsCounter(long numberOfSentEvents,
-                                                         long numberOfReceivedConfirms, long numberOfLostConfirms, long numberOfRetries,
+    public synchronized void setSessionStatisticsCounter(long numberOfSentEvents, long numberOfReceivedConfirms,
+                                                         long numberOfLostConfirms, long numberOfRetries,
                                                          long numberOfReceivedChatMessages) {
     }
 

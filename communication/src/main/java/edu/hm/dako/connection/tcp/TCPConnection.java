@@ -20,8 +20,8 @@ import java.net.SocketException;
  *
  * @author Peter Mandl, edited by Lerngruppe
  */
-public class TcpConnection implements Connection {
-    private static final Logger log = LogManager.getLogger(TcpConnection.class);
+public class TCPConnection implements Connection {
+    private static final Logger log = LogManager.getLogger(TCPConnection.class);
     // Verwendetes TCP-Socket
     private final Socket socket;
     // Ein- und Ausgabestrom der Verbindung
@@ -38,7 +38,7 @@ public class TcpConnection implements Connection {
      * @param TcpNoDelay        Option TCP_NO_DELAY
      * @throws IOException      if it fails to establish a connection
      */
-    public TcpConnection(ServerSocket serverSocket, int sendBufferSize, int receiveBufferSize, boolean keepAlive,
+    public TCPConnection(ServerSocket serverSocket, int sendBufferSize, int receiveBufferSize, boolean keepAlive,
                          boolean TcpNoDelay) throws IOException {
         try {
             // Verbindungsaufbauwunsch akzeptieren
@@ -73,7 +73,7 @@ public class TcpConnection implements Connection {
      * @param TcpNoDelay          Option TCP_NO_DELAY
      * @throws IOException        if it fails to establish a connection
      */
-    public TcpConnection(String remoteServerAddress, int serverPort, String localHost,
+    public TCPConnection(String remoteServerAddress, int serverPort, String localHost,
                          int localPort, int sendBufferSize, int receiveBufferSize,
                          boolean keepAlive, boolean TcpNoDelay) throws IOException {
         try {

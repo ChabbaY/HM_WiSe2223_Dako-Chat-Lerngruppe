@@ -13,7 +13,14 @@ import java.net.MulticastSocket;
  * @version 2.0
  */
 public class UdpMulticastSender {
+    /**
+     * multicast port
+     */
     public final static int MY_MULTICAST_PORT = 7000;
+
+    /**
+     * multicast address
+     */
     public final static String MY_MULTICAST_ADDRESS = "224.10.1.1";
 
     /**
@@ -55,5 +62,11 @@ public class UdpMulticastSender {
             System.out.println("Error in sending Multicast packet");
         }
         s.close();
+    }
+
+    /**
+     * Konstruktor
+     */
+    public UdpMulticastSender() {
     }
 }

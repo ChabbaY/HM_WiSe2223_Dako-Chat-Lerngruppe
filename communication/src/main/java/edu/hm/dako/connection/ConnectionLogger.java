@@ -13,8 +13,8 @@ import java.io.Serializable;
  *
  * @author Peter Mandl, edited by Lerngruppe
  */
-public class LoggingConnectionDecorator implements Connection {
-    private static final Logger log = LogManager.getLogger(LoggingConnectionDecorator.class);
+public class ConnectionLogger implements Connection {
+    private static final Logger log = LogManager.getLogger(ConnectionLogger.class);
 
     private final Connection wrappedConnection;
 
@@ -23,7 +23,7 @@ public class LoggingConnectionDecorator implements Connection {
      *
      * @param wrappedConnection Connection für die geloggt werden soll
      */
-    public LoggingConnectionDecorator(Connection wrappedConnection) {
+    public ConnectionLogger(Connection wrappedConnection) {
         this.wrappedConnection = wrappedConnection;
     }
 

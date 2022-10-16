@@ -1,13 +1,13 @@
 package edu.hm.dako.chatClient;
 
 import edu.hm.dako.common.ClientConversationStatus;
+import edu.hm.dako.common.PDUType;
 import edu.hm.dako.connection.ConnectionFactory;
-import edu.hm.dako.connection.DecoratingConnectionFactory;
+import edu.hm.dako.connection.ConnectionFactoryLogger;
 import edu.hm.dako.common.ChatPDU;
-import edu.hm.dako.common.PduType;
 import edu.hm.dako.common.ExceptionHandler;
 import edu.hm.dako.connection.Connection;
-import edu.hm.dako.connection.tcp.TcpConnectionFactory;
+import edu.hm.dako.connection.tcp.TCPConnectionFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -89,7 +89,7 @@ public abstract class AbstractChatClient implements ClientCommunication {
 
         // Verbindung zum Server aufbauen
         try {
-            connectionFactory = getDecoratedFactory(new TcpConnectionFactory());
+            connectionFactory = getDecoratedFactory(new TCPConnectionFactory());
             connection = connectionFactory.connectToServer(remoteServerAddress, serverPort, localPort, 20000,
                     20000);
         } catch (Exception e) {
@@ -114,7 +114,7 @@ public abstract class AbstractChatClient implements ClientCommunication {
      */
     public static ConnectionFactory getDecoratedFactory(
             ConnectionFactory connectionFactory) {
-        return new DecoratingConnectionFactory(connectionFactory);
+        return new ConnectionFactoryLogger(connectionFactory);
     }
 
     @Override
@@ -123,7 +123,7 @@ public abstract class AbstractChatClient implements ClientCommunication {
         sharedClientData.userName = name;
         sharedClientData.status = ClientConversationStatus.REGISTERING;
         ChatPDU requestPdu = new ChatPDU();
-        requestPdu.setPduType(PduType.LOGIN_REQUEST);
+        requestPdu.setPduType(PDUType.LOGIN_REQUEST);
         requestPdu.setClientStatus(sharedClientData.status);
         Thread.currentThread().setName("Client-" + userName);
         requestPdu.setClientThreadName(Thread.currentThread().getName());
@@ -140,7 +140,7 @@ public abstract class AbstractChatClient implements ClientCommunication {
     public void logout(String name) throws IOException {
         sharedClientData.status = ClientConversationStatus.UNREGISTERING;
         ChatPDU requestPdu = new ChatPDU();
-        requestPdu.setPduType(PduType.LOGOUT_REQUEST);
+        requestPdu.setPduType(PDUType.LOGOUT_REQUEST);
         requestPdu.setClientStatus(sharedClientData.status);
         requestPdu.setClientThreadName(Thread.currentThread().getName());
         requestPdu.setUserName(userName);
@@ -159,7 +159,7 @@ public abstract class AbstractChatClient implements ClientCommunication {
     @Override
     public void tell(String name, String text) throws IOException {
         ChatPDU requestPdu = new ChatPDU();
-        requestPdu.setPduType(PduType.CHAT_MESSAGE_REQUEST);
+        requestPdu.setPduType(PDUType.CHAT_MESSAGE_REQUEST);
         requestPdu.setClientStatus(sharedClientData.status);
         requestPdu.setClientThreadName(Thread.currentThread().getName());
         requestPdu.setUserName(userName);

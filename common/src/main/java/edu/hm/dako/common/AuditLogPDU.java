@@ -15,31 +15,47 @@ import java.util.Date;
 public class AuditLogPDU implements Serializable {
     @Serial
     private static final long serialVersionUID = -6172619032079227589L;
+
+    /**
+     * referencing the logger
+     */
     private static final Logger log = LogManager.getLogger(AuditLogPDU.class);
 
-    // Kommandos bzw. PDU-Typen
-    private AuditLogPduType pduType;
+    /**
+     * Kommandos bzw. PDU-Typen
+     */
+    private AuditLogPDUType pduType;
 
-    // Login-Name des Clients
+    /**
+     * Login-Name des Clients
+     */
     private String userName;
 
-    // Name des Chat-Client-Threads, der den Request absendet
+    /**
+     * Name des Chat-Client-Threads, der den Request absendet
+     */
     private String clientThreadName;
 
-    // Name des Worker-Threads, der den Request im Chat-Server verarbeitet
+    /**
+     * Name des Worker-Threads, der den Request im Chat-Server verarbeitet
+     */
     private String serverThreadName;
 
-    // Zeitstempel zum Zeitpunkt des Audit-Logs im Chat-Server
+    /**
+     * Zeitstempel zum Zeitpunkt des Audit-Logs im Chat-Server
+     */
     private long auditTime;
 
-    // Nutzdaten (eigentliche Chat-Nachricht in Textform)
+    /**
+     * Nutzdaten (eigentliche Chat-Nachricht in Textform)
+     */
     private String message;
 
     /**
      * Konstruktor
      */
     public AuditLogPDU() {
-        this.pduType = AuditLogPduType.UNDEFINED;
+        this.pduType = AuditLogPDUType.UNDEFINED;
         this.clientThreadName = null;
         this.serverThreadName = null;
         this.userName = null;
@@ -79,9 +95,9 @@ public class AuditLogPDU implements Serializable {
      * @param pduType Zu konvertierender PDU-Typ
      * @return AuditLog-PDU-Typ
      */
-    private static AuditLogPduType convertChatPDUTypeToAuditLogPDUType(PduType pduType) {
-        for (AuditLogPduType auditLogPDUTypeItem : AuditLogPduType.values()) {
-            if (auditLogPDUTypeItem.getDescription().equals(pduType.getDescription())) {
+    private static AuditLogPDUType convertChatPDUTypeToAuditLogPDUType(PDUType pduType) {
+        for (AuditLogPDUType auditLogPDUTypeItem : AuditLogPDUType.values()) {
+            if (auditLogPDUTypeItem.toString().equals(pduType.toString())) {
                 return auditLogPDUTypeItem;
             } else {
                 return null;
@@ -95,6 +111,7 @@ public class AuditLogPDU implements Serializable {
      *
      * @return Umgewandelte PDU als String
      */
+    @Override
     public String toString() {
         Date dateAndTime = new Date(this.auditTime);
 
@@ -108,51 +125,111 @@ public class AuditLogPDU implements Serializable {
                 + "\n";
     }
 
-    public AuditLogPduType getPduType() {
+    /**
+     * getter
+     *
+     * @return pduType
+     */
+    public AuditLogPDUType getPduType() {
         return pduType;
     }
 
-    public void setPduType(AuditLogPduType pduType) {
+    /**
+     * setter
+     *
+     * @param pduType pduType
+     */
+    public void setPduType(AuditLogPDUType pduType) {
         this.pduType = pduType;
     }
 
+    /**
+     * getter
+     *
+     * @return userName
+     */
     public String getUserName() {
         return (this.userName);
     }
 
+    /**
+     * setter
+     *
+     * @param userName userName
+     */
     public void setUserName(String userName) {
         this.userName = userName;
     }
 
+    /**
+     * getter
+     *
+     * @return clientThreadName
+     */
     public String getClientThreadName() {
         return (this.clientThreadName);
     }
 
-    public void setClientThreadName(String threadName) {
-        this.clientThreadName = threadName;
+    /**
+     * setter
+     *
+     * @param clientThreadName clientThreadName
+     */
+    public void setClientThreadName(String clientThreadName) {
+        this.clientThreadName = clientThreadName;
     }
 
+    /**
+     * getter
+     *
+     * @return serverThreadName
+     */
     public String getServerThreadName() {
         return (this.serverThreadName);
     }
 
-    public void setServerThreadName(String threadName) {
-        this.serverThreadName = threadName;
+    /**
+     * setter
+     *
+     * @param serverThreadName serverThreadName
+     */
+    public void setServerThreadName(String serverThreadName) {
+        this.serverThreadName = serverThreadName;
     }
 
+    /**
+     * getter
+     *
+     * @return auditTime
+     */
     public long getAuditTime() {
-        return (auditTime);
+        return (this.auditTime);
     }
 
+    /**
+     * setter
+     *
+     * @param auditTime auditTime
+     */
     public void setAuditTime(long auditTime) {
         this.auditTime = auditTime;
     }
 
+    /**
+     * getter
+     *
+     * @return message
+     */
     public String getMessage() {
-        return (message);
+        return (this.message);
     }
 
-    public void setMessage(String msg) {
-        this.message = msg;
+    /**
+     * setter
+     *
+     * @param message message
+     */
+    public void setMessage(String message) {
+        this.message = message;
     }
 }

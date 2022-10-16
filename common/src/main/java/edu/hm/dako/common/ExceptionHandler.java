@@ -13,12 +13,31 @@ import java.net.UnknownHostException;
  * @author Peter Mandl, edited by Lerngruppe
  */
 public class ExceptionHandler {
+    /**
+     * referencing the logger
+     */
     private static final Logger log = LogManager.getLogger(ExceptionHandler.class);
 
+    /**
+     * Konstruktor
+     */
+    public ExceptionHandler() {
+    }
+
+    /**
+     * log an exception and terminate
+     *
+     * @param exception exception to be handled
+     */
     public static void logExceptionAndTerminate(Exception exception) {
         handleException(exception, true);
     }
 
+    /**
+     * log an exception without terminate
+     *
+     * @param exception exception to be handled
+     */
     public static void logException(Exception exception) {
         handleException(exception, false);
     }

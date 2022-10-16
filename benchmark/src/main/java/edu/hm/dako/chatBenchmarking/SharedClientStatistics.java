@@ -29,27 +29,59 @@ import java.util.concurrent.CountDownLatch;
  * @author Peter Mandl, edited by Lerngruppe
  */
 public class SharedClientStatistics {
+    /**
+     * referencing the logger
+     */
     private static final Logger log = LogManager.getLogger(SharedClientStatistics.class);
-    // Anzahl von Clients
+
+    /**
+     * Anzahl von Clients
+     */
     private final int numberOfClients;
-    // Anzahl der Nachrichten (Requests) eines Clients
+
+    /**
+     * Anzahl der Nachrichten (Requests) eines Clients
+     */
     private final int numberOfMessages;
-    // Denkzeit eines Clients zwischen zwei Requests in ms
+
+    /**
+     * Denkzeit eines Clients zwischen zwei Requests in ms
+     */
     private final int clientThinkTime;
-    // Alle Antwortnachrichten, die für den Test empfangen werden müssen
+
+    /**
+     * Alle Antwortnachrichten, die für den Test empfangen werden müssen
+     */
     private final int numberOfAllMessages;
-    // Kann benutzt werden, um ein gleichzeitiges Starten aller Client-Threads zu
-    // ermöglichen
+
+    /**
+     * Kann benutzt werden, um ein gleichzeitiges Starten aller Client-Threads zu ermöglichen
+     */
     private final CountDownLatch loginSignal;
-    // Kann benutzt werden, um ein gleichzeitiges Logout aller Client-Threads zu
-    // ermöglichen, erst nachdem alle Chat-Messages von allen Clients versendet wurden
+    /**
+     * Kann benutzt werden, um ein gleichzeitiges Logout aller Client-Threads zu ermöglichen,
+     * erst nachdem alle Chat-Messages von allen Clients versendet wurden
+     */
     private final CountDownLatch logoutSignal;
+
+    /**
+     * Client Statistik
+     */
     private final ClientStatistics[] clientStatistics;
-    // Alle Event-Nachrichten, die für den Test vom Server gesendet werden müssen
+
+    /**
+     * Alle Event-Nachrichten, die für den Test vom Server gesendet werden müssen
+     */
     final long numberOfPlannedEventMessages;
-    // Zählt angemeldete Clients
+
+    /**
+     * Zählt angemeldete Clients
+     */
     private int numberOfLoggedInClients;
-    // Zählt abgemeldete Clients
+
+    /**
+     * Zählt abgemeldete Clients
+     */
     private int numberOfLoggedOutClients;
 
     /**
@@ -911,38 +943,83 @@ public class SharedClientStatistics {
         return ((r.totalMemory() - r.freeMemory()));
     }
 
-    // Statistikdaten eines Clients
+    /**
+     * Statistikdaten eines Clients
+     */
     private static class ClientStatistics {
-        // Anzahl gesendeter Nachrichten
+        /**
+         * Anzahl gesendeter Nachrichten
+         */
         int sentRequests;
-        // Anzahl empfangener Antworten
+
+        /**
+         * Anzahl empfangener Antworten
+         */
         int receivedResponses;
-        // Anzahl an Übertragungswiederholungen (für unzuverlässige Verbindungen wie UDP)
+
+        /**
+         * Anzahl an Übertragungswiederholungen (für unzuverlässige Verbindungen wie UDP)
+         */
         int numberOfRetries;
-        // Anzahl gesendeter Events für den Client
+
+        /**
+         * Anzahl gesendeter Events für den Client
+         */
         long numberOfSentEventMessages;
-        // Anzahl empfangener Responses für den Client
+
+        /**
+         * Anzahl empfangener Responses für den Client
+         */
         long numberOfReceivedConfirmEvents;
-        // Anzahl verlorener Event-Bestätigungen für den Client
+
+        /**
+         * Anzahl verlorener Event-Bestätigungen für den Client
+         */
         long numberOfLostConfirmEvents;
-        // Anzahl von wiederholten Events für den Client
-        // (für unzuverlässige Verbindungen wie UDP)
+
+        /**
+         * Anzahl von wiederholten Events für den Client (für unzuverlässige Verbindungen wie UDP)
+         */
         long numberOfRetriedEvents;
-        // Durchschnittliche Round Trip Time in ns
+
+        /**
+         * Durchschnittliche Round Trip Time in ns
+         */
         long averageRTT;
-        // Maximale Round Trip Time in ns
+
+        /**
+         * Maximale Round Trip Time in ns
+         */
         long maxRTT;
-        // Minimale Round Trip Time in ns
+
+        /**
+         * Minimale Round Trip Time in ns
+         */
         long minRTT;
-        // Summe aller RTTs in ns
+
+        /**
+         * Summe aller RTTs in ns
+          */
         long sumRTT;
-        // Alle RTTs werden hier für die Quartils-Ermittlung gesammelt
+
+        /**
+         * Alle RTTs werden hier für die Quartils-Ermittlung gesammelt
+         */
         ArrayList<Long> rttList;
-        // Zeit, die der Server insgesamt für alle Requests benötigt in ns
+
+        /**
+         * Zeit, die der Server insgesamt für alle Requests benötigt in ns
+         */
         long sumServerTime;
-        // Zeit, die der Server im Durchschnitt für einen Request benötigt in ns
+
+        /**
+         * Zeit, die der Server im Durchschnitt für einen Request benötigt in ns
+         */
         long avgServerTime;
-        // Maximale Heap-Größe in Bytes während eines Testlaufs
+
+        /**
+         * Maximale Heap-Größe in Bytes während eines Testlaufs
+         */
         long maxHeapSize;
     }
 }

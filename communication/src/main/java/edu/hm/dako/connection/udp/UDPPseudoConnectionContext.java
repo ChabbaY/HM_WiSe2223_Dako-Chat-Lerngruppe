@@ -8,7 +8,7 @@ import java.net.InetAddress;
  *
  * @author Peter Mandl, edited by Lerngruppe
  */
-public class UdpPseudoConnectionContext {
+public class UDPPseudoConnectionContext {
     // IP-Adresse
     private InetAddress remoteAddress;
 
@@ -21,7 +21,7 @@ public class UdpPseudoConnectionContext {
     /**
      * Standardkonstruktor
      */
-    public UdpPseudoConnectionContext() {
+    public UDPPseudoConnectionContext() {
         this.remoteAddress = null;
         this.remotePort = 0;
         this.object = null;
@@ -34,7 +34,7 @@ public class UdpPseudoConnectionContext {
      * @param remotePort    Entfernter Port
      * @param object        Objekt, das übertragen wird
      */
-    public UdpPseudoConnectionContext(InetAddress remoteAddress, int remotePort, Object object) {
+    public UDPPseudoConnectionContext(InetAddress remoteAddress, int remotePort, Object object) {
         this.remoteAddress = remoteAddress;
         this.remotePort = remotePort;
         this.object = object;

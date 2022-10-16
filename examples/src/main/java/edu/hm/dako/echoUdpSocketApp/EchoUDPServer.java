@@ -11,7 +11,10 @@ import java.net.InetAddress;
  * @author Peter Mandl, edited by Lerngruppe
  * @version 2.0
  */
-public class EchoUdpServer {
+public class EchoUDPServer {
+    /**
+     * server socket
+     */
     protected DatagramSocket socket;
 
     /**
@@ -20,7 +23,7 @@ public class EchoUdpServer {
      * @param port - Port des Serverdienstes
      * @throws IOException - Fehler bei der Socket-Erzeugung
      */
-    public EchoUdpServer(int port) throws IOException {
+    public EchoUDPServer(int port) throws IOException {
         socket = new DatagramSocket(port);
     }
 
@@ -32,7 +35,7 @@ public class EchoUdpServer {
     public static void main(String[] args) {
         final int serverPort = 56000;
         try {
-            EchoUdpServer echo = new EchoUdpServer(serverPort);
+            EchoUDPServer echo = new EchoUDPServer(serverPort);
             System.out.println("UDP Echo Server started");
             echo.execute();
         } catch (IOException e) {

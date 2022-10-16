@@ -5,8 +5,10 @@ package edu.hm.dako.connection;
  *
  * @author Peter Mandl, edited by Lerngruppe
  */
-public class DecoratingConnectionFactory implements ConnectionFactory {
-    // ConnectionFactory that should be logged
+public class ConnectionFactoryLogger implements ConnectionFactory {
+    /**
+     * ConnectionFactory that should be logged
+     */
     private final ConnectionFactory wrappedFactory;
 
     /**
@@ -14,7 +16,7 @@ public class DecoratingConnectionFactory implements ConnectionFactory {
      *
      * @param wrappedFactory ConnectionFactory that should be logged
      */
-    public DecoratingConnectionFactory(ConnectionFactory wrappedFactory) {
+    public ConnectionFactoryLogger(ConnectionFactory wrappedFactory) {
         this.wrappedFactory = wrappedFactory;
     }
 
@@ -24,6 +26,6 @@ public class DecoratingConnectionFactory implements ConnectionFactory {
             throws Exception {
         Connection wrappedConnection = wrappedFactory.connectToServer(remoteServerAddress, serverPort, localPort,
                 sendBufferSize, receiveBufferSize);
-        return new LoggingConnectionDecorator(wrappedConnection);
+        return new ConnectionLogger(wrappedConnection);
     }
 }

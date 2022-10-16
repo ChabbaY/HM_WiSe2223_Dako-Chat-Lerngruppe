@@ -1,21 +1,26 @@
 package edu.hm.dako.echoUdpApp;
 
-import edu.hm.dako.connection.udp.UdpServerConnection;
-import edu.hm.dako.connection.udp.UdpServerSocket;
+import edu.hm.dako.connection.udp.UDPServerConnection;
+import edu.hm.dako.connection.udp.UDPServerSocket;
 
 /**
  * SingleThreaded Server (UDP)
  *
  * @author Peter Mandl, edited by Lerngruppe
  */
-public class EchoUdpServer {
-    UdpServerSocket serverSocket = null;
-    UdpServerConnection con = null;
+public class EchoUDPServer {
+    UDPServerSocket serverSocket = null;
+    UDPServerConnection con = null;
 
+    /**
+     * SingleThreaded Server (UDP)
+     *
+     * @param args currently ignored
+     */
     public static void main(String[] args) {
         System.out.println("Server gestartet");
 
-        EchoUdpServer server = new EchoUdpServer();
+        EchoUDPServer server = new EchoUDPServer();
 
         try {
             server.createSocket();
@@ -30,13 +35,19 @@ public class EchoUdpServer {
     }
 
     /**
+     * Konstruktor
+     */
+    public EchoUDPServer() {
+    }
+
+    /**
      * Server-Socket erzeugen
      *
      * @throws Exception Fehler in der Verbindung zum Server
      */
     private void createSocket() throws Exception {
         try {
-            serverSocket = new UdpServerSocket(55000, 400000, 400000);
+            serverSocket = new UDPServerSocket(55000, 400000, 400000);
         } catch (Exception e) {
             System.out.println("Exception");
             throw new Exception();
@@ -50,7 +61,7 @@ public class EchoUdpServer {
      */
     private void waitForConnection() throws Exception {
         try {
-            con = (UdpServerConnection) serverSocket.accept();
+            con = (UDPServerConnection) serverSocket.accept();
             System.out.println("Serversocket erzeugt");
         } catch (Exception e) {
             System.out.println("Exception");

@@ -12,6 +12,5 @@ public interface BenchmarkingStartInterface {
      * @param param     Input-Parameter
      * @param clientGui Schnittstelle zur GUI
      */
-    void executeTest(UserInterfaceInputParameters param,
-                     BenchmarkingClientUserInterface clientGui);
+    void executeTest(UserInterfaceInputParameters param, BenchmarkingClientUserInterface clientGui);
 }

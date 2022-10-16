@@ -11,10 +11,22 @@ import edu.hm.dako.connection.ConnectionFactory;
  * @author Peter Mandl, edited by Lerngruppe
  */
 public final class BenchmarkingClientFactory {
-
+    /**
+     * Konstruktor
+     */
     private BenchmarkingClientFactory() {
     }
 
+    /**
+     * Übernimmt die Konfiguration und die Erzeugung bestimmter Client-Typen für das Benchmarking.
+     *
+     * @param userInterface GUI
+     * @param param input parameters
+     * @param numberOfClient client count
+     * @param sharedData shared client data
+     * @param benchmarkingGui GUI
+     * @return new client implementation
+     */
     public static Runnable getClient(ClientUserInterface userInterface,
                                      UserInterfaceInputParameters param, int numberOfClient,
                                      SharedClientStatistics sharedData,

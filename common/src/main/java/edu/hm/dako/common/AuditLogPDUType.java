@@ -5,24 +5,61 @@ package edu.hm.dako.common;
  *
  * @author Peter Mandl, edited by Lerngruppe
  */
-public enum AuditLogPduType {
+public enum AuditLogPDUType {
+    /**
+     * undefined
+     */
     UNDEFINED(0, "Undefined"),
-    //BEGIN_AUDIT_REQUEST(4, "Begin"),
+
+    /**
+     * finish
+     */
     FINISH_AUDIT_REQUEST(4, "Finish"),
+
+    /**
+     * login
+     */
     LOGIN_REQUEST(1, "Login "),
+
+    /**
+     * logout
+     */
     LOGOUT_REQUEST(2, "Logout"),
+
+    /**
+     * chat message request
+     */
     CHAT_MESSAGE_REQUEST(3, "Chat  ");
 
+    /**
+     * identifier
+     */
     private final int id;
+
+    /**
+     * description
+     */
     private final String description;
 
-    AuditLogPduType(int id, String description) {
+    /**
+     * Konstruktor
+     *
+     * @param id identifier
+     * @param description description
+     */
+    AuditLogPDUType(int id, String description) {
         this.id = id;
         this.description = description;
     }
 
-    public static AuditLogPduType getId(int id) {
-        for (AuditLogPduType e : values()) {
+    /**
+     * getter
+     *
+     * @param id id of enum value
+     * @return enum value
+     */
+    public static AuditLogPDUType getValue(int id) {
+        for (AuditLogPDUType e : values()) {
             if (e.getId() == id) {
                 return e;
             }
@@ -30,12 +67,13 @@ public enum AuditLogPduType {
         return null;
     }
 
+    /**
+     * getter
+     *
+     * @return id
+     */
     public int getId() {
         return id;
-    }
-
-    public String getDescription() {
-        return description;
     }
 
     @Override

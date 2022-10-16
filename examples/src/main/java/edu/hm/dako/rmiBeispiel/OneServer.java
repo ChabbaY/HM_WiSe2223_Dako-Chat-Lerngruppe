@@ -9,9 +9,14 @@ import java.rmi.registry.Registry;
  *
  * @author Peter Mandl, edited by Lerngruppe
  */
-public class oneServer {
+public class OneServer {
+    /**
+     * Beispiel für einen RMI-Server
+     *
+     * @param args currently ignored
+     */
     public static void main(String[] args) {
-        oneServerImpl myServer = null;
+        OneServerImpl myServer = null;
 
         System.out.println("oneServer wird erzeugt ...");
 
@@ -26,7 +31,7 @@ public class oneServer {
         }
 
         try {
-            myServer = new oneServerImpl();
+            myServer = new OneServerImpl();
             System.out.println("oneServer erzeugt");
         } catch (Exception e) {
             System.out.println("Fehler beim Erzeugen des oneServers");
@@ -53,5 +58,11 @@ public class oneServer {
         }
 
         System.out.println("oneServer läuft, wartet auf Requests");
+    }
+
+    /**
+     * Konstruktor
+     */
+    public OneServer() {
     }
 }

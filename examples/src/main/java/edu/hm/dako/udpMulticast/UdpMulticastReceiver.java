@@ -9,13 +9,10 @@ import java.net.NetworkInterface;
 
 /**
  * Multicast Receiver
- * <p>
  * Anlegen einer Multicast-Gruppe und Empfangen von Nachrichten über diese.
- * <p>
  * Die neue Methode joinGroup(ab Java 14) erfordert die Angabe des Netzwerk-Interface,
  * über das Multicast-Nachrichten empfangen werden sollen. Dies wird im Beispiel statisch
  * auf "en0" eingestellt. Diese Bezeichnung ist bei macOS für LAN-Interfaces üblich.
- * <p>
  * Besser ist es, das Netzwerk-Interface dynamisch zu ermitteln. Das ist über die Klasse
  * NetworkInterface möglich.
  *
@@ -23,8 +20,19 @@ import java.net.NetworkInterface;
  * @version 2.0
  */
 public class UdpMulticastReceiver {
+    /**
+     * multicast port
+     */
     public final static int MY_MULTICAST_PORT = 7000;
+
+    /**
+     * local port
+     */
     public final static int MY_LOCAL_PORT = 7000;
+
+    /**
+     * multicast address
+     */
     public final static String MY_MULTICAST_ADDRESS = "224.10.1.1";
 
     /**
@@ -39,8 +47,7 @@ public class UdpMulticastReceiver {
         NetworkInterface networkInterface;
 
         try {
-            // Verwendung des Ports 7000 und der IP-Klasse-D-Adresse 224.10.1.1
-            // für die Multicast-Gruppe
+            // Verwendung des Ports 7000 und der IP-Klasse-D-Adresse 224.10.1.1 für die Multicast-Gruppe
             myMulticastAddress = InetAddress.getByName(MY_MULTICAST_ADDRESS);
             group = new InetSocketAddress(myMulticastAddress, MY_LOCAL_PORT);
             s = new MulticastSocket(MY_MULTICAST_PORT);
@@ -78,5 +85,11 @@ public class UdpMulticastReceiver {
                 s.close();
             }
         }
+    }
+
+    /**
+     * Konstruktor
+     */
+    public UdpMulticastReceiver() {
     }
 }

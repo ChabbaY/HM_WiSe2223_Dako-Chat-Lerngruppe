@@ -1,20 +1,25 @@
 package edu.hm.dako.echoTcpApp;
 
-import edu.hm.dako.connection.tcp.TcpConnection;
-import edu.hm.dako.connection.tcp.TcpServerSocket;
+import edu.hm.dako.connection.tcp.TCPConnection;
+import edu.hm.dako.connection.tcp.TCPServerSocket;
 
 /**
  * SingleThreaded Echo Server
  *
  * @author Peter Mandl, edited by Lerngruppe
  */
-public class EchoTcpServerSingleThreaded {
-    TcpServerSocket serverSocket = null;
-    TcpConnection con = null;
+public class EchoTCPServerSingleThreaded {
+    TCPServerSocket serverSocket = null;
+    TCPConnection con = null;
 
+    /**
+     * SingleThreaded Echo Server
+     *
+     * @param args currently ignored
+     */
     public static void main(String[] args) {
         System.out.println("Server gestartet");
-        EchoTcpServerSingleThreaded server = new EchoTcpServerSingleThreaded();
+        EchoTCPServerSingleThreaded server = new EchoTCPServerSingleThreaded();
 
         try {
             server.createSocket();
@@ -29,13 +34,19 @@ public class EchoTcpServerSingleThreaded {
     }
 
     /**
+     * Konstruktor
+     */
+    public EchoTCPServerSingleThreaded() {
+    }
+
+    /**
      * Server-Socket erzeugen
      *
      * @throws Exception Fehler bei der SocketErzeugung
      */
     private void createSocket() throws Exception {
         try {
-            serverSocket = new TcpServerSocket(55000, 400000, 400000);
+            serverSocket = new TCPServerSocket(55000, 400000, 400000);
         } catch (Exception e) {
             System.out.println("Exception");
             throw new Exception();
@@ -49,7 +60,7 @@ public class EchoTcpServerSingleThreaded {
      */
     private void waitForConnection() throws Exception {
         try {
-            con = (TcpConnection) serverSocket.accept();
+            con = (TCPConnection) serverSocket.accept();
             System.out.println("Verbindung akzeptiert");
         } catch (Exception e) {
             System.out.println("Exception");

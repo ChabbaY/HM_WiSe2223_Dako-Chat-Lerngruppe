@@ -25,9 +25,9 @@ import java.net.SocketTimeoutException;
  * @author Peter Mandl, edited by Lerngruppe
  * @version 1.0.0
  */
-public class UdpSocket {
+public class UDPSocket {
     static final int MAX_BUFFER_SIZE = 65527;
-    private static final Logger log = LogManager.getLogger(UdpSocket.class);
+    private static final Logger log = LogManager.getLogger(UDPSocket.class);
     private DatagramSocket socket;
     private InetAddress remoteAddress;
     private int remotePort;
@@ -38,7 +38,7 @@ public class UdpSocket {
      * @param port UDP-Port, der lokal für das Datagramm-Socket verwendet werden soll
      * @throws SocketException Fehler beim Erzeugen des Sockets oder beim Erzeugen einer Adresse
      */
-    public UdpSocket(int port) throws SocketException {
+    public UDPSocket(int port) throws SocketException {
         try {
             socket = new DatagramSocket(port);
             System.out.println("Größe des Empfangspuffers des Datagram-Sockets: " + socket.getReceiveBufferSize()
@@ -62,7 +62,7 @@ public class UdpSocket {
      * @param receiveBufferSize Größe des Empfangspuffers in Byte
      * @throws SocketException Fehler beim Erzeugen des Sockets oder beim Erzeugen einer Adresse
      */
-    public UdpSocket(int port, int sendBufferSize, int receiveBufferSize) throws SocketException {
+    public UDPSocket(int port, int sendBufferSize, int receiveBufferSize) throws SocketException {
         try {
             socket = new DatagramSocket(port);
             socket.setReceiveBufferSize(receiveBufferSize);

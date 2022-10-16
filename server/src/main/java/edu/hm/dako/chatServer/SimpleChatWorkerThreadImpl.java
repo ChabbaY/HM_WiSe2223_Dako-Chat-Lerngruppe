@@ -1,10 +1,10 @@
 package edu.hm.dako.chatServer;
 
+import edu.hm.dako.common.AuditLogPDUType;
 import edu.hm.dako.common.ClientConversationStatus;
 import edu.hm.dako.connection.Connection;
 import edu.hm.dako.connection.ConnectionTimeoutException;
 import edu.hm.dako.connection.EndOfFileException;
-import edu.hm.dako.common.AuditLogPduType;
 import edu.hm.dako.common.ChatPDU;
 import edu.hm.dako.common.ExceptionHandler;
 import org.apache.logging.log4j.LogManager;
@@ -445,7 +445,7 @@ public class SimpleChatWorkerThreadImpl extends AbstractWorkerThread {
                     if (auditLogServerEnabled) {
                         // AuditLog-Satz erzeugen und senden
                         try {
-                            auditLogConnection.send(receivedPdu, AuditLogPduType.LOGIN_REQUEST);
+                            auditLogConnection.send(receivedPdu, AuditLogPDUType.LOGIN_REQUEST);
                         } catch (Exception e) {
                             ExceptionHandler.logException(e);
                         }
@@ -457,7 +457,7 @@ public class SimpleChatWorkerThreadImpl extends AbstractWorkerThread {
                     if (auditLogServerEnabled) {
                         // AuditLog-Satz erzeugen und senden
                         try {
-                            auditLogConnection.send(receivedPdu, AuditLogPduType.CHAT_MESSAGE_REQUEST);
+                            auditLogConnection.send(receivedPdu, AuditLogPDUType.CHAT_MESSAGE_REQUEST);
                         } catch (Exception e) {
                             ExceptionHandler.logException(e);
                         }
@@ -469,7 +469,7 @@ public class SimpleChatWorkerThreadImpl extends AbstractWorkerThread {
                     if (auditLogServerEnabled) {
                         // AuditLog-Satz erzeugen und senden
                         try {
-                            auditLogConnection.send(receivedPdu, AuditLogPduType.LOGOUT_REQUEST);
+                            auditLogConnection.send(receivedPdu, AuditLogPDUType.LOGOUT_REQUEST);
                         } catch (Exception e) {
                             ExceptionHandler.logException(e);
                         }

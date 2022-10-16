@@ -9,14 +9,14 @@ import java.io.Serializable;
  *
  * @author Peter Mandl, edited by Lerngruppe
  */
-public class UdpClientConnection implements Connection {
+public class UDPClientConnection implements Connection {
 
     /**
-     * Timeout für {@link UdpSocket#receive(int)}, das ist die maximale Wartezeit beim Empfang von UDP-Datagrammen
+     * Timeout für {@link UDPSocket#receive(int)}, das ist die maximale Wartezeit beim Empfang von UDP-Datagrammen
      */
     private final int receivingTimeout;
     // UDP-Socket der Verbindung
-    private final UdpSocket clientSocket;
+    private final UDPSocket clientSocket;
 
     /**
      * UDP-Verbindung aus Sicht des Clients
@@ -24,7 +24,7 @@ public class UdpClientConnection implements Connection {
      * @param clientSocket UDP-Socket der Verbindung
      * @param receivingTimeout die maximale Wartezeit beim Empfang von UDP-Datagrammen
      */
-    public UdpClientConnection(UdpSocket clientSocket, int receivingTimeout) {
+    public UDPClientConnection(UDPSocket clientSocket, int receivingTimeout) {
         this.clientSocket = clientSocket;
         this.receivingTimeout = receivingTimeout;
     }

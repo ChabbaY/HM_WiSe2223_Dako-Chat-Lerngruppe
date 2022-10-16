@@ -10,16 +10,16 @@ import java.net.InetAddress;
  *
  * @author Peter Mandl, edited by Lerngruppe
  */
-public class UdpClientConnectionFactory implements ConnectionFactory {
+public class UDPClientConnectionFactory implements ConnectionFactory {
     /**
      * Fabrik für das Erzeugen von Verbindungen zum Server
      */
-    public UdpClientConnectionFactory() {
+    public UDPClientConnectionFactory() {
     }
     @Override
     public Connection connectToServer(String remoteServerAddress, int serverPort,
                                       int localPort, int sendBufferSize, int receiveBufferSize) throws Exception {
-        UdpSocket udpSocket = new UdpSocket(localPort, sendBufferSize, receiveBufferSize);
+        UDPSocket udpSocket = new UDPSocket(localPort, sendBufferSize, receiveBufferSize);
         udpSocket.setRemoteAddress(InetAddress.getByName(remoteServerAddress));
         udpSocket.setRemotePort(serverPort);
 
@@ -27,6 +27,6 @@ public class UdpClientConnectionFactory implements ConnectionFactory {
         // wird das Empfangen abgebrochen. Mit verschiedenen Einstellungen experimentieren.
         int defaultResponseTimeout = 5000;//TODO try different settings
 
-        return new UdpClientConnection(udpSocket, defaultResponseTimeout);
+        return new UDPClientConnection(udpSocket, defaultResponseTimeout);
     }
 }

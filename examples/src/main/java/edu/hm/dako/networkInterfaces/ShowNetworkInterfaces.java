@@ -16,7 +16,7 @@ import java.util.Objects;
  *
  * @author Peter Mandl, edited by Lerngruppe
  */
-public class showNetworkInterfaces {
+public class ShowNetworkInterfaces {
 
     /**
      * Hauptprogramm
@@ -24,9 +24,18 @@ public class showNetworkInterfaces {
      * @param args - Argumente (nicht verwendet)
      */
     public static void main(String[] args) {
-        new showNetworkInterfaces().execute();
+        new ShowNetworkInterfaces().execute();
     }
 
+    /**
+     * Konstruktor
+     */
+    public ShowNetworkInterfaces() {
+    }
+
+    /**
+     * alle Adressen
+     */
     public void listAllAddresses() {
         Enumeration<NetworkInterface> interfaces;
 
@@ -48,9 +57,12 @@ public class showNetworkInterfaces {
         }
     }
 
+    /**
+     * alle broadcast Adressen
+     * @return ip address list
+     */
     public List<InetAddress> listAllBroadcastAddresses() {
         List<InetAddress> broadcastList = new ArrayList<>();
-
         Enumeration<NetworkInterface> interfaces;
 
         try {
@@ -74,6 +86,9 @@ public class showNetworkInterfaces {
         return broadcastList;
     }
 
+    /**
+     * Durchführung der Auflistung
+     */
     public void execute() {
         List<InetAddress> list = listAllBroadcastAddresses();
         Iterator<InetAddress> iterator = list.iterator();

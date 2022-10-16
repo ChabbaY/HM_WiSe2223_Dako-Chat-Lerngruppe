@@ -11,9 +11,16 @@ import java.net.Socket;
  *
  * @author Peter Mandl, edited by Lerngruppe
  */
-public class EchoTcpServerMultithreaded {
-    static final int SERVER_PORT = 55000; // Port des Servers
-    ServerSocket serverSocket; // Serversocket für Listen
+public class EchoTCPServerMultiThreaded {
+    /**
+     * Port des Servers
+     */
+    static final int SERVER_PORT = 55000;
+
+    /**
+     * Serversocket für Listen
+     */
+    ServerSocket serverSocket;
 
     /**
      * Konstruktor
@@ -22,17 +29,22 @@ public class EchoTcpServerMultithreaded {
      * @throws BindException Port schon belegt
      * @throws IOException   Fehler beim Socket-Zugriff
      */
-    public EchoTcpServerMultithreaded(int serverPort) throws BindException, IOException {
+    public EchoTCPServerMultiThreaded(int serverPort) throws BindException, IOException {
         serverSocket = createServerSocket(serverPort);
     }
 
+    /**
+     * Multithreaded Echo Client
+     *
+     * @param args currently ignored
+     */
     public static void main(String[] args) {
-        EchoTcpServerMultithreaded server = null;
+        EchoTCPServerMultiThreaded server = null;
 
         System.out.println("Server gestartet");
 
         try {
-            server = new EchoTcpServerMultithreaded(SERVER_PORT);
+            server = new EchoTCPServerMultiThreaded(SERVER_PORT);
         } catch (Exception e) {
             System.out.println("Exception beim Erzeugen des Server-Sockets");
             System.exit(1);

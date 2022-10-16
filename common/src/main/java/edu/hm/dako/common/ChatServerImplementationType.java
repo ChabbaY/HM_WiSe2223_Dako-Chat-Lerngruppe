@@ -5,7 +5,19 @@ package edu.hm.dako.common;
  *
  * @author Peter Mandl, edited by Lerngruppe
  */
-
 public enum ChatServerImplementationType {
-    TCPAdvancedImplementation, TCPSimpleImplementation, UDPAdvancedImplementation
+    /**
+     * TCP Advanced Implementation
+     */
+    TCPAdvancedImplementation,
+
+    /**
+     * TCP Simple Implementation
+     */
+    TCPSimpleImplementation,
+
+    /**
+     * UDP Advanced Implementation
+     */
+    UDPAdvancedImplementation
 }
