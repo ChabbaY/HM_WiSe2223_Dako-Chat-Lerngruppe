@@ -15,7 +15,7 @@ currently being supported with security updates:
 How to report vulnerabilities?
 
 Where to go?
-info@chabbay.de or just ask Kiggi
+info@chabbay.de or just ask Kiggi, Greisch or Oskar
 How often to expect updates?
 often enough
 What to expect if the vulnerability is accepted or declined?
