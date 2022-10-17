@@ -59,12 +59,11 @@ public class TCPConnectionFactory implements ConnectionFactory {
                 }
             }
             if (attempts >= MAX_CONNECTION_ATTEMPTS) {
-                throw new IOException();
+                throw new IOException("Connection timed out");
             }
         }
 
-        log.debug("Anzahl der Verbindungsaufbauversuche für die Verbindung zum Server: "
-                + connectionTryCounter);
+        log.debug("Anzahl der Verbindungsaufbauversuche für die Verbindung zum Server: " + connectionTryCounter);
         return connection;
     }
 }

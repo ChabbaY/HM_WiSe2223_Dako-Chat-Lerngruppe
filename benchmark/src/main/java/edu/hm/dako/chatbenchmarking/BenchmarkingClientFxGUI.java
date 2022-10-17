@@ -979,6 +979,7 @@ public class BenchmarkingClientFxGUI extends Application implements Benchmarking
         alert.setTitle("Fehler!");
         alert.setHeaderText("Bei den von ihnen eingegebenen Parametern ist ein Fehler aufgetreten:");
         alert.setContentText(message);
+        alert.setResizable(true);
         Platform.runLater(alert::showAndWait);
     }
 

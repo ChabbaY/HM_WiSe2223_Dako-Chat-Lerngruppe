@@ -30,8 +30,7 @@ public class TCPServerSocket implements ServerSocketInterface {
      * @throws BindException Port schon belegt
      * @throws IOException   I/O-Fehler bei der Socket-Erzeugung
      */
-    public TCPServerSocket(int port, int sendBufferSize, int receiveBufferSize)
-            throws BindException, IOException {
+    public TCPServerSocket(int port, int sendBufferSize, int receiveBufferSize) throws BindException, IOException {
         this.sendBufferSize = sendBufferSize;
         this.receiveBufferSize = receiveBufferSize;
         try {

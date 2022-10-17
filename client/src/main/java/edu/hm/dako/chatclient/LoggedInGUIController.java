@@ -104,8 +104,7 @@ public class LoggedInGUIController {
     public void btnSubmit_OnAction() {
         try {
             // Eingegebene Chat-Nachricht an Server senden
-            appController.getCommunicator().tell(appController.getModel().getUserName(),
-                    txtChatMessage.getText());
+            appController.getCommunicator().tell(appController.getModel().getUserName(), txtChatMessage.getText());
             Platform.runLater(() -> {
                 txtChatMessage.setText("");
                 chatList.scrollTo(appController.getModel().chats.size() - 1);

@@ -90,8 +90,8 @@ public abstract class AbstractChatClient implements ClientCommunication {
         // Verbindung zum Server aufbauen
         try {
             connectionFactory = getDecoratedFactory(new TCPConnectionFactory());
-            connection = connectionFactory.connectToServer(remoteServerAddress, serverPort, localPort, 20000,
-                    20000);
+            connection = connectionFactory.connectToServer(remoteServerAddress, serverPort, localPort,
+                    20000, 20000);
         } catch (Exception e) {
             ExceptionHandler.logException(e);
         }

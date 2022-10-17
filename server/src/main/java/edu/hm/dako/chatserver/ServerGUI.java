@@ -761,6 +761,7 @@ public class ServerGUI extends Application implements ServerGUIInterface {
         alert.setHeaderText(
                 "Bei den von ihnen eingegebenen Parametern ist ein Fehler aufgetreten:");
         alert.setContentText(message);
+        alert.setResizable(true);
         Platform.runLater(alert::showAndWait);
     }
 

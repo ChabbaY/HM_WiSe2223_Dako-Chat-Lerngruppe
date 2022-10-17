@@ -264,6 +264,7 @@ public class ClientFxGUI extends Application implements ClientUserInterface {
             alert.setTitle("Es ist ein Fehler im " + sender + " aufgetreten");
             alert.setHeaderText("Fehlerbehandlung (Fehlercode = " + errorCode + ")");
             alert.setContentText(errorMessage);
+            alert.setResizable(true);
             alert.showAndWait();
         });
     }
