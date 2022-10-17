@@ -151,7 +151,7 @@ public class BenchmarkingClientFxGUI extends Application implements Benchmarking
      * Start der GUI
      * @param args - nicht verwendet
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) {//TODO parametrize
         // Log4j2-Logging aus Datei konfigurieren
         LoggerContext context = (org.apache.logging.log4j.core.LoggerContext) LogManager.getContext(false);
         File file = new File("config/log4j/log4j2.benchmarkingClient.xml");

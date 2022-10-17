@@ -102,9 +102,9 @@ public class ServerGUI extends Application implements ServerGUIInterface {
     /**
      * Benutzeroberfläche zum Starten des Chat-Servers
      *
-     * @param args currently ignored //TODO parametrize
+     * @param args currently ignored
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) {//TODO parametrize
 
         // Log4j2-Logging aus Datei konfigurieren
         LoggerContext context = (LoggerContext) LogManager.getContext(false);

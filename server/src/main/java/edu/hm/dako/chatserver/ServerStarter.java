@@ -9,9 +9,9 @@ public class ServerStarter {
     /**
      * starts the chat server
      *
-     * @param args currently ignored //TODO parametrize
+     * @param args currently ignored
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) {//TODO parametrize
         ServerGUI.main(args);
     }
 

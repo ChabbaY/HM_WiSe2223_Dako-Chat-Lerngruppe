@@ -9,9 +9,9 @@ public class BenchmarkingStarter {
     /**
      * starts the benchmarking server
      *
-     * @param args currently ignored //TODO parametrize
+     * @param args currently ignored
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) {//TODO parametrize
         BenchmarkingClientFxGUI.main(args);
     }
 

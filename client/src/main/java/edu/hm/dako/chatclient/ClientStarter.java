@@ -9,9 +9,9 @@ public class ClientStarter {
     /**
      * starts the chat client
      *
-     * @param args currently ignored //TODO parametrize
+     * @param args currently ignored
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) {//TODO parametrize
         ClientFxGUI.main(args);
     }
 
