@@ -1,0 +1,203 @@
+@startuml
+class edu.hm.dako.echoUdpSocketApp.EchoUDPClient {
+# DatagramSocket socket
+# InetAddress serverAddress
+# int serverPort
++ <<Create>> EchoUDPClient(int)
++ {static} void main(String[])
++ void execute()
+# void sendPacket(String,int,InetAddress,int)
+# void receivePacket()
+# void closeSocket()
+}
+class edu.hm.dako.rmiBeispiel.OneClient {
++ <<Create>> OneClient()
++ {static} void main(String[])
+}
+class edu.hm.dako.echoTcpSocketApp.EchoWorkerThread {
+~ Socket connection
+~ ObjectOutputStream out
+~ ObjectInputStream in
+- boolean connect
++ <<Create>> EchoWorkerThread(Socket)
++ void run()
+- void echo()
+- void closeConnection()
+}
+class edu.hm.dako.udpMulticast.UdpMulticastSender {
++ {static} int MY_MULTICAST_PORT
++ {static} String MY_MULTICAST_ADDRESS
++ <<Create>> UdpMulticastSender()
++ {static} void main(String[])
+}
+class edu.hm.dako.echoTcpApp.EchoWorkerThread {
+- {static} int nrWorkerThread
+- TCPConnection con
+- boolean connect
++ <<Create>> EchoWorkerThread(TCPConnection)
++ void run()
+- void echo()
+}
+class edu.hm.dako.echoUdpApp.EchoUDPClient {
+~ {static} int NR_OF_MSG
+~ {static} int MAX_LENGTH
+~ UDPClientConnectionFactory udpFactory
+~ UDPClientConnection con
+~ <<Create>> EchoUDPClient()
++ {static} void main(String[])
+- {static} SimplePDU createMessage()
+- void connect()
+- void echo()
+- void close()
+}
+class edu.hm.dako.rmiBeispiel.OneServerImpl {
+- {static} long serialVersionUID
++ <<Create>> OneServerImpl()
++ int op1(String)
++ long op2(String)
+}
+class edu.hm.dako.echoTcpSocketApp.SimplePDU {
+- {static} long serialVersionUID
+- String clientThreadName
+- String serverThreadName
+- String message
++ <<Create>> SimplePDU(String)
++ String toString()
++ void setClientThreadName(String)
++ void setServerThreadName(String)
++ String getMessage()
++ void setMessage(String)
+}
+class edu.hm.dako.echoTcpApp.SimplePDU {
+- {static} long serialVersionUID
+- String clientThreadName
+- String serverThreadName
+- String message
++ <<Create>> SimplePDU(String)
++ String toString()
++ void setClientThreadName(String)
++ void setServerThreadName(String)
++ String getMessage()
++ void setMessage(String)
+}
+class edu.hm.dako.echoUdpSocketApp.EchoUDPServer {
+# DatagramSocket socket
++ <<Create>> EchoUDPServer(int)
++ {static} void main(String[])
++ void execute()
+# DatagramPacket receivePacket()
+# void sendEcho(InetAddress,int,byte[],int)
+# void closeSocket()
+}
+class edu.hm.dako.rmiBeispiel.OneServer {
++ <<Create>> OneServer()
++ {static} void main(String[])
+}
+class edu.hm.dako.echoUdpApp.EchoUDPServer {
+~ UDPServerSocket serverSocket
+~ UDPServerConnection con
++ <<Create>> EchoUDPServer()
++ {static} void main(String[])
+- void createSocket()
+- void waitForConnection()
+- void echo()
+- void close()
+}
+class edu.hm.dako.udpMulticast.UdpMulticastReceiver {
++ {static} int MY_MULTICAST_PORT
++ {static} int MY_LOCAL_PORT
++ {static} String MY_MULTICAST_ADDRESS
++ <<Create>> UdpMulticastReceiver()
++ {static} void main(String[])
+}
+class edu.hm.dako.echoTcpApp.EchoTCPServerMultiThreaded {
+~ TCPServerSocket serverSocket
+~ TCPConnection con
++ <<Create>> EchoTCPServerMultiThreaded()
++ {static} void main(String[])
+- void createSocket()
+- TCPConnection waitForConnection()
+- void close()
+}
+class edu.hm.dako.networkInterfaces.ShowNetworkInterfaces {
++ <<Create>> ShowNetworkInterfaces()
++ {static} void main(String[])
++ void listAllAddresses()
++ List<InetAddress> listAllBroadcastAddresses()
++ void execute()
+}
+class edu.hm.dako.echoTcpApp.EchoTCPServerSingleThreaded {
+~ TCPServerSocket serverSocket
+~ TCPConnection con
++ <<Create>> EchoTCPServerSingleThreaded()
++ {static} void main(String[])
+- void createSocket()
+- void waitForConnection()
+- void echo()
+- void close()
+}
+class edu.hm.dako.echoUdpApp.SimplePDU {
+- {static} long serialVersionUID
+- String clientThreadName
+- String serverThreadName
+- String message
++ <<Create>> SimplePDU(String)
++ String toString()
++ void setClientThreadName(String)
++ void setServerThreadName(String)
++ String getMessage()
++ void setMessage(String)
+}
+class edu.hm.dako.echoTcpSocketApp.EchoTCPServerMultiThreaded {
+~ {static} int SERVER_PORT
+~ ServerSocket serverSocket
++ <<Create>> EchoTCPServerMultiThreaded(int)
++ {static} void main(String[])
+- ServerSocket createServerSocket(int)
+- Socket waitForConnection()
+- void closeServerSocket()
+}
+interface edu.hm.dako.rmiBeispiel.OneInterface {
+~ int op1(String)
+~ long op2(String)
+}
+class edu.hm.dako.echoTcpSocketApp.EchoTCPClient {
+~ {static} int NR_OF_MSG
+~ {static} int SERVER_PORT
+~ {static} String SERVER_HOST
+~ Socket connection
+~ ObjectOutputStream out
+~ ObjectInputStream in
+~ <<Create>> EchoTCPClient()
++ {static} void main(String[])
++ void echo(int)
++ Serializable receive()
++ void send(Serializable)
++ void closeConnection()
++ SimplePDU createMessage(int)
++ Socket connectToServer(String,int)
++ void execute()
+}
+class edu.hm.dako.echoTcpApp.EchoTCPClient {
+~ {static} int NR_OF_MSG
+~ {static} int MAX_LENGTH
+~ TCPConnectionFactory tcpFactory
+~ TCPConnection con
+~ <<Create>> EchoTCPClient()
++ {static} void main(String[])
+- {static} SimplePDU createMessage()
+- void connect()
+- void echo()
+- void close()
+}
+
+
+edu.hm.dako.echoTcpSocketApp.Thread <|-- edu.hm.dako.echoTcpSocketApp.EchoWorkerThread
+edu.hm.dako.echoTcpApp.Thread <|-- edu.hm.dako.echoTcpApp.EchoWorkerThread
+edu.hm.dako.rmiBeispiel.OneInterface <|.. edu.hm.dako.rmiBeispiel.OneServerImpl
+java.rmi.server.UnicastRemoteObject <|-- edu.hm.dako.rmiBeispiel.OneServerImpl
+java.io.Serializable <|.. edu.hm.dako.echoTcpSocketApp.SimplePDU
+java.io.Serializable <|.. edu.hm.dako.echoTcpApp.SimplePDU
+java.io.Serializable <|.. edu.hm.dako.echoUdpApp.SimplePDU
+java.rmi.Remote <|-- edu.hm.dako.rmiBeispiel.OneInterface
+@enduml

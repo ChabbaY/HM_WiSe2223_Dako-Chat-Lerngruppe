@@ -1,0 +1,143 @@
+@startuml
+class edu.hm.dako.connection.tcp.TCPConnection {
+- {static} Logger log
+- Socket socket
+- ObjectOutputStream out
+- ObjectInputStream in
++ <<Create>> TCPConnection(ServerSocket,int,int,boolean,boolean)
++ <<Create>> TCPConnection(String,int,String,int,int,int,boolean,boolean)
+- void createObjectStreams()
+- void setConnectionParameters(int,int,boolean,boolean)
++ Serializable receive(int)
++ Serializable receive()
++ void send(Serializable)
++ void close()
+}
+class edu.hm.dako.connection.ConnectionFactoryLogger {
+- ConnectionFactory wrappedFactory
++ <<Create>> ConnectionFactoryLogger(ConnectionFactory)
++ Connection connectToServer(String,int,int,int,int)
+}
+class edu.hm.dako.connection.udp.UDPSocket {
+~ {static} int MAX_BUFFER_SIZE
+- {static} Logger log
+- DatagramSocket socket
+- InetAddress remoteAddress
+- int remotePort
++ <<Create>> UDPSocket(int)
++ <<Create>> UDPSocket(int,int,int)
++ Object receive(int)
++ void send(InetAddress,int,Object)
++ void close()
++ String getLocalAddress()
++ int getLocalPort()
++ InetAddress getRemoteAddress()
++ void setRemoteAddress(InetAddress)
++ int getRemotePort()
++ void setRemotePort(int)
++ boolean isClosed()
+}
+interface edu.hm.dako.connection.ServerSocketInterface {
+~ Connection accept()
+~ void close()
+~ boolean isClosed()
+}
+class edu.hm.dako.connection.udp.UDPServerSocket {
+- UDPSocket socket
++ <<Create>> UDPServerSocket(int,int,int)
++ Connection accept()
++ void close()
++ boolean isClosed()
+}
+class edu.hm.dako.connection.tcp.TCPServerSocket {
+- {static} Logger log
+- {static} java.net.ServerSocket serverSocket
+~ int sendBufferSize
+~ int receiveBufferSize
++ <<Create>> TCPServerSocket(int,int,int)
++ Connection accept()
++ void close()
++ boolean isClosed()
+}
+class edu.hm.dako.connection.tcp.TCPConnectionFactory {
+- {static} int MAX_CONNECTION_ATTEMPTS
+- {static} Logger log
+- long connectionTryCounter
++ <<Create>> TCPConnectionFactory()
++ Connection connectToServer(String,int,int,int,int)
+}
+class edu.hm.dako.connection.ConnectionTimeoutException {
+- {static} long serialVersionUID
++ <<Create>> ConnectionTimeoutException()
+}
+class edu.hm.dako.connection.udp.UDPPseudoConnectionContext {
+- InetAddress remoteAddress
+- int remotePort
+- Object object
++ <<Create>> UDPPseudoConnectionContext()
++ <<Create>> UDPPseudoConnectionContext(InetAddress,int,Object)
++ InetAddress getRemoteAddress()
++ void setRemoteAddress(InetAddress)
++ int getRemotePort()
++ void setRemotePort(int)
++ Object getObject()
++ void setObject(Object)
+}
+class edu.hm.dako.connection.EndOfFileException {
+- {static} long serialVersionUID
++ <<Create>> EndOfFileException()
+}
+class edu.hm.dako.connection.ConnectionLogger {
+- {static} Logger log
+- Connection wrappedConnection
++ <<Create>> ConnectionLogger(Connection)
++ void send(Serializable)
++ Serializable receive()
++ Serializable receive(int)
++ void close()
+}
+class edu.hm.dako.connection.udp.UDPClientConnection {
+- int receivingTimeout
+- UDPSocket clientSocket
++ <<Create>> UDPClientConnection(UDPSocket,int)
++ Serializable receive(int)
++ Serializable receive()
++ void send(Serializable)
++ void close()
+}
+interface edu.hm.dako.connection.ConnectionFactory {
+~ Connection connectToServer(String,int,int,int,int)
+}
+interface edu.hm.dako.connection.Connection {
+~ Serializable receive(int)
+~ Serializable receive()
+~ void send(Serializable)
+~ void close()
+}
+class edu.hm.dako.connection.udp.UDPServerConnection {
+- UDPSocket serverSocket
+- UDPPseudoConnectionContext udpRemoteObject
++ <<Create>> UDPServerConnection(UDPSocket)
++ Serializable receive(int)
++ Serializable receive()
++ void send(Serializable)
++ void close()
+}
+class edu.hm.dako.connection.udp.UDPClientConnectionFactory {
++ <<Create>> UDPClientConnectionFactory()
++ Connection connectToServer(String,int,int,int,int)
+}
+
+
+edu.hm.dako.connection.Connection <|.. edu.hm.dako.connection.tcp.TCPConnection
+edu.hm.dako.connection.ConnectionFactory <|.. edu.hm.dako.connection.ConnectionFactoryLogger
+edu.hm.dako.connection.ServerSocketInterface <|.. edu.hm.dako.connection.udp.UDPServerSocket
+edu.hm.dako.connection.ServerSocketInterface <|.. edu.hm.dako.connection.tcp.TCPServerSocket
+edu.hm.dako.connection.ConnectionFactory <|.. edu.hm.dako.connection.tcp.TCPConnectionFactory
+edu.hm.dako.connection.Exception <|-- edu.hm.dako.connection.ConnectionTimeoutException
+edu.hm.dako.connection.Exception <|-- edu.hm.dako.connection.EndOfFileException
+edu.hm.dako.connection.Connection <|.. edu.hm.dako.connection.ConnectionLogger
+edu.hm.dako.connection.Connection <|.. edu.hm.dako.connection.udp.UDPClientConnection
+edu.hm.dako.connection.Connection <|.. edu.hm.dako.connection.udp.UDPServerConnection
+edu.hm.dako.connection.ConnectionFactory <|.. edu.hm.dako.connection.udp.UDPClientConnectionFactory
+@enduml

@@ -1,0 +1,257 @@
+@startuml
+class edu.hm.dako.chatserver.ClientListEntry {
+- {static} Logger LOG
+~ boolean finished
+- String userName
+- Connection con
+- long startTime
+- ClientConversationStatus status
+- long numberOfReceivedChatMessages
+- long numberOfSentEvents
+- long numberOfReceivedEventConfirms
+- long numberOfLostEventConfirms
+- long numberOfRetries
+- Vector<String> waitList
++ <<Create>> ClientListEntry(String,Connection)
++ String toString()
++ String getUserName()
++ void setUserName(String)
++ Connection getConnection()
++ void setConnection(Connection)
++ void setLoginTime(long)
++ long getStartTime()
++ void setStartTime(long)
++ long getNumberOfReceivedChatMessages()
++ void setNumberOfReceivedChatMessages(long)
++ long getNumberOfSentEvents()
++ void setNumberOfSentEvents(long)
++ long getNumberOfReceivedEventConfirms()
++ void setNumberOfReceivedEventConfirms(long)
++ long getNumberOfLostEventConfirms()
++ void setNumberOfLostEventConfirms(long)
++ long getNumberOfRetries()
++ void setNumberOfRetries(long)
++ ClientConversationStatus getStatus()
++ void setStatus(ClientConversationStatus)
++ boolean isFinished()
++ void setFinished(boolean)
++ void increaseNumberOfSentEvents()
++ void increaseNumberOfReceivedEventConfirms()
++ void increaseNumberOfLostEventConfirms()
++ void increaseNumberOfReceivedChatMessages()
++ void increaseNumberOfRetries()
++ void addWaitListEntry(String)
++ Vector<String> getWaitList()
++ void setWaitList(Vector<String>)
++ void clearWaitList()
+}
+interface edu.hm.dako.chatserver.ServerGUIInterface {
+~ void showStartData(ServerStartData)
+~ void increaseNumberOfLoggedInClients()
+~ void decreaseNumberOfLoggedInClients()
+~ void increaseNumberOfRequests()
+}
+abstract class edu.hm.dako.chatserver.AbstractChatServer {
+# SharedChatClientList clients
+# SharedServerCounter counter
+# ServerGUIInterface serverGuiInterface
+~ <<Create>> AbstractChatServer()
+}
+class edu.hm.dako.chatserver.SharedServerCounter {
++ AtomicInteger logoutCounter
++ AtomicInteger eventCounter
++ AtomicInteger confirmCounter
++ <<Create>> SharedServerCounter()
+}
+interface edu.hm.dako.chatserver.ServerInterface {
+~ void start()
+~ void stop()
+}
+class edu.hm.dako.chatserver.SharedChatClientList {
+- {static} Logger LOG
+- {static} ConcurrentHashMap<String,ClientListEntry> clients
+- {static} SharedChatClientList instance
+- <<Create>> SharedChatClientList()
++ {static} SharedChatClientList getInstance()
++ void deleteAll()
++ void changeClientStatus(String,ClientConversationStatus)
++ ClientConversationStatus getClientStatus(String)
++ ClientListEntry getClient(String)
++ Vector<String> getClientNameList()
++ Vector<String> getRegisteredClientNameList()
++ boolean existsClient(String)
++ void createClient(String,ClientListEntry)
++ void updateClient(String,ClientListEntry)
++ boolean deletable(String)
++ void deleteClientWithoutCondition(String)
++ boolean deleteClient(String)
++ Vector<String> gcClientList()
++ long size()
++ void increaseNumberOfReceivedChatEventConfirms(String)
++ void increaseNumberOfSentChatEvents(String)
++ void increaseNumberOfReceivedChatMessages(String)
++ void setRequestStartTime(String,long)
++ long getRequestStartTime(String)
++ Vector<String> createWaitList(String)
++ void deleteWaitList(String)
++ int deleteWaitListEntry(String,String)
++ int getWaitListSize(String)
++ void finish(String)
++ String printClientList()
+}
+class edu.hm.dako.chatserver.ServerFactory {
+- {static} Logger LOG
+- {static} AuditLogConnection auditLogConnection
+- <<Create>> ServerFactory()
++ {static} ServerInterface getServer(ChatServerImplementationType,int,int,int,ServerGUIInterface)
++ {static} ServerInterface getServerWithAuditLog(ChatServerImplementationType,int,int,int,ServerGUIInterface,AuditLogImplementationType,String,int)
+- {static} ServerSocketInterface getDecoratedServerSocket(ServerSocketInterface)
++ {static} boolean isAuditLogServerConnected()
+}
+class edu.hm.dako.chatserver.ServerStarter {
++ <<Create>> ServerStarter()
++ {static} void main(String[])
+}
+class edu.hm.dako.chatserver.ServerGUI {
+~ {static} String DEFAULT_SERVER_PORT
+- {static} Logger LOG
+- {static} ServerInterface chatServer
+- {static} AtomicInteger loggedInClientCounter
+- {static} AtomicInteger requestCounter
+- ServerStartData data
+~ ObservableList<String> implTypeOptions
+~ ObservableList<String> auditLogServerImplTypeOptions
+- String startTimeAsString
+- Calendar cal
+- boolean startable
+- ComboBox<String> comboBoxImplType
+- ComboBox<String> comboBoxAuditLogServerType
+- VBox pane
+- TextField serverPort
+- TextField sendBufferSize
+- TextField receiveBufferSize
+- TextField auditLogServerHostnameOrIp
+- TextField auditLogServerPort
+- Label serverPortLabel
+- Label sendBufferSizeLabel
+- Label receiveBufferSizeLabel
+- Label auditLogServerPortLabel
+- CheckBox enableAuditLogServerCheckbox
+- Button startButton
+- Button stopButton
+- Button finishButton
+- TextField startTimeField
+- TextField receivedRequests
+- TextField loggedInClients
++ <<Create>> ServerGUI()
++ {static} void main(String[])
++ void start(Stage)
+- GridPane createInputPane()
+- GridPane createInfoPane()
+- HBox createButtonPane()
+- Label createLabel(String)
+- ComboBox<String> createImplTypeComboBox(ObservableList<String>)
+- ComboBox<String> getStringComboBox(ObservableList<String>)
+- ComboBox<String> createAuditLogTypeComboBox(ObservableList<String>)
+- HBox createSeparator(String,int)
+- TextField createNotEditableTextField()
+- TextField createEditableTextField(String)
+- void reactOnStartButton()
+- void reactOnStopButton()
+- void reactOnFinishButton()
+- String readAuditLogComboBox()
+- String readImplTypeComboBox()
+- void startChatServerWithAuditLogServer(String,int,int,int,String,int,String)
+- void startChatServer(String,int,int,int)
+- String readAuditLogServerHostnameOrIp()
+- int readAuditLogServerPort(String)
+- int readServerPort()
+- int readSendBufferSize()
+- int readReceiveBufferSize()
+- String getCurrentTime(Calendar)
+- void updateLoggedInClients()
+- void updateNumberOfRequests()
+- void setAlert(String)
++ void showStartData(ServerStartData)
++ void increaseNumberOfLoggedInClients()
++ void decreaseNumberOfLoggedInClients()
++ void increaseNumberOfRequests()
+}
+class edu.hm.dako.chatserver.SimpleChatServerImpl {
+- {static} Logger LOG
+- ExecutorService executorService
+- ServerSocketInterface socket
+- AuditLogConnection auditLogConnection
++ <<Create>> SimpleChatServerImpl(ExecutorService,ServerSocketInterface,ServerGUIInterface)
++ <<Create>> SimpleChatServerImpl(ExecutorService,ServerSocketInterface,ServerGUIInterface,AuditLogConnection)
++ void start()
++ void stop()
+}
+class edu.hm.dako.chatserver.ServerStartData {
+~ String startTime
++ <<Create>> ServerStartData()
++ String getStartTime()
++ void setStartTime(String)
+}
+abstract class edu.hm.dako.chatserver.AbstractWorkerThread {
+# Connection connection
+# boolean finished
+# String userName
+# String clientThreadName
+# long startTime
+# SharedChatClientList clients
+# AtomicInteger logoutCounter
+# AtomicInteger eventCounter
+# AtomicInteger confirmCounter
+# ServerGUIInterface serverGuiInterface
++ <<Create>> AbstractWorkerThread(Connection,SharedChatClientList,SharedServerCounter,ServerGUIInterface)
+# {abstract}void loginRequestAction(ChatPDU)
+# {abstract}void logoutRequestAction(ChatPDU)
+# {abstract}void chatMessageRequestAction(ChatPDU)
+# {abstract}void handleIncomingMessage()
+}
+class edu.hm.dako.chatserver.AuditLogConnection {
++ {static} int AUDIT_LOG_CONNECTION_TYPE_TCP
++ {static} int AUDIT_LOG_CONNECTION_TYPE_UDP
++ {static} int AUDIT_LOG_CONNECTION_TYPE_RMI
+~ {static} int DEFAULT_SEND_BUFFER_AUDIT_LOG_SIZE
+~ {static} int DEFAULT_RECEIVE_BUFFER_AUDIT_LOG_SIZE
+- {static} Logger LOG
+- int connectionType
+# UDPClientConnection udpConnectionToAuditLogServer
+# TCPConnection tcpConnectionToAuditLogServer
+# AuditLogRMIInterface auditLogRemoteObject
+~ String auditLogServer
+~ int auditLogPort
+- long counter
++ <<Create>> AuditLogConnection(int,String,int)
++ void connectToAuditLogServer()
++ void send(ChatPDU,AuditLogPDUType)
++ void close()
+- AuditLogPDU createAuditLogPdu(ChatPDU)
+}
+class edu.hm.dako.chatserver.SimpleChatWorkerThreadImpl {
+- {static} Logger LOG
+# AuditLogConnection auditLogConnection
+# boolean auditLogServerEnabled
++ <<Create>> SimpleChatWorkerThreadImpl(Connection,SharedChatClientList,SharedServerCounter,ServerGUIInterface)
++ <<Create>> SimpleChatWorkerThreadImpl(Connection,SharedChatClientList,SharedServerCounter,ServerGUIInterface,AuditLogConnection)
++ void run()
+# void sendLoginListUpdateEvent(ChatPDU)
+# void loginRequestAction(ChatPDU)
+# void logoutRequestAction(ChatPDU)
+# void chatMessageRequestAction(ChatPDU)
+- void closeConnection()
+- void sendLogoutResponse(String)
+- boolean checkIfClientIsDeletable()
+# void handleIncomingMessage()
+}
+
+
+edu.hm.dako.chatserver.ServerInterface <|.. edu.hm.dako.chatserver.AbstractChatServer
+edu.hm.dako.chatserver.ServerGUIInterface <|.. edu.hm.dako.chatserver.ServerGUI
+javafx.application.Application <|-- edu.hm.dako.chatserver.ServerGUI
+edu.hm.dako.chatserver.AbstractChatServer <|-- edu.hm.dako.chatserver.SimpleChatServerImpl
+edu.hm.dako.chatserver.Thread <|-- edu.hm.dako.chatserver.AbstractWorkerThread
+edu.hm.dako.chatserver.AbstractWorkerThread <|-- edu.hm.dako.chatserver.SimpleChatWorkerThreadImpl
+@enduml

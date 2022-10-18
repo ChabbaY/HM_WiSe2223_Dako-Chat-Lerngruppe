@@ -1,0 +1,181 @@
+@startuml
+enum edu.hm.dako.common.PDUType {
++  UNDEFINED
++  LOGIN_REQUEST
++  LOGIN_RESPONSE
++  LOGOUT_REQUEST
++  LOGOUT_RESPONSE
++  CHAT_MESSAGE_REQUEST
++  CHAT_MESSAGE_RESPONSE
++  CHAT_MESSAGE_EVENT
++  LOGIN_EVENT
++  LOGOUT_EVENT
++  CHAT_MESSAGE_EVENT_CONFIRM
++  LOGIN_EVENT_CONFIRM
++  LOGOUT_EVENT_CONFIRM
+- int id
+- String description
+~ <<Create>> PDUType(int,String)
++ {static} PDUType getId(int)
++ int getId()
++ String toString()
+}
+enum edu.hm.dako.common.ClientConversationStatus {
++  UNREGISTERED
++  REGISTERING
++  REGISTERED
++  UNREGISTERING
+}
+class edu.hm.dako.common.AuditLogPDU {
+- {static} long serialVersionUID
+- {static} Logger log
+- AuditLogPDUType pduType
+- String userName
+- String clientThreadName
+- String serverThreadName
+- long auditTime
+- String message
++ <<Create>> AuditLogPDU()
++ {static} void printPdu(AuditLogPDU)
++ {static} AuditLogPDU convertChatPDUtoAuditLogPDU(ChatPDU)
+- {static} AuditLogPDUType convertChatPDUTypeToAuditLogPDUType(PDUType)
++ String toString()
++ AuditLogPDUType getPduType()
++ void setPduType(AuditLogPDUType)
++ String getUserName()
++ void setUserName(String)
++ String getClientThreadName()
++ void setClientThreadName(String)
++ String getServerThreadName()
++ void setServerThreadName(String)
++ long getAuditTime()
++ void setAuditTime(long)
++ String getMessage()
++ void setMessage(String)
+}
+class edu.hm.dako.common.SystemConstants {
++ {static} String IMPL_TCP_ADVANCED
++ {static} String IMPL_UDP_ADVANCED
++ {static} String IMPL_TCP_SIMPLE
++ {static} String AUDIT_LOG_SERVER_TCP_IMPL
++ {static} String AUDIT_LOG_SERVER_UDP_IMPL
++ {static} String AUDIT_LOG_SERVER_RMI_IMPL
++ {static} String DEFAULT_SEND_BUFFER_SIZE
++ {static} String DEFAULT_RECEIVE_BUFFER_SIZE
++ {static} String MAX_SEND_BUFFER_SIZE
++ {static} String MAX_RECEIVE_BUFFER_SIZE
++ {static} String DEFAULT_AUDIT_LOG_SERVER_NAME
++ {static} String DEFAULT_AUDIT_LOG_SERVER_PORT
++ {static} String DEFAULT_AUDIT_LOG_SERVER_RMI_REGISTRY_PORT
++ {static} String RED_COLOR
++ {static} String BLACK_COLOR
++ <<Create>> SystemConstants()
+}
+enum edu.hm.dako.common.AuditLogImplementationType {
++  AuditLogServerTCPImplementation
++  AuditLogServerUDPImplementation
++  AuditLogServerRMIImplementation
+}
+class edu.hm.dako.common.ChatPDU {
+- {static} long serialVersionUID
++ {static} int NO_ERROR
++ {static} int LOGIN_ERROR
+- {static} Logger log
+- PDUType pduType
+- String userName
+- String eventUserName
+- String clientThreadName
+- String serverThreadName
+- long sequenceNumber
+- String message
+- Vector<String> clients
+- long serverTime
+- ClientConversationStatus clientStatus
+- int errorCode
+- long numberOfReceivedChatMessages
+- long numberOfSentEvents
+- long numberOfReceivedConfirms
+- long numberOfLostConfirms
+- long numberOfRetries
++ <<Create>> ChatPDU()
++ <<Create>> ChatPDU(PDUType,Vector<String>)
++ <<Create>> ChatPDU(PDUType,String)
++ {static} void printPdu(ChatPDU)
++ {static} ChatPDU createLogoutEventPdu(String,Vector<String>,ChatPDU)
++ {static} ChatPDU createLoginEventPdu(String,Vector<String>,ChatPDU)
++ {static} ChatPDU createLoginResponsePdu(String,ChatPDU)
++ {static} ChatPDU createChatMessageEventPdu(String,ChatPDU)
++ {static} ChatPDU createLogoutResponsePdu(String,long,long,long,long,long,String)
++ {static} ChatPDU createChatMessageResponsePdu(String,long,long,long,long,long,String,long)
++ {static} ChatPDU createLoginErrorResponsePdu(ChatPDU,int)
++ {static} ChatPDU createLoginEventConfirm(String,ChatPDU)
++ {static} ChatPDU createLogoutEventConfirm(String,ChatPDU)
++ {static} ChatPDU createChatMessageEventConfirm(String,ChatPDU)
++ String toString()
++ PDUType getPduType()
++ void setPduType(PDUType)
++ Vector<String> getClients()
++ void setClients(Vector<String>)
++ String getUserName()
++ void setUserName(String)
++ String getEventUserName()
++ void setEventUserName(String)
++ String getClientThreadName()
++ void setClientThreadName(String)
++ String getServerThreadName()
++ void setServerThreadName(String)
++ String getMessage()
++ void setMessage(String)
++ long getServerTime()
++ void setServerTime(long)
++ long getSequenceNumber()
++ void setSequenceNumber(long)
++ ClientConversationStatus getClientStatus()
++ void setClientStatus(ClientConversationStatus)
++ long getNumberOfSentEvents()
++ void setNumberOfSentEvents(long)
++ long getNumberOfReceivedConfirms()
++ void setNumberOfReceivedEventConfirms(long)
++ long getNumberOfLostConfirms()
++ void setNumberOfLostEventConfirms(long)
++ long getNumberOfRetries()
++ void setNumberOfRetries(long)
++ long getNumberOfReceivedChatMessages()
++ void setNumberOfReceivedChatMessages(long)
++ int getErrorCode()
++ void setErrorCode(int)
+}
+interface edu.hm.dako.common.AuditLogRMIInterface {
+~ void audit(AuditLogPDU)
+}
+enum edu.hm.dako.common.ChatServerImplementationType {
++  TCPAdvancedImplementation
++  TCPSimpleImplementation
++  UDPAdvancedImplementation
+}
+enum edu.hm.dako.common.AuditLogPDUType {
++  UNDEFINED
++  FINISH_AUDIT_REQUEST
++  LOGIN_REQUEST
++  LOGOUT_REQUEST
++  CHAT_MESSAGE_REQUEST
+- int id
+- String description
+~ <<Create>> AuditLogPDUType(int,String)
++ {static} AuditLogPDUType getValue(int)
++ int getId()
++ String toString()
+}
+class edu.hm.dako.common.ExceptionHandler {
+- {static} Logger log
++ <<Create>> ExceptionHandler()
++ {static} void logExceptionAndTerminate(Exception)
++ {static} void logException(Exception)
+- {static} void handleException(Exception,boolean)
+}
+
+
+java.io.Serializable <|.. edu.hm.dako.common.AuditLogPDU
+java.io.Serializable <|.. edu.hm.dako.common.ChatPDU
+java.rmi.Remote <|-- edu.hm.dako.common.AuditLogRMIInterface
+@enduml

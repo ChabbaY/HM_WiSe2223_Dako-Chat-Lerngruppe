@@ -1,0 +1,184 @@
+@startuml
+class edu.hm.dako.chatclient.SimpleMessageListenerThreadImpl {
+- {static} Logger LOG
++ <<Create>> SimpleMessageListenerThreadImpl(ClientUserInterface,Connection,SharedClientData)
+# void loginResponseAction(ChatPDU)
+# void loginEventAction(ChatPDU)
+# void logoutResponseAction(ChatPDU)
+# void logoutEventAction(ChatPDU)
+# void chatMessageResponseAction(ChatPDU)
+# void chatMessageEventAction(ChatPDU)
++ void run()
+}
+class edu.hm.dako.chatclient.ClientModel {
+- StringProperty userName
++ ObservableList<String> users
++ ObservableList<String> chats
++ BooleanProperty block
++ <<Create>> ClientModel()
++ StringProperty userNameProperty()
++ String getUserName()
++ void setUserName(String)
+}
+class edu.hm.dako.chatclient.LogInGUIController {
+- {static} Pattern IPV6_PATTERN
+- {static} Pattern IPV4_PATTERN
+- {static} Logger log
+- String userName
+- TextField txtUsername
+- TextField txtServername
+- TextField txtServerPort
+- ComboBox<String> comboServerType
+- Label lblIP
+- Label lblServerPort
+- ClientFxGUI appController
++ <<Create>> LogInGUIController()
++ void handleKeyPressed(KeyEvent)
++ void setAppController(ClientFxGUI)
++ void performLogin()
++ String getUserName()
++ void exitButtonReaction()
+- Boolean ipCorrect()
++ void initialize(URL,ResourceBundle)
+}
+abstract class edu.hm.dako.chatclient.AbstractMessageListenerThread {
+- {static} Logger LOG
+# boolean finished
+# Connection connection
+# ClientUserInterface userInterface
+# SharedClientData sharedClientData
++ <<Create>> AbstractMessageListenerThread(ClientUserInterface,Connection,SharedClientData)
+# void handleUserListEvent(ChatPDU)
+# ChatPDU receive()
+# {abstract}void chatMessageResponseAction(ChatPDU)
+# {abstract}void chatMessageEventAction(ChatPDU)
+# {abstract}void loginResponseAction(ChatPDU)
+# {abstract}void loginEventAction(ChatPDU)
+# {abstract}void logoutEventAction(ChatPDU)
+# {abstract}void logoutResponseAction(ChatPDU)
+}
+class edu.hm.dako.chatclient.LoggedInGUIController {
+- {static} Logger LOG
+- Button btnSubmit
+- TextField txtChatMessage
+- ListView<String> usersList
+- ListView<String> chatList
+- ScrollPane scrollPane
+- ScrollPane chatPane
+- ClientFxGUI appController
++ <<Create>> LoggedInGUIController()
++ void handleEnterPressed(KeyEvent)
++ void setAppController(ClientFxGUI)
++ void btnLogOut_OnAction()
++ void btnSubmit_OnAction()
+}
+class edu.hm.dako.chatclient.ClientFxGUI {
+- {static} Logger LOG
+- ClientModel model
+- Stage stage
+- ClientImpl communicator
++ <<Create>> ClientFxGUI()
++ {static} void main(String[])
++ void createCommunicator(String,int,String)
++ ClientImpl getCommunicator()
++ ClientModel getModel()
++ void start(Stage)
++ void createNextGui()
++ void switchToLogInGui()
++ void setUserList(Vector<String>)
++ void setMessageLine(String,String)
++ boolean getLock()
++ void setLock(boolean)
++ boolean isTestAborted()
++ void abortTest()
++ void releaseTest()
++ boolean isRunning()
++ long getLastServerTime()
++ void setLastServerTime(long)
++ void setSessionStatisticsCounter(long,long,long,long,long)
++ long getNumberOfSentEvents()
++ long getNumberOfReceivedConfirms()
++ long getNumberOfLostConfirms()
++ long getNumberOfRetries()
++ long getNumberOfReceivedChatMessages()
++ void setErrorMessage(String,String,long)
++ void loginComplete()
++ void logoutComplete()
+}
+class edu.hm.dako.chatclient.SharedClientData {
++ {static} AtomicInteger logoutEvents
++ {static} AtomicInteger loginEvents
++ {static} AtomicInteger messageEvents
++ String userName
++ ClientConversationStatus status
++ AtomicInteger messageCounter
++ AtomicInteger logoutCounter
++ AtomicInteger eventCounter
++ AtomicInteger confirmCounter
++ <<Create>> SharedClientData()
+}
+class edu.hm.dako.chatclient.ClientImpl {
++ <<Create>> ClientImpl(ClientUserInterface,int,String,String)
+}
+interface edu.hm.dako.chatclient.ClientCommunication {
+~ void login(String)
+~ void logout(String)
+~ void tell(String,String)
+~ void cancelConnection()
+~ boolean isLoggedOut()
+}
+abstract class edu.hm.dako.chatclient.AbstractChatClient {
+- {static} Logger LOG
+# String userName
+# String threadName
+# int localPort
+# int serverPort
+# String remoteServerAddress
+# ClientUserInterface userInterface
+# ConnectionFactory connectionFactory
+# Connection connection
+# SharedClientData sharedClientData
+# Thread messageListenerThread
++ <<Create>> AbstractChatClient(ClientUserInterface,int,String)
++ {static} ConnectionFactory getDecoratedFactory(ConnectionFactory)
++ void login(String)
++ void logout(String)
++ void tell(String,String)
++ void cancelConnection()
++ boolean isLoggedOut()
+}
+interface edu.hm.dako.chatclient.ClientUserInterface {
+~ void setUserList(Vector<String>)
+~ void setMessageLine(String,String)
+~ boolean getLock()
+~ void setLock(boolean)
+~ boolean isTestAborted()
+~ void abortTest()
+~ void releaseTest()
+~ boolean isRunning()
+~ long getLastServerTime()
+~ void setLastServerTime(long)
+~ void setSessionStatisticsCounter(long,long,long,long,long)
+~ long getNumberOfSentEvents()
+~ long getNumberOfReceivedConfirms()
+~ long getNumberOfLostConfirms()
+~ long getNumberOfRetries()
+~ long getNumberOfReceivedChatMessages()
+~ void setErrorMessage(String,String,long)
+~ void loginComplete()
+~ void logoutComplete()
+}
+class edu.hm.dako.chatclient.ClientStarter {
++ <<Create>> ClientStarter()
++ {static} void main(String[])
+}
+
+
+edu.hm.dako.chatclient.AbstractMessageListenerThread <|-- edu.hm.dako.chatclient.SimpleMessageListenerThreadImpl
+javafx.fxml.Initializable <|.. edu.hm.dako.chatclient.LogInGUIController
+edu.hm.dako.chatclient.Thread <|-- edu.hm.dako.chatclient.AbstractMessageListenerThread
+edu.hm.dako.chatclient.ClientUserInterface <|.. edu.hm.dako.chatclient.ClientFxGUI
+javafx.application.Application <|-- edu.hm.dako.chatclient.ClientFxGUI
+edu.hm.dako.chatclient.AbstractChatClient <|-- edu.hm.dako.chatclient.ClientImpl
+edu.hm.dako.chatclient.ClientCommunication <|.. edu.hm.dako.chatclient.AbstractChatClient
+@enduml
