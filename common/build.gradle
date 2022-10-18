@@ -1,6 +1,26 @@
+plugins {
+    id 'application'
+    id 'org.openjfx.javafxplugin' version '0.0.13'
+}
+
 jar.enabled = true
+
+javafx {
+    version = '18'
+    modules = ['javafx.controls', 'javafx.fxml']
+}
+
+sourceSets {
+    main {
+        resources {
+            srcDirs = ['src/main/java']
+            includes = ['**/*.fxml']
+        }
+    }
+}
 
 dependencies {
 
     implementation(group: 'org.apache.commons', name: 'commons-math3', version: '3.6.1')
+    implementation 'org.openjfx:javafx:19'
 }

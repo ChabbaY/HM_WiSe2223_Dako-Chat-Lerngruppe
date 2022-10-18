@@ -2,7 +2,7 @@ package edu.hm.dako.chatbenchmarking;
 
 import edu.hm.dako.common.ChatServerImplementationType;
 import edu.hm.dako.common.SystemConstants;
-import javafx.application.Application;
+import edu.hm.dako.common.graphics.FxGUI;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -10,18 +10,13 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.geometry.Insets;
-import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -34,8 +29,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.LoggerContext;
 
 import javax.swing.JProgressBar;
-import java.awt.Dimension;
-import java.awt.Toolkit;
 import java.io.File;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -50,101 +43,114 @@ import java.util.regex.Pattern;
  * @author Paul Mandl, edited by Lerngruppe
  */
 
-public class BenchmarkingClientFxGUI extends Application implements BenchmarkingClientUserInterface {
+public class BenchmarkingClientFxGUI extends FxGUI implements BenchmarkingClientUserInterface {
+    protected final static int MIN_SCREEN_SIZE = 900;
 
-    private final static int MIN_SCREEN_SIZE = 900;
-    // Patterns für die Prüfung der eingegebenen IP-Adressen
+    /**
+     * Patterns für die Prüfung der eingegebenen IP-Adressen
+     */
     private static final Pattern IPV6_PATTERN = Pattern
             .compile("^(?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}$");
     private static final Pattern IPV4_PATTERN = Pattern.compile(
             "(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)");
 
-    // Message Area erstellen
+    /**
+     * Message Area erstellen
+     */
     final Label messageArea = new Label();
 
-    // Buttons erstellen
-    final Button abortButton = new Button("Abbrechen");
-    final Button startButton = new Button("Starten");
-    final Button newButton = new Button("Neustart");
-    final Button finishButton = new Button("Beenden");
+    /**
+     * Buttons erstellen
+     */
+    final Button abortButton = new Button("Abbrechen"), startButton = new Button("Starten"),
+            newButton = new Button("Neustart"), finishButton = new Button("Beenden");
 
-    // Vbox für die Zusammensetzung der einzelnen Raster erstellen
-    final VBox pane = new VBox(5);
     final VBox box = new VBox();
+
     private final StringProperty labelString = new SimpleStringProperty();
-    // BenchmarkingClient
+
+    /**
+     * BenchmarkingClient
+     */
     BenchmarkingClientCoordinator benchClient;
-    //Bildschirmauflösung
-    Dimension dim;
-    // Eingabeparameter für GUI erzeugen
+
+    /**
+     * Eingabeparameter für GUI erzeugen
+     */
     final UserInterfaceInputParameters iParam = new UserInterfaceInputParameters();
-    // Auswahl für ComboBoxen
+
+    /**
+     * Auswahl für ComboBoxen
+     */
     final ObservableList<String> implTypeOptions = FXCollections.observableArrayList(
             SystemConstants.IMPL_TCP_SIMPLE, SystemConstants.IMPL_TCP_ADVANCED);
     final ObservableList<String> measureTypeOptions = FXCollections
             .observableArrayList("Variable Threads", "Variable Length");
-    // ComboBoxen
+
+    /**
+     * ComboBoxen
+     */
     private ComboBox<String> optionListImplType;
     private ComboBox<String> optionListMeasureType;
-    // Eingabefelder
-    private TextField textFieldNumberOfClientThreads;
-    private TextField textFieldNumberOfMessagesPerClients;
-    private TextField textFieldServerport;
-    private TextField textFieldThinkTime;
-    private TextField textFieldServerIpAddress;
-    private TextField textFieldMessageLength;
-    private TextField textFieldNumberOfMaxRetries;
-    private TextField textFieldResponseTimeout;
-    // Ausgabefelder für Laufzeitdaten
-    private TextField textFieldPlannedRequests;
-    private TextField textFieldTestBegin;
-    private TextField textFieldSentRequests;
-    private TextField textFieldTestEnd;
-    private TextField textFieldReceivedResponses;
-    private TextField textFieldTestDuration;
-    private TextField textFieldPlannedEventMessages;
-    private TextField textFieldSentEventMessages;
-    private TextField textFieldReceivedConfirmEvents;
-    private TextField textFieldLostConfirmEvents;
-    private TextField textFieldRetriedEvents;
-    private TextField textFieldNumberOfRetries;
-    // Ausgabefelder für Messergebnisse
-    private TextField textFieldAvgRTT;
-    private TextField textFieldAvgServerTime;
-    private TextField textFieldMaxRTT;
-    private TextField textFieldMaxHeapUsage;
-    private TextField textFieldMinRTT;
-    private TextField textFieldAvgCpuUsage;
-    // Statistische Ausgabefelder
-    private TextField textField10Percentile;
-    private TextField textField25Percentile;
-    private TextField textField50Percentile;
-    private TextField textField75Percentile;
-    private TextField textField90Percentile;
-    private TextField textFieldRange;
-    private TextField textFieldInterquartilRange;
-    private TextField textFieldStandardDeviation;
+
+    /**
+     * Eingabefelder
+     */
+    private TextField textFieldNumberOfClientThreads, textFieldNumberOfMessagesPerClients, textFieldServerport,
+            textFieldThinkTime, textFieldServerIpAddress, textFieldMessageLength, textFieldNumberOfMaxRetries,
+            textFieldResponseTimeout;
+
+    /**
+     * Ausgabefelder für Laufzeitdaten
+     */
+    private TextField textFieldPlannedRequests, textFieldTestBegin, textFieldSentRequests, textFieldTestEnd,
+            textFieldReceivedResponses, textFieldTestDuration, textFieldPlannedEventMessages,
+            textFieldSentEventMessages, textFieldReceivedConfirmEvents, textFieldLostConfirmEvents,
+            textFieldRetriedEvents, textFieldNumberOfRetries;
+
+    /**
+     * Ausgabefelder für Messergebnisse
+     */
+    private TextField textFieldAvgRTT, textFieldAvgServerTime, textFieldMaxRTT, textFieldMaxHeapUsage, textFieldMinRTT,
+            textFieldAvgCpuUsage;
+
+    /**
+     * Statistische Ausgabefelder
+     */
+    private TextField textField10Percentile, textField25Percentile, textField50Percentile, textField75Percentile,
+            textField90Percentile, textFieldRange, textFieldInterquartilRange, textFieldStandardDeviation;
+
+    /**
+     * Fortschrittsbalken
+     */
     private ProgressBar progressBarFx;
-    // Labels Eingabefelder
-    private Label implType;
-    private Label numberOfClientThreads;
-    private Label numberOfMessagesPerClients;
-    private Label serverport;
-    private Label thinkTime;
-    private Label serverIpAddress;
-    private Label messageLength;
-    private Label numberOfMaxRetries;
-    private Label responseTimeout;
-    // Scroller für Message Area
+
+    /**
+     * Labels Eingabefelder
+     */
+    private Label implType, numberOfClientThreads, numberOfMessagesPerClients, serverport, thinkTime, serverIpAddress,
+            messageLength, numberOfMaxRetries, responseTimeout;
+
+    /**
+     * Scroller für Message Area
+     */
     private ScrollPane scrollPane;
-    // Task für Progressbar
+
+    /**
+     * Task für Progressbar
+     */
     private Task<Boolean> task;
     private Label progressIndicator;
     private int progressCounter;
-    // Laufzeitzähler erzeugen
+
+    /**
+     * Laufzeitzähler erzeugen
+     */
     private Long timeCounter = 0L;
-    // Kennzeichen, ob alle Parameter ordnungsgemäß eingegeben wurden, um den
-    // Benchmark zu starten
+
+    /**
+     * Kennzeichen, ob alle Parameter ordnungsgemäß eingegeben wurden, um den Benchmark zu starten
+     */
     private boolean startable = true;
 
     /**
@@ -163,17 +169,23 @@ public class BenchmarkingClientFxGUI extends Application implements Benchmarking
      * Konstruktor
      */
     public BenchmarkingClientFxGUI() {
+        super("Benchmarking Client", 1150, 650);
     }
 
     /**
      * Startmethode für FX-Application
      */
     @Override
-    public void start(final Stage stage) {
-        // BorderPane für Layout erstellen
-        BorderPane layout = new BorderPane(pane);
-        BorderPane.setAlignment(pane, Pos.CENTER);
-        layout.setStyle("-fx-background-color: linear-gradient(from 0% 100% to 100% 0%, #16a34a, #60a5fa)");
+    public void start(final Stage stage) throws IllegalArgumentException {
+        super.start(stage);
+
+        // Window vergrößern, falls möglich
+        if (dim.getHeight() >= MIN_SCREEN_SIZE) {
+            stage.setMinWidth(1235);
+            stage.setMaxWidth(1235);
+            stage.setMinHeight(850);
+            stage.setMaxHeight(850);
+        }
 
         // Progressbar erzeugen
         progressBarFx = createProgressbar();
@@ -197,35 +209,28 @@ public class BenchmarkingClientFxGUI extends Application implements Benchmarking
         reactOnNewButton();
         reactOnFinishButton();
         reactOnAbortButton();
-
-        // Titel setzen und Window anzeigen
-        stage.setTitle("Benchmarking Client");
-        if (dim.getHeight() >= MIN_SCREEN_SIZE) {
-            stage.setScene(new Scene(layout, 1235, 850));
-        } else {
-            stage.setScene(new Scene(layout, 1150, 650));
-        }
-        stage.show();
     }
 
     /**
      * Pane für das Layout der GUI erzeugen
      */
     private void createGuiPane() {
-        dim = Toolkit.getDefaultToolkit().getScreenSize();
         scrollPane = createScrollPane();
 
-        pane.getChildren().add(createSeparator("Eingabeparameter"));
+        int fontSize = dim.getHeight() >= MIN_SCREEN_SIZE ? (18) : (12);
+
+        pane.getChildren().add(createHeader("Eingabeparameter", fontSize));
         pane.getChildren().add(createInputPane());
 
-        pane.getChildren().add(createSeparator("Laufzeitdaten"));
+        pane.getChildren().add(createHeader("Laufzeitdaten", fontSize));
         pane.getChildren().add(createRunTimePane());
 
-        pane.getChildren().add(createSeparator("Messergebnisse"));
+        pane.getChildren().add(createHeader("Messergebnisse", fontSize));
         pane.getChildren().add(createResultPane());
         pane.getChildren().add(scrollPane);
         pane.getChildren().add(createProgressPane());
-        pane.getChildren().add(createSeparator(""));
+
+        pane.getChildren().add(createHeader("", fontSize));
         pane.getChildren().add(createButtonPane());
 
         pane.setPadding(new Insets(5, 5, 5, 5));
@@ -237,7 +242,6 @@ public class BenchmarkingClientFxGUI extends Application implements Benchmarking
      * @return inputPane
      */
     private Pane createInputPane() {
-
         final GridPane inputPane = new GridPane();
 
         optionListImplType = createComboBox(implTypeOptions);
@@ -265,7 +269,7 @@ public class BenchmarkingClientFxGUI extends Application implements Benchmarking
         inputPane.add(numberOfMaxRetries, 1, 7);
         textFieldNumberOfMaxRetries = createEditableTextField(inputPane, 3, 7, "1");
 
-        messageLength = createLabel("Nachrichtenlänge in Byte");
+        messageLength = createLabel("Nachrichtenl\u00e4nge in Byte");
         inputPane.add(messageLength, 5, 3);
         textFieldMessageLength = createEditableTextField(inputPane, 7, 3, "10");
 
@@ -295,7 +299,7 @@ public class BenchmarkingClientFxGUI extends Application implements Benchmarking
      */
     private Pane fillPane(GridPane inputPane) {
         if (dim.getHeight() >= MIN_SCREEN_SIZE) {
-            inputPane.add(createLabel(""), 1, 9);
+            inputPane.add(createLabel("", 230, 20, 13), 1, 9);
             // Abstände hinzufügen
             inputPane.setHgap(5);
             inputPane.setVgap(3);
@@ -351,7 +355,7 @@ public class BenchmarkingClientFxGUI extends Application implements Benchmarking
         runTimePane.add(createLabel("Verlorene Confirm-Nachrichten"), 5, 7);
         textFieldLostConfirmEvents = createNotEditableTextField(runTimePane, 7, 7);
 
-        runTimePane.add(createLabel("Anzahl Übertragungswiederholungen"), 9, 7);
+        runTimePane.add(createLabel("Anzahl \u00dcbertragungswiederholungen"), 9, 7);
         textFieldNumberOfRetries = createNotEditableTextField(runTimePane, 11, 7);
 
         return fillPane(runTimePane);
@@ -409,7 +413,7 @@ public class BenchmarkingClientFxGUI extends Application implements Benchmarking
         textFieldAvgCpuUsage = createNotEditableTextField(resultPane, 11, 11);
 
         if (dim.getHeight() >= MIN_SCREEN_SIZE) {
-            resultPane.add(createLabel(""), 1, 13);
+            resultPane.add(createLabel("", 230, 20, 13), 1, 13);
             // Abstände hinzufügen
             resultPane.setHgap(5);
             resultPane.setVgap(3);
@@ -470,137 +474,6 @@ public class BenchmarkingClientFxGUI extends Application implements Benchmarking
         progressIndicator.setAlignment(Pos.CENTER);
         pane.setAlignment(Pos.CENTER);
         return pane;
-    }
-
-    /**
-     * Label erstellen
-     * @param value Wert des Labels
-     * @return label Referenz auf erzeugtes Label
-     */
-    private Label createLabel(String value) {
-        Label label = new Label(value);
-
-        if (dim.getHeight() >= MIN_SCREEN_SIZE) {
-            label.setMinSize(230, 20);
-            label.setMaxSize(230, 20);
-            label.setFont(Font.font(13));
-        } else {
-            label.setMinSize(190, 20);
-            label.setMaxSize(190, 20);
-            label.setFont(Font.font(10));
-        }
-        label.setAlignment(Pos.BASELINE_RIGHT);
-        return label;
-    }
-
-    /**
-     * Erstellung einer Progressbar
-     * @return Progressbar
-     */
-    private ProgressBar createProgressbar() {
-        final ProgressBar progressBar = new ProgressBar(0);
-
-        progressBar.setStyle(
-                "-fx-background-color: white; -fx-border-color: lightgrey; -fx-border-radius: 50px, 50px, 50px, 50px;" +
-                        "-fx-accent: green;");
-        return progressBar;
-    }
-
-    /**
-     * Erstellung nicht editierbarer Textfelder
-     * @param pane Zu bearbeitende Pane (Fensterteil)
-     * @param columnIndex Spaltenindex
-     * @param rowIndex Zeilenindex
-     * @return textField Referenz auf erzeugtes Textfeld
-     */
-    private TextField createNotEditableTextField(GridPane pane, int columnIndex, int rowIndex) {
-        final TextField textField = new TextField();
-        pane.add(textField, columnIndex, rowIndex);
-        textField.setMaxSize(155, 28);
-        textField.setMinSize(155, 28);
-        textField.setEditable(false);
-        if (dim.getHeight() >= MIN_SCREEN_SIZE) {
-            textField.setStyle(
-                    "-fx-background-color: white; -fx-border-color: lightgrey; -fx-border-radius: 5px, 5px, 5px, 5px");
-        } else {
-            textField.setStyle(
-                    "-fx-background-color: white; -fx-border-color: lightgrey; -fx-border-radius: 5px, 5px, 5px, 5px;" +
-                            "-fx-font-size: 10px");
-        }
-        return textField;
-    }
-
-    /**
-     * Erstellung editierbarer Textfelder
-     * @param pane Zu bearbeitende Pane (Fensterteil)
-     * @param columnIndex Spaltenindex
-     * @param rowIndex Zeilenindex
-     * @return textField Referenz auf erzeugtes Textfeld
-     */
-    private TextField createEditableTextField(GridPane pane, int columnIndex, int rowIndex, String value) {
-        final TextField textField = new TextField(value);
-        pane.add(textField, columnIndex, rowIndex);
-        textField.setMaxSize(155, 28);
-        textField.setMinSize(155, 28);
-        textField.setEditable(true);
-        if (dim.getHeight() >= MIN_SCREEN_SIZE) {
-            textField.setStyle(
-                    "-fx-background-color: white; -fx-border-color: lightgrey; -fx-border-radius: 5px, 5px, 5px, 5px");
-        } else {
-            textField.setStyle(
-                    "-fx-background-color: white; -fx-border-color: lightgrey; -fx-border-radius: 5px, 5px, 5px, 5px;" +
-                            "-fx-font-size: 10px");
-        }
-        return textField;
-    }
-
-    /**
-     * Erstellung eines Separators mit einem Label
-     * @param value Wert für den Separator
-     * @return labeledSeparator
-     */
-    private HBox createSeparator(String value) {
-        // Separator erstellen
-        final HBox labeledSeparator = new HBox();
-        final Separator rightSeparator = new Separator(Orientation.HORIZONTAL);
-        final Label textOnSeparator = new Label(value);
-        final double labelLength;
-        if (dim.getHeight() >= MIN_SCREEN_SIZE) {
-            textOnSeparator.setFont(Font.font(18));
-            labelLength = value.length();
-            rightSeparator.setMinWidth(1220 - labelLength * 10);
-            rightSeparator.setMaxWidth(1220 - labelLength * 10);
-        } else {
-            labelLength = value.length();
-            textOnSeparator.setFont(Font.font(12));
-            rightSeparator.setMinWidth(1050 - labelLength * 10);
-            rightSeparator.setMaxWidth(1050 - labelLength * 10);
-        }
-
-        labeledSeparator.getChildren().add(textOnSeparator);
-        labeledSeparator.getChildren().add(rightSeparator);
-        labeledSeparator.setAlignment(Pos.CENTER);
-        return labeledSeparator;
-    }
-
-    /**
-     * Erstellung von ComboBoxen
-     * @param options ComboBox-Optionen
-     * @return comboBox Referenz auf erzeugte ComboBox
-     */
-    private ComboBox<String> createComboBox(ObservableList<String> options) {
-        ComboBox<String> comboBox = new ComboBox<>(options);
-        comboBox.setMinSize(155, 28);
-        comboBox.setMaxSize(155, 28);
-        if (dim.getHeight() >= MIN_SCREEN_SIZE) {
-            comboBox.setStyle(
-                    "-fx-background-color: white; -fx-border-color: lightgrey; -fx-border-radius: 5px, 5px, 5px, 5px;");
-        } else {
-            comboBox.setStyle(
-                    "-fx-background-color: white; -fx-border-color: lightgrey; -fx-border-radius: 5px, 5px, 5px, 5px;" +
-                            "-fx-font-size: 10px;");
-        }
-        return comboBox;
     }
 
     /**
@@ -700,8 +573,7 @@ public class BenchmarkingClientFxGUI extends Application implements Benchmarking
     private synchronized void reactOnFinishButton() {
         finishButton.setOnAction(event -> {
             setMessageLine("Programm wird beendet...");
-            Platform.exit();
-            //System.exit(0);
+            super.exit();
         });
     }
 
@@ -757,8 +629,7 @@ public class BenchmarkingClientFxGUI extends Application implements Benchmarking
         if (testString.matches("[0-9]+")) {
             int iServerPort = Integer.parseInt(textFieldServerport.getText());
             if ((iServerPort < 1) || (iServerPort > 65535)) {
-                // Nicht im Wertebereich
-                // Aktualisieren des Frames auf dem Bildschirm
+                // Nicht im Wertebereich; Aktualisieren des Frames auf dem Bildschirm
                 startable = false;
                 serverport.setTextFill(Color.web(SystemConstants.RED_COLOR));
             } else {
@@ -778,8 +649,7 @@ public class BenchmarkingClientFxGUI extends Application implements Benchmarking
     private void setThinkTime() {
         String testString2 = textFieldThinkTime.getText();
         if (!testString2.matches("[0-9]+")) {
-            // Nicht numerisch
-            // Aktualisieren des Frames auf dem Bildschirm
+            // Nicht numerisch; Aktualisieren des Frames auf dem Bildschirm
             startable = false;
             thinkTime.setTextFill(Color.web(SystemConstants.RED_COLOR));
         } else {
@@ -798,8 +668,7 @@ public class BenchmarkingClientFxGUI extends Application implements Benchmarking
         if (testString3.matches("[0-9]+")) {
             int iClientThreads = Integer.parseInt(textFieldNumberOfClientThreads.getText());
             if (iClientThreads < 1 || iClientThreads > BenchmarkingConstants.MAX_CLIENTS) {
-                // Nicht im Wertebereich
-                // Aktualisieren des Frames auf dem Bildschirm
+                // Nicht im Wertebereich; Aktualisieren des Frames auf dem Bildschirm
                 startable = false;
                 numberOfClientThreads.setTextFill(Color.web(SystemConstants.RED_COLOR));
             } else {
@@ -822,8 +691,7 @@ public class BenchmarkingClientFxGUI extends Application implements Benchmarking
             int iNumberOfMessages = Integer.parseInt(textFieldNumberOfMessagesPerClients.getText());
             if (iNumberOfMessages < 1
                     || iNumberOfMessages > BenchmarkingConstants.MAX_MESSAGES_PER_CLIENT) {
-                // nicht numerisch
-                // Aktualisieren des Frames auf dem Bildschirm
+                // nicht numerisch; Aktualisieren des Frames auf dem Bildschirm
                 startable = false;
                 numberOfMessagesPerClients.setTextFill(Color.web(SystemConstants.RED_COLOR));
             } else {
@@ -846,8 +714,7 @@ public class BenchmarkingClientFxGUI extends Application implements Benchmarking
             int iMessageLength = Integer.parseInt(textFieldMessageLength.getText());
             if ((iMessageLength < 1)
                     || (iMessageLength > BenchmarkingConstants.MAX_MESSAGE_LENGTH)) {
-                // nicht im Wertebereich
-                // Aktualisieren des Frames auf dem Bildschirm
+                // nicht im Wertebereich; Aktualisieren des Frames auf dem Bildschirm
                 startable = false;
                 messageLength.setTextFill(Color.web(SystemConstants.RED_COLOR));
             } else {
@@ -867,8 +734,7 @@ public class BenchmarkingClientFxGUI extends Application implements Benchmarking
     private void setResponseTimeOut() {
         String testString6 = textFieldResponseTimeout.getText();
         if (!testString6.matches("[0-9]+")) {
-            // nicht numerisch
-            // Aktualisieren des Frames auf dem Bildschirm
+            // nicht numerisch; Aktualisieren des Frames auf dem Bildschirm
             startable = false;
             responseTimeout.setTextFill(Color.web(SystemConstants.RED_COLOR));
         } else {
@@ -887,8 +753,7 @@ public class BenchmarkingClientFxGUI extends Application implements Benchmarking
         if (testString7.matches("[0-9]+")) {
             int iNumberOfMaxRetries = Integer.parseInt(textFieldNumberOfMaxRetries.getText());
             if (iNumberOfMaxRetries > 5000) {
-                // nicht im Wertebereich
-                // Aktualisieren des Frames auf dem Bildschirm
+                // nicht im Wertebereich; Aktualisieren des Frames auf dem Bildschirm
                 startable = false;
                 numberOfMaxRetries.setTextFill(Color.web(SystemConstants.RED_COLOR));
             } else {
@@ -897,8 +762,7 @@ public class BenchmarkingClientFxGUI extends Application implements Benchmarking
                 numberOfMaxRetries.setTextFill(Color.web(SystemConstants.BLACK_COLOR));
             }
         } else {
-            // nicht numerisch
-            // Aktualisieren des Frames auf dem Bildschirm
+            // nicht numerisch; Aktualisieren des Frames auf dem Bildschirm
             startable = false;
             numberOfMaxRetries.setTextFill(Color.web(SystemConstants.RED_COLOR));
         }
@@ -968,19 +832,6 @@ public class BenchmarkingClientFxGUI extends Application implements Benchmarking
             setAlert("Art der Messung nicht festgelegt!");
             startable = false;
         }
-    }
-
-    /**
-     * Öffnen eines Dialogfensters, wenn ein Fehler bei der Eingabe auftritt
-     * @param message Meldung für Dialogfenster
-     */
-    private void setAlert(String message) {
-        Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setTitle("Fehler!");
-        alert.setHeaderText("Bei den von ihnen eingegebenen Parametern ist ein Fehler aufgetreten:");
-        alert.setContentText(message);
-        alert.setResizable(true);
-        Platform.runLater(alert::showAndWait);
     }
 
     /**
@@ -1203,5 +1054,45 @@ public class BenchmarkingClientFxGUI extends Application implements Benchmarking
     @Override
     public JProgressBar getProgressBar() {
         return null;
+    }
+
+    @Override
+    protected ComboBox<String> createComboBox(ObservableList<String> options) {
+        ComboBox<String> comboBox = super.createComboBox(options);
+        if (dim.getHeight() >= MIN_SCREEN_SIZE) {
+            comboBox.setStyle("-fx-font-size: 10px;");
+        }
+
+        return comboBox;
+    }
+    @Override
+    protected TextField createEditableTextField(GridPane pane, int columnIndex, int rowIndex, String value) {
+        final TextField textField = super.createEditableTextField(pane, columnIndex, rowIndex, value);
+        if (dim.getHeight() >= MIN_SCREEN_SIZE) {
+            textField.setStyle("-fx-font-size: 10px;");
+        }
+
+        return textField;
+    }
+    @Override
+    protected Label createLabel(String value) {
+        int labelWidth = dim.getHeight() >= MIN_SCREEN_SIZE ? (230) : (190);
+        int fontSize = dim.getHeight() >= MIN_SCREEN_SIZE ? (13) : (10);
+        return createLabel(value, labelWidth, 20, fontSize);
+    }
+    @Override
+    protected Label createLabel(String value, int width, int height, int fontSize) {
+        Label label = super.createLabel(value, width, height, fontSize);
+        label.setAlignment(Pos.BASELINE_RIGHT);
+        return label;
+    }
+    @Override
+    protected TextField createNotEditableTextField(GridPane pane, int columnIndex, int rowIndex) {
+        final TextField textField = super.createNotEditableTextField(pane, columnIndex, rowIndex);
+        if (dim.getHeight() >= MIN_SCREEN_SIZE) {
+            textField.setStyle("-fx-font-size: 10px;");
+        }
+
+        return textField;
     }
 }

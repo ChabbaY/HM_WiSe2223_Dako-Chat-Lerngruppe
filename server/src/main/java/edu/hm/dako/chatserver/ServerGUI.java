@@ -4,26 +4,20 @@ import edu.hm.dako.common.AuditLogImplementationType;
 import edu.hm.dako.common.ChatServerImplementationType;
 import edu.hm.dako.common.ExceptionHandler;
 import edu.hm.dako.common.SystemConstants;
-import javafx.application.Application;
+import edu.hm.dako.common.graphics.FxGUI;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
-import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -40,64 +34,74 @@ import java.util.concurrent.atomic.AtomicInteger;
  *
  * @author Peter Mandl, edited by Lerngruppe
  */
-public class ServerGUI extends Application implements ServerGUIInterface {
-    // Standard-Port des Servers
+public class ServerGUI extends FxGUI implements ServerGUIInterface {
+    /**
+     * Standard-Port des Servers
+     */
     static final String DEFAULT_SERVER_PORT = "50001";
 
+    /**
+     * referencing the logger
+     */
     private static final Logger LOG = LogManager.getLogger(ServerGUI.class);
 
-    // Interface der Chat-Server-Implementierung
+    /**
+     * Interface der Chat-Server-Implementierung
+     */
     private static ServerInterface chatServer;
 
-    // Zähler für die eingeloggten Clients und die empfangenen Request
-    private static AtomicInteger loggedInClientCounter;
-    private static AtomicInteger requestCounter;
+    /**
+     * Zähler für die eingeloggten Clients und die empfangenen Request
+     */
+    private static AtomicInteger loggedInClientCounter, requestCounter;
 
-    // Daten, die beim Start der GUI übergeben werden
+    /**
+     * Daten, die beim Start der GUI übergeben werden
+     */
     private final ServerStartData data = new ServerStartData();
 
-    // Mögliche Belegungen des Implementierungsfeldes in der GUI
+    /**
+     * Mögliche Belegungen des Implementierungsfeldes in der GUI
+     */
     final ObservableList<String> implTypeOptions = FXCollections.observableArrayList(
             SystemConstants.IMPL_TCP_SIMPLE, SystemConstants.IMPL_TCP_ADVANCED);
     final ObservableList<String> auditLogServerImplTypeOptions = FXCollections.observableArrayList(
             SystemConstants.AUDIT_LOG_SERVER_TCP_IMPL, SystemConstants.AUDIT_LOG_SERVER_UDP_IMPL,
             SystemConstants.AUDIT_LOG_SERVER_RMI_IMPL);
 
-    // Server-Startzeit als String
+    /**
+     * Server-Startzeit als String
+     */
     private String startTimeAsString;
 
-    // Kalender zur Umrechnung der Startzeit
+    /**
+     * Kalender zur Umrechnung der Startzeit
+     */
     private Calendar cal;
 
-    // Flag, das angibt, ob der Server gestartet werden kann (alle
-    // Plausibilitätsprüfungen erfüllt)
+    /**
+     * Flag, das angibt, ob der Server gestartet werden kann (alle Plausibilitätsprüfungen erfüllt)
+     */
     private boolean startable = true;
 
-    // ComboBox für Eingabe des Implementierungstyps
+    /**
+     * ComboBox für Eingabe des Implementierungstyps
+     */
     private ComboBox<String> comboBoxImplType;
 
-    // ComboBox für AuditLogServer-Implementierung
+    /**
+     * ComboBox für AuditLogServer-Implementierung
+     */
     private ComboBox<String> comboBoxAuditLogServerType;
 
-    // Testfelder, Buttons und Labels der ServerGUI
-
-    private final VBox pane = new VBox(5);
-    private TextField serverPort;
-    private TextField sendBufferSize;
-    private TextField receiveBufferSize;
-    private TextField auditLogServerHostnameOrIp;
-    private TextField auditLogServerPort;
-    private Label serverPortLabel;
-    private Label sendBufferSizeLabel;
-    private Label receiveBufferSizeLabel;
-    private Label auditLogServerPortLabel;
+    /**
+     * Testfelder, Buttons und Labels der ServerGUI
+     */
+    private TextField serverPort, sendBufferSize, receiveBufferSize, auditLogServerHostnameOrIp, auditLogServerPort;
+    private Label serverPortLabel, sendBufferSizeLabel, receiveBufferSizeLabel, auditLogServerPortLabel;
     private CheckBox enableAuditLogServerCheckbox;
-    private Button startButton;
-    private Button stopButton;
-    private Button finishButton;
-    private final TextField startTimeField;
-    private final TextField receivedRequests;
-    private final TextField loggedInClients;
+    private Button startButton, stopButton, finishButton;
+    private final TextField startTimeField, receivedRequests, loggedInClients;
 
     /**
      * Benutzeroberfläche zum Starten des Chat-Servers
@@ -105,7 +109,6 @@ public class ServerGUI extends Application implements ServerGUIInterface {
      * @param args currently ignored
      */
     public static void main(String[] args) {//TODO parametrize
-
         // Log4j2-Logging aus Datei konfigurieren
         LoggerContext context = (LoggerContext) LogManager.getContext(false);
         File file = new File("config/log4j/log4j2.chatServer.xml");
@@ -119,6 +122,8 @@ public class ServerGUI extends Application implements ServerGUIInterface {
      * Konstruktion der ServerGUI
      */
     public ServerGUI() {
+        super("ChatServerGUI", 400, 540);
+
         loggedInClientCounter = new AtomicInteger(0);
         requestCounter = new AtomicInteger(0);
         startTimeField = createNotEditableTextField();
@@ -127,10 +132,8 @@ public class ServerGUI extends Application implements ServerGUIInterface {
     }
 
     @Override
-    public void start(final Stage stage) {
-        stage.setTitle("ChatServerGUI");
-        stage.setScene(new Scene(pane, 400, 540));
-        stage.show();
+    public void start(final Stage stage) throws IllegalArgumentException {
+        super.start(stage);
 
         stage.setOnCloseRequest(event -> {
             try {
@@ -141,20 +144,17 @@ public class ServerGUI extends Application implements ServerGUIInterface {
             }
         });
 
-        pane.setStyle("-fx-background-color: linear-gradient(from 0% 100% to 100% 0%, #16a34a, #60a5fa)");
         pane.setPadding(new Insets(10, 10, 10, 10));
 
-        Label label_eingabe = createLabel("Eingabe");
-        label_eingabe.setStyle("-fx-font-weight: bold");
+        HBox label_eingabe = createHeader("Eingabe");
         pane.getChildren().add(label_eingabe);
         pane.getChildren().add(createInputPane());
 
-        Label label_informationen = createLabel("Informationen");
-        label_informationen.setStyle("-fx-font-weight: bold");
+        HBox label_informationen = createHeader("Informationen");
         pane.getChildren().add(label_informationen);
         pane.getChildren().add(createInfoPane());
 
-        pane.getChildren().add(createSeparator("", 360));
+        pane.getChildren().add(createHeader(""));
         pane.getChildren().add(createButtonPane());
 
         reactOnStartButton();
@@ -171,7 +171,7 @@ public class ServerGUI extends Application implements ServerGUIInterface {
     private GridPane createInputPane() {
         final GridPane inputPane = new GridPane();
 
-        final Label label = new Label("Serverauswahl");
+        final Label label = createLabel("Serverauswahl");
         label.setMinSize(100, 25);
         label.setMaxSize(100, 25);
         Label auditLogServerHostnameOrIpLabel = createLabel("AuditLogServer Hostname/IP-Adr.");
@@ -280,42 +280,13 @@ public class ServerGUI extends Application implements ServerGUIInterface {
     }
 
     /**
-     * Label erzeugen
-     *
-     * @param value Wert für das Label
-     * @return Label Referenz auf das Label
-     */
-    private Label createLabel(String value) {
-        final Label label = new Label(value);
-        label.setMinSize(200, 25);
-        label.setMaxSize(200, 25);
-        return label;
-    }
-
-    /**
      * Aufbau der ComboBox für die Serverauswahl in der GUI
      *
      * @param options Optionen für Implementierungstyp
      * @return ComboBox
      */
     private ComboBox<String> createImplTypeComboBox(ObservableList<String> options) {
-        return getStringComboBox(options);
-    }
-
-    /**
-     * Aufbau der ComboBox für Strings in der GUI
-     *
-     * @param options Optionen für String
-     * @return ComboBox
-     */
-    private ComboBox<String> getStringComboBox(ObservableList<String> options) {
-        ComboBox<String> comboBox = new ComboBox<>(options);
-        comboBox.setMinSize(155, 28);
-        comboBox.setMaxSize(155, 28);
-        comboBox.setValue(options.get(0));
-        comboBox.setStyle(
-                "-fx-background-color: white; -fx-border-color: lightgrey; -fx-border-radius: 5px, 5px, 5px, 5px");
-        return comboBox;
+        return createComboBox(options);
     }
 
     /**
@@ -325,65 +296,8 @@ public class ServerGUI extends Application implements ServerGUIInterface {
      * @return ComboBox
      */
     private ComboBox<String> createAuditLogTypeComboBox(ObservableList<String> options) {
-        return getStringComboBox(options);
+        return createComboBox(options);
     }
-
-    /**
-     * Trennlinie erstellen
-     *
-     * @param value Text der Trennlinie
-     * @param size  Größe der Trennlinie
-     * @return Trennlinie
-     */
-    private HBox createSeparator(String value, int size) {
-        // Separator erstellen
-        final HBox labeledSeparator = new HBox();
-        final Separator rightSeparator = new Separator(Orientation.HORIZONTAL);
-        final Label textOnSeparator = new Label(value);
-
-        textOnSeparator.setFont(Font.font(12));
-
-        rightSeparator.setMinWidth(size);
-        rightSeparator.setMaxWidth(size);
-
-        labeledSeparator.getChildren().add(textOnSeparator);
-        labeledSeparator.getChildren().add(rightSeparator);
-        labeledSeparator.setAlignment(Pos.BASELINE_LEFT);
-
-        return labeledSeparator;
-    }
-
-    /**
-     * Nicht editierbares Feld erzeugen
-     *
-     * @return Textfeld
-     */
-    private TextField createNotEditableTextField() {
-        TextField textField = new TextField("");
-        textField.setMaxSize(155, 28);
-        textField.setMinSize(155, 28);
-        textField.setEditable(false);
-        textField.setStyle(
-                "-fx-background-color: white; -fx-border-color: lightgrey; -fx-border-radius: 5px, 5px, 5px, 5px");
-        return textField;
-    }
-
-    /**
-     * Erstellung editierbarer Textfelder
-     *
-     * @param value Feldinhalt
-     * @return textField
-     */
-    private TextField createEditableTextField(String value) {
-        TextField textField = new TextField(value);
-        textField.setMaxSize(155, 28);
-        textField.setMinSize(155, 28);
-        textField.setEditable(true);
-        textField.setStyle(
-                "-fx-background-color: white; -fx-border-color: lightgrey; -fx-border-radius: 5px, 5px, 5px, 5px");
-        return textField;
-    }
-
 
     /**
      * Reaktion auf das Betätigen des Start-Buttons
@@ -413,8 +327,7 @@ public class ServerGUI extends Application implements ServerGUIInterface {
             }
 
             if (startable) {
-                // Implementierungstyp, der zu starten ist, ermitteln und
-                // Chat-Server starten
+                // Implementierungstyp, der zu starten ist, ermitteln und Chat-Server starten
                 String implType = readImplTypeComboBox();
 
                 if (enableAuditLogServerCheckbox.isSelected()) {
@@ -502,7 +415,7 @@ public class ServerGUI extends Application implements ServerGUIInterface {
                 LOG.debug("Fehler beim Stoppen des Chat-Servers, Chat-Server eventuell noch gar nicht aktiv");
             }
             System.out.println("ChatServer-GUI ordnungsgemäß beendet");
-            Platform.exit();
+            super.exit();
         });
     }
 
@@ -748,21 +661,6 @@ public class ServerGUI extends Application implements ServerGUIInterface {
             LOG.debug("runLater: Received Requests: " + requestCounter.get());
             receivedRequests.setText(String.valueOf(requestCounter.get()));
         });
-    }
-
-    /**
-     * Öffnen eines Dialogfensters, wenn ein Fehler bei der Eingabe auftritt
-     *
-     * @param message Meldung für Bildschirmanzeige
-     */
-    private void setAlert(String message) {
-        Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setTitle("Fehler!");
-        alert.setHeaderText(
-                "Bei den von ihnen eingegebenen Parametern ist ein Fehler aufgetreten:");
-        alert.setContentText(message);
-        alert.setResizable(true);
-        Platform.runLater(alert::showAndWait);
     }
 
     @Override
