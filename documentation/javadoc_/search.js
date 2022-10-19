@@ -23,35 +23,35 @@
  * questions.
  */
 
-var noResult = {l: "No results found"};
-var loading = {l: "Loading search index..."};
-var catModules = "Modules";
-var catPackages = "Packages";
-var catTypes = "Classes and Interfaces";
-var catMembers = "Members";
-var catSearchTags = "Search Tags";
-var highlight = "<span class=\"result-highlight\">$&</span>";
-var searchPattern = "";
-var fallbackPattern = "";
-var RANKING_THRESHOLD = 2;
-var NO_MATCH = 0xffff;
-var MIN_RESULTS = 3;
-var MAX_RESULTS = 500;
-var UNNAMED = "<Unnamed>";
+let noResult = {l: "No results found"};
+let loading = {l: "Loading search index..."};
+let catModules = "Modules";
+let catPackages = "Packages";
+let catTypes = "Classes and Interfaces";
+let catMembers = "Members";
+let catSearchTags = "Search Tags";
+let highlight = "<span class=\"result-highlight\">$&</span>";
+let searchPattern = "";
+let fallbackPattern = "";
+let RANKING_THRESHOLD = 2;
+let NO_MATCH = 0xffff;
+let MIN_RESULTS = 3;
+let MAX_RESULTS = 500;
+let UNNAMED = "<Unnamed>";
 function escapeHtml(str) {
     return str.replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
 function getHighlightedText(item, matcher, fallbackMatcher) {
-    var escapedItem = escapeHtml(item);
-    var highlighted = escapedItem.replace(matcher, highlight);
+    let escapedItem = escapeHtml(item);
+    let highlighted = escapedItem.replace(matcher, highlight);
     if (highlighted === escapedItem) {
         highlighted = escapedItem.replace(fallbackMatcher, highlight)
     }
     return highlighted;
 }
 function getURLPrefix(ui) {
-    var urlPrefix="";
-    var slash = "/";
+    let urlPrefix="";
+    let slash = "/";
     if (ui.item.category === catModules) {
         return ui.item.l + slash;
     } else if (ui.item.category === catPackages && ui.item.m) {
@@ -70,16 +70,16 @@ function getURLPrefix(ui) {
     return urlPrefix;
 }
 function createSearchPattern(term) {
-    var pattern = "";
-    var isWordToken = false;
+    let pattern = "";
+    let isWordToken = false;
     term.replace(/,\s*/g, ", ").trim().split(/\s+/).forEach(function(w, index) {
         if (index > 0) {
             // whitespace between identifiers is significant
             pattern += (isWordToken && /^\w/.test(w)) ? "\\s+" : "\\s*";
         }
-        var tokens = w.split(/(?=[A-Z,.()<>[\/])/);
-        for (var i = 0; i < tokens.length; i++) {
-            var s = tokens[i];
+        let tokens = w.split(/(?=[A-Z,.()<>[\/])/);
+        for (let i = 0; i < tokens.length; i++) {
+            let s = tokens[i];
             if (s === "") {
                 continue;
             }
@@ -93,12 +93,12 @@ function createSearchPattern(term) {
     return pattern;
 }
 function createMatcher(pattern, flags) {
-    var isCamelCase = /[A-Z]/.test(pattern);
+    let isCamelCase = /[A-Z]/.test(pattern);
     return new RegExp(pattern, flags + (isCamelCase ? "" : "i"));
 }
 $(function() {
-    var search = $("#search-input");
-    var reset = $("#reset-button");
+    let search = $("#search-input");
+    let reset = $("#reset-button");
     search.val('');
     search.prop("disabled", false);
     reset.prop("disabled", false);
@@ -113,11 +113,11 @@ $.widget("custom.catcomplete", $.ui.autocomplete, {
         this.widget().menu("option", "items", "> :not(.ui-autocomplete-category)");
     },
     _renderMenu: function(ul, items) {
-        var rMenu = this;
-        var currentCategory = "";
+        let rMenu = this;
+        let currentCategory = "";
         rMenu.menu.bindings = $();
         $.each(items, function(index, item) {
-            var li;
+            let li;
             if (item.category && item.category !== currentCategory) {
                 ul.append("<li class=\"ui-autocomplete-category\">" + item.category + "</li>");
                 currentCategory = item.category;
@@ -133,9 +133,9 @@ $.widget("custom.catcomplete", $.ui.autocomplete, {
         });
     },
     _renderItem: function(ul, item) {
-        var label = "";
-        var matcher = createMatcher(escapeHtml(searchPattern), "g");
-        var fallbackMatcher = new RegExp(fallbackPattern, "gi")
+        let label;
+        let matcher = createMatcher(escapeHtml(searchPattern), "g");
+        let fallbackMatcher = new RegExp(fallbackPattern, "gi")
         if (item.category === catModules) {
             label = getHighlightedText(item.l, matcher, fallbackMatcher);
         } else if (item.category === catPackages) {
@@ -153,8 +153,8 @@ $.widget("custom.catcomplete", $.ui.autocomplete, {
         } else {
             label = item.l;
         }
-        var li = $("<li/>").appendTo(ul);
-        var div = $("<div/>").appendTo(li);
+        let li = $("<li/>").appendTo(ul);
+        let div = $("<div/>").appendTo(li);
         if (item.category === catSearchTags && item.h) {
             if (item.d) {
                 div.html(label + "<span class=\"search-tag-holder-result\"> (" + item.h + ")</span><br><span class=\"search-tag-desc-result\">"
@@ -176,30 +176,30 @@ function rankMatch(match, category) {
     if (!match) {
         return NO_MATCH;
     }
-    var index = match.index;
-    var input = match.input;
-    var leftBoundaryMatch = 2;
-    var periferalMatch = 0;
+    let index = match.index;
+    let input = match.input;
+    let leftBoundaryMatch = 2;
+    let peripheralMatch = 0;
     // make sure match is anchored on a left word boundary
     if (index === 0 || /\W/.test(input[index - 1]) || "_" === input[index]) {
         leftBoundaryMatch = 0;
     } else if ("_" === input[index - 1] || (input[index] === input[index].toUpperCase() && !/^[A-Z0-9_$]+$/.test(input))) {
         leftBoundaryMatch = 1;
     }
-    var matchEnd = index + match[0].length;
-    var leftParen = input.indexOf("(");
-    var endOfName = leftParen > -1 ? leftParen : input.length;
+    let matchEnd = index + match[0].length;
+    let leftParen = input.indexOf("(");
+    let endOfName = leftParen > -1 ? leftParen : input.length;
     // exclude peripheral matches
     if (category !== catModules && category !== catSearchTags) {
-        var delim = category === catPackages ? "/" : ".";
+        let delim = category === catPackages ? "/" : ".";
         if (leftParen > -1 && leftParen < index) {
-            periferalMatch += 2;
+            peripheralMatch += 2;
         } else if (input.lastIndexOf(delim, endOfName) >= matchEnd) {
-            periferalMatch += 2;
+            peripheralMatch += 2;
         }
     }
-    var delta = match[0].length === endOfName ? 0 : 1; // rank full match higher than partial match
-    for (var i = 1; i < match.length; i++) {
+    let delta = match[0].length === endOfName ? 0 : 1; // rank full match higher than partial match
+    for (let i = 1; i < match.length; i++) {
         // lower ranking if parts of the name are missing
         if (match[i])
             delta += match[i].length;
@@ -211,25 +211,25 @@ function rankMatch(match, category) {
         if (/[A-Z]/.test(input.substring(0, index)))
             delta += 5;
     }
-    return leftBoundaryMatch + periferalMatch + (delta / 200);
+    return leftBoundaryMatch + peripheralMatch + (delta / 200);
 
 }
 function doSearch(request, response) {
-    var result = [];
+    let result = [];
     searchPattern = createSearchPattern(request.term);
     fallbackPattern = createSearchPattern(request.term.toLowerCase());
     if (searchPattern === "") {
         return this.close();
     }
-    var camelCaseMatcher = createMatcher(searchPattern, "");
-    var fallbackMatcher = new RegExp(fallbackPattern, "i");
+    let camelCaseMatcher = createMatcher(searchPattern, "");
+    let fallbackMatcher = new RegExp(fallbackPattern, "i");
 
     function searchIndexWithMatcher(indexArray, matcher, category, nameFunc) {
         if (indexArray) {
-            var newResults = [];
+            let newResults = [];
             $.each(indexArray, function (i, item) {
                 item.category = category;
-                var ranking = rankMatch(matcher.exec(nameFunc(item)), category);
+                let ranking = rankMatch(matcher.exec(nameFunc(item)), category);
                 if (ranking < RANKING_THRESHOLD) {
                     newResults.push({ranking: ranking, item: item});
                 }
@@ -244,10 +244,10 @@ function doSearch(request, response) {
         return [];
     }
     function searchIndex(indexArray, category, nameFunc) {
-        var primaryResults = searchIndexWithMatcher(indexArray, camelCaseMatcher, category, nameFunc);
+        let primaryResults = searchIndexWithMatcher(indexArray, camelCaseMatcher, category, nameFunc);
         result = result.concat(primaryResults);
         if (primaryResults.length <= MIN_RESULTS && !camelCaseMatcher.ignoreCase) {
-            var secondaryResults = searchIndexWithMatcher(indexArray, fallbackMatcher, category, nameFunc);
+            let secondaryResults = searchIndexWithMatcher(indexArray, fallbackMatcher, category, nameFunc);
             result = result.concat(secondaryResults.filter(function (item) {
                 return primaryResults.indexOf(item) === -1;
             }));
@@ -279,8 +279,8 @@ function doSearch(request, response) {
     response(result);
 }
 $(function() {
-    var expanded = false;
-    var windowWidth;
+    let expanded = false;
+    let windowWidth;
     function collapse() {
         if (expanded) {
             $("div#navbar-top").removeAttr("style");
@@ -328,7 +328,7 @@ $(function() {
         },
         select: function(event, ui) {
             if (ui.item.category) {
-                var url = getURLPrefix(ui);
+                let url = getURLPrefix(ui);
                 if (ui.item.category === catModules) {
                     url += "module-summary.html";
                 } else if (ui.item.category === catPackages) {

@@ -68,12 +68,16 @@ public class FxGUI extends Application{
     protected Dimension dim;
 
     /**
-     *
+     * display panel
      */
     protected final VBox pane = new VBox(5);
 
     /**
      * new GUI
+     *
+     * @param title title
+     * @param width width
+     * @param height height
      */
     public FxGUI(String title, int width, int height) {
         this.TITLE = title;

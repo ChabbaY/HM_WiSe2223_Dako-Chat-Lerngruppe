@@ -23,11 +23,12 @@
  * questions.
  */
 
-var moduleSearchIndex;
-var packageSearchIndex;
-var typeSearchIndex;
-var memberSearchIndex;
-var tagSearchIndex;
+let moduleSearchIndex;
+let packageSearchIndex;
+let typeSearchIndex;
+let memberSearchIndex;
+let tagSearchIndex;
+
 function loadScripts(doc, tag) {
     createElem(doc, tag, 'search.js');
 
@@ -39,8 +40,8 @@ function loadScripts(doc, tag) {
 }
 
 function createElem(doc, tag, path) {
-    var script = doc.createElement(tag);
-    var scriptElement = doc.getElementsByTagName(tag)[0];
+    const script = doc.createElement(tag);
+    const scriptElement = doc.getElementsByTagName(tag)[0];
     script.src = pathtoroot + path;
     scriptElement.parentNode.insertBefore(script, scriptElement);
 }
@@ -55,7 +56,7 @@ function show(tableId, selected, columns) {
     document.querySelectorAll('div.' + selected)
         .forEach(function(elem, index) {
             elem.style.display = '';
-            var isEvenRow = index % (columns * 2) < columns;
+            const isEvenRow = index % (columns * 2) < columns;
             elem.classList.remove(isEvenRow ? oddRowColor : evenRowColor);
             elem.classList.add(isEvenRow ? evenRowColor : oddRowColor);
         });
@@ -80,7 +81,7 @@ function updateTabs(tableId, selected) {
 }
 
 function switchTab(e) {
-    var selected = document.querySelector('[aria-selected=true]');
+    const selected = document.querySelector('[aria-selected=true]');
     if (selected) {
         if ((e.keyCode === 37 || e.keyCode === 38) && selected.previousSibling) {
             // left or up arrow key pressed: move focus to previous tab
@@ -96,7 +97,8 @@ function switchTab(e) {
     }
 }
 
-var updateSearchResults = function() {};
+const updateSearchResults = function () {
+};
 
 function indexFilesLoaded() {
     return moduleSearchIndex
@@ -107,19 +109,19 @@ function indexFilesLoaded() {
 }
 
 function copySnippet(button) {
-    var textarea = document.createElement("textarea");
+    const textarea = document.createElement("textarea");
     textarea.style.height = 0;
     document.body.appendChild(textarea);
     textarea.value = button.nextElementSibling.innerText;
     textarea.select();
     document.execCommand("copy");
     document.body.removeChild(textarea);
-    var span = button.firstElementChild;
-    var copied = span.getAttribute("data-copied");
+    const span = button.firstElementChild;
+    const copied = span.getAttribute("data-copied");
     if (span.innerHTML !== copied) {
-        var initialLabel = span.innerHTML;
+        const initialLabel = span.innerHTML;
         span.innerHTML = copied;
-        var parent = button.parentElement;
+        const parent = button.parentElement;
         parent.onmouseleave = parent.ontouchend = function() {
             span.innerHTML = initialLabel;
         };
@@ -128,7 +130,7 @@ function copySnippet(button) {
 
 // Workaround for scroll position not being included in browser history (8249133)
 document.addEventListener("DOMContentLoaded", function(e) {
-    var contentDiv = document.querySelector("div.flex-content");
+    const contentDiv = document.querySelector("div.flex-content");
     window.addEventListener("popstate", function(e) {
         if (e.state !== null) {
             contentDiv.scrollTop = e.state;
@@ -138,7 +140,7 @@ document.addEventListener("DOMContentLoaded", function(e) {
         history.replaceState(contentDiv.scrollTop, document.title);
     });
     contentDiv.addEventListener("scroll", function(e) {
-        var timeoutID;
+        let timeoutID;
         if (!timeoutID) {
             timeoutID = setTimeout(function() {
                 history.replaceState(contentDiv.scrollTop, document.title);

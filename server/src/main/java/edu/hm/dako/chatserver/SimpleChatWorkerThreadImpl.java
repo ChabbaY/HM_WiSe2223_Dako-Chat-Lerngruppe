@@ -187,7 +187,7 @@ public class SimpleChatWorkerThreadImpl extends AbstractWorkerThread {
         if (!clients.existsClient(userName)) {
             LOG.debug("User nicht in ClientListe: " + userName);
         } else {
-            // Event an den Client versenden
+            // das Event an den Client versenden
             Vector<String> clientList = clients.getClientNameList();
             pdu = ChatPDU.createLogoutEventPdu(userName, clientList, receivedPdu);
 

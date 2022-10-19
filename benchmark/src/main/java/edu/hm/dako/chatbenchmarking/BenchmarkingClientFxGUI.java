@@ -44,6 +44,9 @@ import java.util.regex.Pattern;
  */
 
 public class BenchmarkingClientFxGUI extends FxGUI implements BenchmarkingClientUserInterface {
+    /**
+     * min screen size for bigger window version, window will be smaller if not reached
+     */
     protected final static int MIN_SCREEN_SIZE = 900;
 
     /**
