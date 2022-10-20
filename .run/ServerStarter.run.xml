@@ -2,6 +2,7 @@
   <configuration default="false" name="ServerStarter" type="Application" factoryName="Application" nameIsGenerated="true">
     <option name="MAIN_CLASS_NAME" value="edu.hm.dako.chatserver.ServerStarter" />
     <module name="dako.server.main" />
+    <option name="PROGRAM_PARAMETERS" value="--nogui" />
     <extension name="coverage">
       <pattern>
         <option name="PATTERN" value="edu.hm.dako.chatserver.*" />
