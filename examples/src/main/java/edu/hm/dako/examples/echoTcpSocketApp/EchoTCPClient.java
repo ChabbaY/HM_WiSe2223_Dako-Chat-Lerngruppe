@@ -182,7 +182,8 @@ public class EchoTCPClient {
 
         boolean connected = false;
         int attempts = 0;
-        while ((!connected) && (attempts < MAX_CONNECTION_ATTEMPTS)) {
+        // condition (attempts < MAX_CONNECTION_ATTEMPTS) excluded, as an exception will be thrown before
+        while (!connected) {
             try {
                 connectionTryCounter++;
                 connection = new Socket(remoteServerAddress, serverPort);

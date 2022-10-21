@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="BenchmarkingStarter" type="Application" factoryName="Application" nameIsGenerated="true">
+  <configuration default="false" name="BenchmarkingStarter - GUI" type="Application" factoryName="Application">
     <option name="MAIN_CLASS_NAME" value="edu.hm.dako.chatbenchmarking.BenchmarkingStarter" />
     <module name="dako.benchmark.main" />
     <extension name="coverage">

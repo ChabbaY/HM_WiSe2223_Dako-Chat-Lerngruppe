@@ -140,7 +140,7 @@ public class SimpleChatWorkerThreadImpl extends AbstractWorkerThread {
             clientThreadName = receivedPdu.getClientThreadName();
             Thread.currentThread().setName(userName);
             LOG.debug("Länge der ClientListe: " + clients.size());
-            serverGuiInterface.increaseNumberOfLoggedInClients();
+            if (serverGuiInterface != null) serverGuiInterface.increaseNumberOfLoggedInClients();
 
             // Login-Event an alle Clients (auch an den gerade aktuell anfragenden) senden
             Vector<String> clientList = clients.getClientNameList();
@@ -193,7 +193,7 @@ public class SimpleChatWorkerThreadImpl extends AbstractWorkerThread {
 
             clients.changeClientStatus(userName, ClientConversationStatus.UNREGISTERING);
             sendLoginListUpdateEvent(pdu);
-            serverGuiInterface.decreaseNumberOfLoggedInClients();
+            if (serverGuiInterface != null) serverGuiInterface.decreaseNumberOfLoggedInClients();
 
             // Der Thread muss hier noch warten, bevor eine Logout-Response gesendet wird, da sich sonst ein Client
             // abmeldet, bevor er seinen letzten Event empfangen hat. Das funktioniert nicht bei einer großen Anzahl
@@ -222,7 +222,7 @@ public class SimpleChatWorkerThreadImpl extends AbstractWorkerThread {
         ClientListEntry client;
         clients.setRequestStartTime(userName, startTime);
         clients.increaseNumberOfReceivedChatMessages(userName);
-        serverGuiInterface.increaseNumberOfRequests();
+        if (serverGuiInterface != null) serverGuiInterface.increaseNumberOfRequests();
         LOG.debug("Chat-Message-Request-PDU von " + userName + " mit Sequenznummer "
                 + receivedPdu.getSequenceNumber() + " empfangen");
 

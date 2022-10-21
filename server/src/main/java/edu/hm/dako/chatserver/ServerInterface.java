@@ -7,12 +7,12 @@ package edu.hm.dako.chatserver;
  */
 public interface ServerInterface {
     /**
-     * Startet den Server
+     * starts the server
      */
     void start();
 
     /**
-     * Stoppt den Server
+     * stops the server
      *
      * @throws Exception - Fehler beim Beenden aller Threads des Chat-Servers
      */

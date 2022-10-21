@@ -65,7 +65,7 @@ public class FxGUI extends Application{
     /**
      * Bildschirmauflösung
      */
-    protected Dimension dim;
+    protected final Dimension dim;
 
     /**
      * display panel

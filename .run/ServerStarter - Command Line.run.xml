@@ -1,8 +1,8 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="ServerStarter" type="Application" factoryName="Application" nameIsGenerated="true">
+  <configuration default="false" name="ServerStarter - Command Line" type="Application" factoryName="Application">
     <option name="MAIN_CLASS_NAME" value="edu.hm.dako.chatserver.ServerStarter" />
     <module name="dako.server.main" />
-    <option name="PROGRAM_PARAMETERS" value="--nogui" />
+    <option name="PROGRAM_PARAMETERS" value="--nogui --auditlog=false" />
     <extension name="coverage">
       <pattern>
         <option name="PATTERN" value="edu.hm.dako.chatserver.*" />
