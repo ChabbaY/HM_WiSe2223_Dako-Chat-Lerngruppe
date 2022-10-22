@@ -1,4 +1,4 @@
-package edu.hm.dako.chatclient;
+package edu.hm.dako.chatclient.gui;
 
 import edu.hm.dako.common.SystemConstants;
 import javafx.fxml.FXML;
@@ -11,7 +11,6 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
@@ -32,17 +31,11 @@ public class LogInGUIController implements Initializable {
     private static final Logger log = LogManager.getLogger(LogInGUIController.class);
     private String userName;
     @FXML
-    private TextField txtUsername;
-    @FXML
-    private TextField txtServername;
-    @FXML
-    private TextField txtServerPort;
+    private TextField txtUsername, txtServername, txtServerPort;
     @FXML
     private ComboBox<String> comboServerType;
     @FXML
-    private Label lblIP;
-    @FXML
-    private Label lblServerPort;
+    private Label lblIP, lblServerPort;
     private ClientFxGUI appController;
 
     /**
@@ -118,12 +111,10 @@ public class LogInGUIController implements Initializable {
         }
 
         // Verbindung herstellen und beim Server anmelden
-        appController.createCommunicator(comboServerType.getValue(), serverPort,
-                txtServername.getText());
+        appController.createCommunicator(comboServerType.getValue(), serverPort, txtServername.getText());
         try {
             appController.getCommunicator().login(userName);
         } catch (Exception e2) {
-
             // Benutzer mit dem angegebenen Namen schon angemeldet
             log.error("Login konnte nicht zum Server gesendet werden, Server aktiv?");
             appController.setErrorMessage("Chat-Client",

@@ -1,15 +1,15 @@
 package edu.hm.dako.chatserver;
 
+import edu.hm.dako.chatserver.gui.ServerGUIInterface;
 import edu.hm.dako.common.AuditLogImplementationType;
 import edu.hm.dako.common.ChatServerImplementationType;
 import edu.hm.dako.connection.ConnectionLogger;
 import edu.hm.dako.connection.Connection;
 import edu.hm.dako.connection.ServerSocketInterface;
 import edu.hm.dako.connection.tcp.TCPServerSocket;
+import java.util.concurrent.Executors;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import java.util.concurrent.Executors;
 
 /**
  * Übernimmt die Konfiguration und Erzeugung bestimmter Server-Typen.

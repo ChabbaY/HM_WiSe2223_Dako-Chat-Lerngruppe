@@ -20,7 +20,7 @@ class edu.hm.dako.chatclient.ClientModel {
 + String getUserName()
 + void setUserName(String)
 }
-class edu.hm.dako.chatclient.LogInGUIController {
+class edu.hm.dako.chatclient.gui.LogInGUIController {
 - {static} Pattern IPV6_PATTERN
 - {static} Pattern IPV4_PATTERN
 - {static} Logger log
@@ -57,7 +57,7 @@ abstract class edu.hm.dako.chatclient.AbstractMessageListenerThread {
 # {abstract}void logoutEventAction(ChatPDU)
 # {abstract}void logoutResponseAction(ChatPDU)
 }
-class edu.hm.dako.chatclient.LoggedInGUIController {
+class edu.hm.dako.chatclient.gui.LoggedInGUIController {
 - {static} Logger LOG
 - Button btnSubmit
 - TextField txtChatMessage
@@ -72,7 +72,7 @@ class edu.hm.dako.chatclient.LoggedInGUIController {
 + void btnLogOut_OnAction()
 + void btnSubmit_OnAction()
 }
-class edu.hm.dako.chatclient.ClientFxGUI {
+class edu.hm.dako.chatclient.gui.ClientFxGUI {
 - {static} Logger LOG
 - ClientModel model
 - Stage stage
@@ -175,10 +175,10 @@ class edu.hm.dako.chatclient.ClientStarter {
 
 
 edu.hm.dako.chatclient.AbstractMessageListenerThread <|-- edu.hm.dako.chatclient.SimpleMessageListenerThreadImpl
-javafx.fxml.Initializable <|.. edu.hm.dako.chatclient.LogInGUIController
+javafx.fxml.Initializable <|.. edu.hm.dako.chatclient.gui.LogInGUIController
 edu.hm.dako.chatclient.Thread <|-- edu.hm.dako.chatclient.AbstractMessageListenerThread
-edu.hm.dako.chatclient.ClientUserInterface <|.. edu.hm.dako.chatclient.ClientFxGUI
-javafx.application.Application <|-- edu.hm.dako.chatclient.ClientFxGUI
+edu.hm.dako.chatclient.ClientUserInterface <|.. edu.hm.dako.chatclient.gui.ClientFxGUI
+javafx.application.Application <|-- edu.hm.dako.chatclient.gui.ClientFxGUI
 edu.hm.dako.chatclient.AbstractChatClient <|-- edu.hm.dako.chatclient.ClientImpl
 edu.hm.dako.chatclient.ClientCommunication <|.. edu.hm.dako.chatclient.AbstractChatClient
 @enduml

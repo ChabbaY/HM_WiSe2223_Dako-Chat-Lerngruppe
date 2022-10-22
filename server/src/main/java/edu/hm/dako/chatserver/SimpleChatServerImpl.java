@@ -1,5 +1,6 @@
 package edu.hm.dako.chatserver;
 
+import edu.hm.dako.chatserver.gui.ServerGUIInterface;
 import edu.hm.dako.common.ExceptionHandler;
 import edu.hm.dako.connection.Connection;
 import edu.hm.dako.connection.ServerSocketInterface;

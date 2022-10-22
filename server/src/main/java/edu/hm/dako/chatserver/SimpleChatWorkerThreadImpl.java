@@ -1,5 +1,6 @@
 package edu.hm.dako.chatserver;
 
+import edu.hm.dako.chatserver.gui.ServerGUIInterface;
 import edu.hm.dako.common.AuditLogPDUType;
 import edu.hm.dako.common.ClientConversationStatus;
 import edu.hm.dako.connection.Connection;
@@ -9,7 +10,6 @@ import edu.hm.dako.common.ChatPDU;
 import edu.hm.dako.common.ExceptionHandler;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import java.util.Vector;
 
 /**
@@ -109,7 +109,7 @@ public class SimpleChatWorkerThreadImpl extends AbstractWorkerThread {
             ClientListEntry client = clients.getClient(s);
             try {
                 if (client != null) {
-                    userName = client.getUserName();
+                    String userName = client.getUserName();
                     client.getConnection().send(pdu);
                     LOG.debug("Login- oder Logout-Event-PDU an " + userName + " gesendet");
                     clients.increaseNumberOfSentChatEvents(userName);
@@ -125,7 +125,7 @@ public class SimpleChatWorkerThreadImpl extends AbstractWorkerThread {
     @Override
     protected void loginRequestAction(ChatPDU receivedPdu) {
         ChatPDU pdu;
-        userName = receivedPdu.getUserName();
+        String userName = receivedPdu.getUserName();
         LOG.debug("Login-Request-PDU für " + userName + " empfangen");
 
         // Neuer Client möchte sich einloggen, Client in Client-Liste eintragen
@@ -137,6 +137,7 @@ public class SimpleChatWorkerThreadImpl extends AbstractWorkerThread {
             clients.changeClientStatus(userName, ClientConversationStatus.REGISTERING);
             LOG.debug("User " + userName + " nun in ClientListe");
 
+            this.userName = receivedPdu.getUserName();
             clientThreadName = receivedPdu.getClientThreadName();
             Thread.currentThread().setName(userName);
             LOG.debug("Länge der ClientListe: " + clients.size());
@@ -144,23 +145,23 @@ public class SimpleChatWorkerThreadImpl extends AbstractWorkerThread {
 
             // Login-Event an alle Clients (auch an den gerade aktuell anfragenden) senden
             Vector<String> clientList = clients.getClientNameList();
-            pdu = ChatPDU.createLoginEventPdu(userName, clientList, receivedPdu);
+            pdu = ChatPDU.createLoginEventPdu(this.userName, clientList, receivedPdu);
             sendLoginListUpdateEvent(pdu);
 
             // Login Response senden
-            ChatPDU responsePdu = ChatPDU.createLoginResponsePdu(userName, receivedPdu);
+            ChatPDU responsePdu = ChatPDU.createLoginResponsePdu(this.userName, receivedPdu);
 
             try {
-                clients.getClient(userName).getConnection().send(responsePdu);
+                clients.getClient(this.userName).getConnection().send(responsePdu);
             } catch (Exception e) {
-                LOG.debug("Senden einer Login-Response-PDU an " + userName + " fehlgeschlagen");
+                LOG.debug("Senden einer Login-Response-PDU an " + this.userName + " fehlgeschlagen");
                 LOG.debug("Exception Message: " + e.getMessage());
             }
 
-            LOG.debug("Login-Response-PDU an Client " + userName + " gesendet");
+            LOG.debug("Login-Response-PDU an Client " + this.userName + " gesendet");
 
             // Zustand des Clients ändern
-            clients.changeClientStatus(userName, ClientConversationStatus.REGISTERED);
+            clients.changeClientStatus(this.userName, ClientConversationStatus.REGISTERED);
         } else {
             // User bereits angemeldet, Fehlermeldung an Client senden, Fehlercode an Client senden
             pdu = ChatPDU.createLoginErrorResponsePdu(receivedPdu, ChatPDU.LOGIN_ERROR);
@@ -178,18 +179,18 @@ public class SimpleChatWorkerThreadImpl extends AbstractWorkerThread {
     @Override
     protected void logoutRequestAction(ChatPDU receivedPdu) {
         ChatPDU pdu;
-        userName = receivedPdu.getUserName();
+        String userName = receivedPdu.getUserName();
         logoutCounter.getAndIncrement();
         LOG.debug("Logout-Request von " + userName + ", LogoutCount = " + logoutCounter.get());
 
         LOG.debug("Logout-Request-PDU von " + userName + " empfangen");
 
-        if (!clients.existsClient(userName)) {
+        if (!clients.existsClient(this.userName)) {
             LOG.debug("User nicht in ClientListe: " + userName);
         } else {
             // das Event an den Client versenden
             Vector<String> clientList = clients.getClientNameList();
-            pdu = ChatPDU.createLogoutEventPdu(userName, clientList, receivedPdu);
+            pdu = ChatPDU.createLogoutEventPdu(this.userName, clientList, receivedPdu);
 
             clients.changeClientStatus(userName, ClientConversationStatus.UNREGISTERING);
             sendLoginListUpdateEvent(pdu);
@@ -218,7 +219,7 @@ public class SimpleChatWorkerThreadImpl extends AbstractWorkerThread {
 
     @Override
     protected void chatMessageRequestAction(ChatPDU receivedPdu) {
-        userName = receivedPdu.getUserName();
+        String userName = receivedPdu.getUserName();
         ClientListEntry client;
         clients.setRequestStartTime(userName, startTime);
         clients.increaseNumberOfReceivedChatMessages(userName);
@@ -231,7 +232,7 @@ public class SimpleChatWorkerThreadImpl extends AbstractWorkerThread {
         } else {
             // Liste der betroffenen Clients ermitteln
             Vector<String> sendList = clients.getClientNameList();
-            ChatPDU pdu = ChatPDU.createChatMessageEventPdu(userName, receivedPdu);
+            ChatPDU pdu = ChatPDU.createChatMessageEventPdu(this.userName, receivedPdu);
 
             // Event an Clients senden
             for (String s : new Vector<>(sendList)) {

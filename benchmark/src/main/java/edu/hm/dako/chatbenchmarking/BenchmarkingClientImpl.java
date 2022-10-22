@@ -1,5 +1,6 @@
 package edu.hm.dako.chatbenchmarking;
 
+import edu.hm.dako.chatbenchmarking.gui.BenchmarkingClientUserInterface;
 import edu.hm.dako.chatclient.ClientImpl;
 import edu.hm.dako.chatclient.AbstractChatClient;
 import edu.hm.dako.chatclient.ClientUserInterface;
@@ -9,7 +10,6 @@ import edu.hm.dako.common.ClientConversationStatus;
 import edu.hm.dako.common.ExceptionHandler;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import java.util.UUID;
 import java.util.Vector;
 import java.util.concurrent.atomic.AtomicBoolean;

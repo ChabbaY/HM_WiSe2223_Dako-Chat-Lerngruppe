@@ -1,5 +1,6 @@
 package edu.hm.dako.chatserver;
 
+import edu.hm.dako.chatserver.gui.ServerFxGUI;
 import edu.hm.dako.common.AuditLogImplementationType;
 import edu.hm.dako.common.ChatServerImplementationType;
 import edu.hm.dako.common.ExceptionHandler;
@@ -39,16 +40,16 @@ public class ServerStarter {
     /**
      * starts the chat server
      *
-     * @param args available args, please do not change order:
+     * @param args available args, please only use non-default, auditlog-protocol must be specified before auditlog-port
      *             --nogui disables the gui
      *             --protocol=tcpsimple (default; tcpadvanced not implemented yet)
      *             --port=50001 (default)
      *             --send-buffer=300000 (default)
      *             --receive-buffer=300000 (default)
      *             --auditlog=true | false (default true)
+     *             --auditlog-protocol=tcp | udp | rmi (default tcp)
      *             --auditlog-host=localhost (default)
      *             --auditlog-port=40001 (default)
-     *             --auditlog-protocol=tcp | udp | rmi (default tcp)
      */
     public static void main(String[] args) {
         // Log4j2-Logging aus Datei konfigurieren
@@ -137,7 +138,7 @@ public class ServerStarter {
         }
 
         if (GUI) {
-            ServerGUI.main(args);
+            ServerFxGUI.main(args);
         } else {
             try {
                 if (auditlog) {

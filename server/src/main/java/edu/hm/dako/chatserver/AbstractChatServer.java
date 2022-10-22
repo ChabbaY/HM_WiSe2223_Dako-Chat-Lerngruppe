@@ -1,5 +1,7 @@
 package edu.hm.dako.chatserver;
 
+import edu.hm.dako.chatserver.gui.ServerGUIInterface;
+
 /**
  * shared attributes for all implementations
  *

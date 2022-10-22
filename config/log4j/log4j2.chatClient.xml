@@ -21,7 +21,7 @@
         <!--
             Ausgabe-Level wählen: info, debug, trace, error
              -->
-        <Root level="debug">
+        <Root level="error">
             <AppenderRef ref="RollingFile"/>
             <AppenderRef ref="console"/>
         </Root>

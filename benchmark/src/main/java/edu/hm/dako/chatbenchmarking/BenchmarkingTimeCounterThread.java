@@ -1,8 +1,8 @@
 package edu.hm.dako.chatbenchmarking;
 
+import edu.hm.dako.chatbenchmarking.gui.BenchmarkingClientUserInterface;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import java.util.concurrent.TimeUnit;
 
 /**

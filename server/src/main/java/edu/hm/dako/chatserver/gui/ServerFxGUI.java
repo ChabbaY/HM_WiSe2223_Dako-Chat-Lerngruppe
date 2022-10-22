@@ -1,11 +1,15 @@
-package edu.hm.dako.chatserver;
+package edu.hm.dako.chatserver.gui;
 
+import edu.hm.dako.chatserver.ServerFactory;
+import edu.hm.dako.chatserver.ServerInterface;
+import edu.hm.dako.chatserver.ServerStartData;
+import edu.hm.dako.chatserver.ServerStarter;
 import edu.hm.dako.common.AuditLogImplementationType;
 import edu.hm.dako.common.ChatServerImplementationType;
 import edu.hm.dako.common.ExceptionHandler;
 import edu.hm.dako.common.SystemConstants;
 import edu.hm.dako.common.Tupel;
-import edu.hm.dako.common.graphics.FxGUI;
+import edu.hm.dako.common.gui.FxGUI;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -33,7 +37,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  *
  * @author Peter Mandl, edited by Lerngruppe
  */
-public class ServerGUI extends FxGUI implements ServerGUIInterface {
+public class ServerFxGUI extends FxGUI implements ServerGUIInterface {
     /**
      * Standard-Port des Servers
      */
@@ -42,7 +46,7 @@ public class ServerGUI extends FxGUI implements ServerGUIInterface {
     /**
      * referencing the logger
      */
-    private static final Logger LOG = LogManager.getLogger(ServerGUI.class);
+    private static final Logger LOG = LogManager.getLogger(ServerFxGUI.class);
 
     /**
      * Interface der Chat-Server-Implementierung
@@ -127,7 +131,7 @@ public class ServerGUI extends FxGUI implements ServerGUIInterface {
     /**
      * Konstruktion der ServerGUI
      */
-    public ServerGUI() {
+    public ServerFxGUI() {
         super("ChatServerGUI", 400, 540);
 
         loggedInClientCounter = new AtomicInteger(0);
@@ -143,7 +147,7 @@ public class ServerGUI extends FxGUI implements ServerGUIInterface {
 
         stage.setOnCloseRequest(event -> {
             try {
-                ServerGUI.chatServer.stop();
+                ServerFxGUI.chatServer.stop();
             } catch (Exception ex) {
                 LOG.error("Fehler beim Stoppen des Chat-Servers");
                 ExceptionHandler.logException(ex);
@@ -416,7 +420,7 @@ public class ServerGUI extends FxGUI implements ServerGUIInterface {
         LOG.debug("Schliessen-Button betätigt");
         finishButton.setOnAction(event -> {
             try {
-                ServerGUI.chatServer.stop();
+                ServerFxGUI.chatServer.stop();
             } catch (Exception var3) {
                 LOG.debug("Fehler beim Stoppen des Chat-Servers, Chat-Server eventuell noch gar nicht aktiv");
             }

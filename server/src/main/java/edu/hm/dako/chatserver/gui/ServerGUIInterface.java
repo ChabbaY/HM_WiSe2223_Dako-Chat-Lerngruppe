@@ -1,4 +1,6 @@
-package edu.hm.dako.chatserver;
+package edu.hm.dako.chatserver.gui;
+
+import edu.hm.dako.chatserver.ServerStartData;
 
 /**
  * Interface, das der ServerGUI bereitstehen muss

@@ -36,10 +36,13 @@ public class SimpleMessageListenerThreadImpl extends AbstractMessageListenerThre
             // Login hat nicht funktioniert
             LOG.error("Login-Response-PDU für Client " + receivedPdu.getUserName()
                     + " mit Login-Error empfangen");
-            userInterface.setErrorMessage(
-                    "Chat-Server", "Anmelden beim Server nicht erfolgreich, Benutzer "
-                            + receivedPdu.getUserName() + " vermutlich schon angemeldet",
-                    receivedPdu.getErrorCode());
+            if (userInterface != null) {
+                userInterface.setErrorMessage("Chat-Server", "Anmelden beim Server nicht erfolgreich,"
+                                + "Benutzer " + receivedPdu.getUserName() + " vermutlich schon angemeldet",
+                        receivedPdu.getErrorCode());
+            }
+            else System.out.println("Anmelden beim Server nicht erfolgreich,"
+                    + "Benutzer " + receivedPdu.getUserName() + " vermutlich schon angemeldet");
             sharedClientData.status = ClientConversationStatus.UNREGISTERED;
 
             // Verbindung wird gleich geschlossen
@@ -52,10 +55,13 @@ public class SimpleMessageListenerThreadImpl extends AbstractMessageListenerThre
             // Login hat funktioniert
             sharedClientData.status = ClientConversationStatus.REGISTERED;
 
-            userInterface.loginComplete();
+            if (userInterface != null) userInterface.loginComplete();
+            else System.out.println("Erfolgreich eingeloggt!");
 
             Thread.currentThread().setName("Listener" + "-" + sharedClientData.userName);
             LOG.debug("Login-Response-PDU für Client " + receivedPdu.getUserName() + " empfangen");
+
+            ClientStarter.lock = false;
         }
     }
 
@@ -79,13 +85,14 @@ public class SimpleMessageListenerThreadImpl extends AbstractMessageListenerThre
         LOG.debug(sharedClientData.userName + " empfängt Logout-Response-PDU für Client " + receivedPdu.getUserName());
         sharedClientData.status = ClientConversationStatus.UNREGISTERED;
 
-        userInterface.setSessionStatisticsCounter(sharedClientData.eventCounter.longValue(),
+        if (userInterface != null) userInterface.setSessionStatisticsCounter(sharedClientData.eventCounter.longValue(),
                 sharedClientData.confirmCounter.longValue(), 0, 0, 0);
 
         LOG.debug("Vom Client gesendete Chat-Nachrichten:  " + sharedClientData.messageCounter.get());
 
         finished = true;
-        userInterface.logoutComplete();
+        if (userInterface != null) userInterface.logoutComplete();
+        else System.out.println("Logout abgeschlossen!");
     }
 
     @Override
@@ -116,10 +123,10 @@ public class SimpleMessageListenerThreadImpl extends AbstractMessageListenerThre
 
         if (receivedPdu.getSequenceNumber() == sharedClientData.messageCounter.get()) {
             // Zuletzt gemessene Serverzeit für das Benchmarking merken
-            userInterface.setLastServerTime(receivedPdu.getServerTime());
+            if (userInterface != null) userInterface.setLastServerTime(receivedPdu.getServerTime());
 
             // Nächste Chat-Nachricht darf eingegeben werden
-            userInterface.setLock(false);
+            if (userInterface != null) userInterface.setLock(false);
 
             LOG.debug("Chat-Response-PDU für Client " + receivedPdu.getUserName() + " empfangen");
         } else {
@@ -140,7 +147,10 @@ public class SimpleMessageListenerThreadImpl extends AbstractMessageListenerThre
         LOG.debug("MessageEventCounter: " + events);
 
         // Empfangene Chat-Nachricht an User Interface zur Darstellung übergeben
-        userInterface.setMessageLine(receivedPdu.getEventUserName(), receivedPdu.getMessage());
+        if (userInterface != null) userInterface.setMessageLine(receivedPdu.getEventUserName(), receivedPdu.getMessage());
+        else System.out.println(">> " + receivedPdu.getEventUserName() + ": " + receivedPdu.getMessage());
+
+        ClientStarter.lock = false;
     }
 
     /**

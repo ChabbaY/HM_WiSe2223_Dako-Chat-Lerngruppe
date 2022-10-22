@@ -1,5 +1,7 @@
 package edu.hm.dako.chatbenchmarking;
 
+import edu.hm.dako.chatbenchmarking.gui.BenchmarkingClientFxGUI;
+
 /**
  * starts the benchmarking server
  *

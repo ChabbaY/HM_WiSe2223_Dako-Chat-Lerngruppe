@@ -4,7 +4,7 @@
     <module name="dako.benchmark.main" />
     <extension name="coverage">
       <pattern>
-        <option name="PATTERN" value="edu.hm.dako.chatbenchmarking.*" />
+        <option name="PATTERN" value="edu.hm.dako.chatbenchmarking.gui.*" />
         <option name="ENABLED" value="true" />
       </pattern>
     </extension>

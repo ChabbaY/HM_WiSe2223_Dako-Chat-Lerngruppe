@@ -4,7 +4,7 @@
     <module name="dako.client.main" />
     <extension name="coverage">
       <pattern>
-        <option name="PATTERN" value="edu.hm.dako.chatclient.*" />
+        <option name="PATTERN" value="edu.hm.dako.chatclient.gui.*" />
         <option name="ENABLED" value="true" />
       </pattern>
     </extension>

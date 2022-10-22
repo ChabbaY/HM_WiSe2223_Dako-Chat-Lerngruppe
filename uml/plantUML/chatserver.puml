@@ -45,7 +45,7 @@ class edu.hm.dako.chatserver.ClientListEntry {
 + void setWaitList(Vector<String>)
 + void clearWaitList()
 }
-interface edu.hm.dako.chatserver.ServerGUIInterface {
+interface edu.hm.dako.chatserver.gui.ServerGUIInterface {
 ~ void showStartData(ServerStartData)
 ~ void increaseNumberOfLoggedInClients()
 ~ void decreaseNumberOfLoggedInClients()
@@ -112,7 +112,7 @@ class edu.hm.dako.chatserver.ServerStarter {
 + <<Create>> ServerStarter()
 + {static} void main(String[])
 }
-class edu.hm.dako.chatserver.ServerGUI {
+class edu.hm.dako.chatserver.gui.ServerFxGUI {
 ~ {static} String DEFAULT_SERVER_PORT
 - {static} Logger LOG
 - {static} ServerInterface chatServer
@@ -249,8 +249,8 @@ class edu.hm.dako.chatserver.SimpleChatWorkerThreadImpl {
 
 
 edu.hm.dako.chatserver.ServerInterface <|.. edu.hm.dako.chatserver.AbstractChatServer
-edu.hm.dako.chatserver.ServerGUIInterface <|.. edu.hm.dako.chatserver.ServerGUI
-javafx.application.Application <|-- edu.hm.dako.chatserver.ServerGUI
+edu.hm.dako.chatserver.gui.ServerGUIInterface <|.. edu.hm.dako.chatserver.gui.ServerFxGUI
+javafx.application.Application <|-- edu.hm.dako.chatserver.gui.ServerFxGUI
 edu.hm.dako.chatserver.AbstractChatServer <|-- edu.hm.dako.chatserver.SimpleChatServerImpl
 edu.hm.dako.chatserver.Thread <|-- edu.hm.dako.chatserver.AbstractWorkerThread
 edu.hm.dako.chatserver.AbstractWorkerThread <|-- edu.hm.dako.chatserver.SimpleChatWorkerThreadImpl

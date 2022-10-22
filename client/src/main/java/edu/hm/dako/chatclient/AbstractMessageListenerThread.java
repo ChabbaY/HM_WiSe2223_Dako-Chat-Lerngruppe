@@ -61,7 +61,7 @@ public abstract class AbstractMessageListenerThread extends Thread {
 
         // Neue Userliste zur Darstellung an User Interface übergeben
         LOG.debug("Empfangene Userliste: " + receivedPdu.getClients());
-        userInterface.setUserList(receivedPdu.getClients());
+        if (userInterface != null) userInterface.setUserList(receivedPdu.getClients());
     }
 
     /**
