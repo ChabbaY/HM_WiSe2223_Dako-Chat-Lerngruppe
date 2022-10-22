@@ -1,8 +1,10 @@
-package edu.hm.dako.chatbenchmarking;
+package edu.hm.dako.chatbenchmarking.gui;
 
+import edu.hm.dako.chatbenchmarking.BenchmarkingClientCoordinator;
+import edu.hm.dako.chatbenchmarking.BenchmarkingConstants;
 import edu.hm.dako.common.ChatServerImplementationType;
 import edu.hm.dako.common.SystemConstants;
-import edu.hm.dako.common.graphics.FxGUI;
+import edu.hm.dako.common.gui.FxGUI;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -27,7 +29,6 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.LoggerContext;
-
 import javax.swing.JProgressBar;
 import java.io.File;
 import java.text.DecimalFormat;

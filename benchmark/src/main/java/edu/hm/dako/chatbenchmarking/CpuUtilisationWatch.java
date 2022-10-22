@@ -1,7 +1,6 @@
 package edu.hm.dako.chatbenchmarking;
 
 import com.sun.management.OperatingSystemMXBean;
-
 import java.lang.management.ManagementFactory;
 
 /**

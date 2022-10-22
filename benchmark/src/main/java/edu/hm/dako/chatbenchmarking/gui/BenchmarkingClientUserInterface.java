@@ -1,7 +1,6 @@
-package edu.hm.dako.chatbenchmarking;
+package edu.hm.dako.chatbenchmarking.gui;
 
 import javafx.scene.control.ProgressBar;
-
 import javax.swing.JProgressBar;
 
 /**

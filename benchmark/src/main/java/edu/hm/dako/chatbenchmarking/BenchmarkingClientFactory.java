@@ -1,5 +1,7 @@
 package edu.hm.dako.chatbenchmarking;
 
+import edu.hm.dako.chatbenchmarking.gui.BenchmarkingClientUserInterface;
+import edu.hm.dako.chatbenchmarking.gui.UserInterfaceInputParameters;
 import edu.hm.dako.chatclient.ClientUserInterface;
 import edu.hm.dako.connection.ConnectionFactory;
 

@@ -1,11 +1,24 @@
 jar.enabled = true
 
-dependencies {
+sourceSets {
+    main {
+        resources {
+            srcDirs = ['src/main/java']
+        }
+    }
+}
 
+dependencies {
     implementation project(':common')
     implementation project(':communication')
     implementation group: 'org.apache.commons', name: 'commons-configuration2', version: '2.8.0'
     implementation group: 'commons-beanutils', name: 'commons-beanutils', version: '1.9.4'
     implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.11.0'
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.9.0'
 }
 
+test {
+    useJUnit()
+    useJUnitPlatform()
+}

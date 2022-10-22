@@ -1,10 +1,15 @@
-package edu.hm.dako.chatserver;
+package edu.hm.dako.chatserver.gui;
 
+import edu.hm.dako.chatserver.ServerFactory;
+import edu.hm.dako.chatserver.ServerInterface;
+import edu.hm.dako.chatserver.ServerStartData;
+import edu.hm.dako.chatserver.ServerStarter;
 import edu.hm.dako.common.AuditLogImplementationType;
 import edu.hm.dako.common.ChatServerImplementationType;
 import edu.hm.dako.common.ExceptionHandler;
 import edu.hm.dako.common.SystemConstants;
-import edu.hm.dako.common.graphics.FxGUI;
+import edu.hm.dako.common.Tupel;
+import edu.hm.dako.common.gui.FxGUI;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -17,12 +22,10 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.LoggerContext;
-
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -34,7 +37,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  *
  * @author Peter Mandl, edited by Lerngruppe
  */
-public class ServerGUI extends FxGUI implements ServerGUIInterface {
+public class ServerFxGUI extends FxGUI implements ServerGUIInterface {
     /**
      * Standard-Port des Servers
      */
@@ -43,7 +46,7 @@ public class ServerGUI extends FxGUI implements ServerGUIInterface {
     /**
      * referencing the logger
      */
-    private static final Logger LOG = LogManager.getLogger(ServerGUI.class);
+    private static final Logger LOG = LogManager.getLogger(ServerFxGUI.class);
 
     /**
      * Interface der Chat-Server-Implementierung
@@ -98,7 +101,6 @@ public class ServerGUI extends FxGUI implements ServerGUIInterface {
      * Testfelder, Buttons und Labels der ServerGUI
      */
     private TextField serverPort, sendBufferSize, receiveBufferSize, auditLogServerHostnameOrIp, auditLogServerPort;
-    private Label serverPortLabel, sendBufferSizeLabel, receiveBufferSizeLabel, auditLogServerPortLabel;
     private CheckBox enableAuditLogServerCheckbox;
     private Button startButton, stopButton, finishButton;
     private final TextField startTimeField, receivedRequests, loggedInClients;
@@ -106,7 +108,15 @@ public class ServerGUI extends FxGUI implements ServerGUIInterface {
     /**
      * Benutzeroberfläche zum Starten des Chat-Servers
      *
-     * @param args currently ignored
+     * @param args available args, please do not change order:
+     *             --protocol=tcpsimple (default; tcpadvanced not implemented yet)
+     *             --port=50001 (default)
+     *             --send-buffer=300000 (default)
+     *             --receive-buffer=300000 (default)
+     *             --auditlog=true | false (default true)
+     *             --auditlog-host=localhost (default)
+     *             --auditlog-port=40001 (default)
+     *             --auditlog-protocol=tcp | udp | rmi (default tcp)
      */
     public static void main(String[] args) {//TODO parametrize
         // Log4j2-Logging aus Datei konfigurieren
@@ -121,7 +131,7 @@ public class ServerGUI extends FxGUI implements ServerGUIInterface {
     /**
      * Konstruktion der ServerGUI
      */
-    public ServerGUI() {
+    public ServerFxGUI() {
         super("ChatServerGUI", 400, 540);
 
         loggedInClientCounter = new AtomicInteger(0);
@@ -137,7 +147,7 @@ public class ServerGUI extends FxGUI implements ServerGUIInterface {
 
         stage.setOnCloseRequest(event -> {
             try {
-                ServerGUI.chatServer.stop();
+                ServerFxGUI.chatServer.stop();
             } catch (Exception ex) {
                 LOG.error("Fehler beim Stoppen des Chat-Servers");
                 ExceptionHandler.logException(ex);
@@ -176,10 +186,10 @@ public class ServerGUI extends FxGUI implements ServerGUIInterface {
         label.setMaxSize(100, 25);
         Label auditLogServerHostnameOrIpLabel = createLabel("AuditLogServer Hostname/IP-Adr.");
 
-        serverPortLabel = createLabel("Serverport");
-        sendBufferSizeLabel = createLabel("Sendepuffer in Byte");
-        receiveBufferSizeLabel = createLabel("Empfangspuffer in Byte");
-        auditLogServerPortLabel = createLabel("AuditLogServer/RMI-Registry Port");
+        Label serverPortLabel = createLabel("Serverport");
+        Label sendBufferSizeLabel = createLabel("Sendepuffer in Byte");
+        Label receiveBufferSizeLabel = createLabel("Empfangspuffer in Byte");
+        Label auditLogServerPortLabel = createLabel("AuditLogServer/RMI-Registry Port");
         sendBufferSize = createEditableTextField(SystemConstants.DEFAULT_SEND_BUFFER_SIZE);
         receiveBufferSize = createEditableTextField(SystemConstants.DEFAULT_RECEIVE_BUFFER_SIZE);
 
@@ -410,7 +420,7 @@ public class ServerGUI extends FxGUI implements ServerGUIInterface {
         LOG.debug("Schliessen-Button betätigt");
         finishButton.setOnAction(event -> {
             try {
-                ServerGUI.chatServer.stop();
+                ServerFxGUI.chatServer.stop();
             } catch (Exception var3) {
                 LOG.debug("Fehler beim Stoppen des Chat-Servers, Chat-Server eventuell noch gar nicht aktiv");
             }
@@ -418,28 +428,6 @@ public class ServerGUI extends FxGUI implements ServerGUIInterface {
             super.exit();
         });
     }
-
-    /**
-     * AuditLogServer-Typ aus GUI auslesen
-     */
-    private String readAuditLogComboBox() {
-        String implType;
-        if (comboBoxAuditLogServerType.getValue() == null) {
-            implType = SystemConstants.AUDIT_LOG_SERVER_TCP_IMPL;
-        } else {
-            implType = comboBoxAuditLogServerType.getValue();
-        }
-
-        return (implType);
-    }
-
-    /**
-     * Gewählten Implementierungstyp aus GUI auslesen
-     */
-    private String readImplTypeComboBox() {
-        return (comboBoxImplType.getValue());
-    }
-
 
     private void startChatServerWithAuditLogServer(String implType, int serverPort, int sendBufferSize,
                                                    int receiveBufferSize, String auditLogServerHostname,
@@ -521,6 +509,27 @@ public class ServerGUI extends FxGUI implements ServerGUIInterface {
     }
 
     /**
+     * AuditLogServer-Typ aus GUI auslesen
+     */
+    private String readAuditLogComboBox() {
+        String implType;
+        if (comboBoxAuditLogServerType.getValue() == null) {
+            implType = SystemConstants.AUDIT_LOG_SERVER_TCP_IMPL;
+        } else {
+            implType = comboBoxAuditLogServerType.getValue();
+        }
+
+        return (implType);
+    }
+
+    /**
+     * Gewählten Implementierungstyp aus GUI auslesen
+     */
+    private String readImplTypeComboBox() {
+        return (comboBoxImplType.getValue());
+    }
+
+    /**
      * Lesen des HostNamens oder der Serveradresse aus der GUI als String
      *
      * @return Hostname oder IP-Adresse als String
@@ -535,26 +544,10 @@ public class ServerGUI extends FxGUI implements ServerGUIInterface {
      * @return Port
      */
     private int readAuditLogServerPort(String auditLogServerImplType) {
-        String item = auditLogServerPort.getText();
-        int iServerPort = 0;
-        if (item.matches("[0-9]+")) {
-            iServerPort = Integer.parseInt(auditLogServerPort.getText());
-            if ((iServerPort < 1) || (iServerPort > 65535)) {
-                startable = false;
-                auditLogServerPortLabel.setTextFill(Color.web(SystemConstants.RED_COLOR));
-            } else if (auditLogServerImplType.equals(SystemConstants.AUDIT_LOG_SERVER_RMI_IMPL)) {
-                // Falls RMI ausgewählt wurde, wird standardmäßig der RMI-Registry-Port 1099 verwendet
-                iServerPort = Integer.parseInt(SystemConstants.DEFAULT_AUDIT_LOG_SERVER_RMI_REGISTRY_PORT);
-                LOG.debug("Standard-Port für RMI-Registry: {}", iServerPort);
-            } else
-                LOG.debug("Port für AuditLog-Server: {}", iServerPort);
-            auditLogServerPortLabel.setTextFill(Color.web(SystemConstants.BLACK_COLOR));
-        } else {
-            startable = false;
-            auditLogServerPortLabel.setTextFill(Color.web(SystemConstants.RED_COLOR));
-
-        }
-        return (iServerPort);
+        String port = auditLogServerPort.getText();
+        Tupel<Integer, Boolean> result = ServerStarter.validateAuditLogServerPort(port, auditLogServerImplType);
+        startable = result.getY();
+        return result.getX();
     }
 
     /**
@@ -563,23 +556,10 @@ public class ServerGUI extends FxGUI implements ServerGUIInterface {
      * @return Verwendeter Serverport
      */
     private int readServerPort() {
-        String item = serverPort.getText();
-        int iServerPort = 0;
-        if (item.matches("[0-9]+")) {
-            iServerPort = Integer.parseInt(serverPort.getText());
-            if ((iServerPort < 1) || (iServerPort > 65535)) {
-                startable = false;
-                serverPortLabel.setTextFill(Color.web(SystemConstants.RED_COLOR));
-            } else {
-                System.out.println("Serverport: " + iServerPort);
-                serverPortLabel.setTextFill(Color.web(SystemConstants.BLACK_COLOR));
-            }
-        } else {
-            startable = false;
-            serverPortLabel.setTextFill(Color.web(SystemConstants.RED_COLOR));
-
-        }
-        return (iServerPort);
+        String port = serverPort.getText();
+        Tupel<Integer, Boolean> result = ServerStarter.validateServerPort(port);
+        startable = result.getY();
+        return result.getX();
     }
 
     /**
@@ -588,24 +568,10 @@ public class ServerGUI extends FxGUI implements ServerGUIInterface {
      * @return Eingegebene Sendepuffer-Größe
      */
     private int readSendBufferSize() {
-
-        String item = sendBufferSize.getText();
-        int iSendBufferSize = 0;
-        if (item.matches("[0-9]+")) {
-            iSendBufferSize = Integer.parseInt(sendBufferSize.getText());
-            if ((iSendBufferSize <= 0)
-                    || (iSendBufferSize > Integer.parseInt(SystemConstants.MAX_SEND_BUFFER_SIZE))) {
-                startable = false;
-                sendBufferSizeLabel.setTextFill(Color.web(SystemConstants.RED_COLOR));
-            } else {
-                sendBufferSizeLabel.setTextFill(Color.web(SystemConstants.BLACK_COLOR));
-
-            }
-        } else {
-            startable = false;
-            sendBufferSizeLabel.setTextFill(Color.web(SystemConstants.RED_COLOR));
-        }
-        return (iSendBufferSize);
+        String size = sendBufferSize.getText();
+        Tupel<Integer, Boolean> result = ServerStarter.validateSendBufferSize(size);
+        startable = result.getY();
+        return result.getX();
     }
 
     /**
@@ -614,24 +580,10 @@ public class ServerGUI extends FxGUI implements ServerGUIInterface {
      * @return Eingegebene Empfangspuffer-Größe
      */
     private int readReceiveBufferSize() {
-
-        String item = receiveBufferSize.getText();
-        LOG.debug("Empfangspuffergröße: {}", receiveBufferSize);
-        int iReceiveBufferSize = 0;
-        if (item.matches("[0-9]+")) {
-            iReceiveBufferSize = Integer.parseInt(receiveBufferSize.getText());
-            if ((iReceiveBufferSize <= 0)
-                    || (iReceiveBufferSize > Integer.parseInt(SystemConstants.MAX_RECEIVE_BUFFER_SIZE))) {
-                startable = false;
-                receiveBufferSizeLabel.setTextFill(Color.web(SystemConstants.RED_COLOR));
-            } else {
-                receiveBufferSizeLabel.setTextFill(Color.web(SystemConstants.BLACK_COLOR));
-            }
-        } else {
-            startable = false;
-            receiveBufferSizeLabel.setTextFill(Color.web(SystemConstants.RED_COLOR));
-        }
-        return (iReceiveBufferSize);
+        String size = receiveBufferSize.getText();
+        Tupel<Integer, Boolean> result = ServerStarter.validateReceiveBufferSize(size);
+        startable = result.getY();
+        return result.getX();
     }
 
     private String getCurrentTime(Calendar cal) {

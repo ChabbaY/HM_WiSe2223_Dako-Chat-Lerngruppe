@@ -1,5 +1,8 @@
-package edu.hm.dako.chatclient;
+package edu.hm.dako.chatclient.gui;
 
+import edu.hm.dako.chatclient.ClientImpl;
+import edu.hm.dako.chatclient.ClientModel;
+import edu.hm.dako.chatclient.ClientUserInterface;
 import edu.hm.dako.common.ExceptionHandler;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -11,7 +14,6 @@ import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.LoggerContext;
-
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -86,8 +88,8 @@ public class ClientFxGUI extends Application implements ClientUserInterface {
      * Diese Methode wird von Java FX bei Aufruf der launch-Methode implizit aufgerufen
      */
     @Override
-    public void start(Stage primaryStage) throws Exception {
-        URL resource = getClass().getResource("LogInGui.fxml");
+    public void start(Stage stage) throws Exception {
+        URL resource = getClass().getResource("LogInGUI.fxml");
         FXMLLoader loader;
         if (resource != null) {
             LOG.error("FXML-Datei gelesen: {}", resource);
@@ -99,11 +101,11 @@ public class ClientFxGUI extends Application implements ClientUserInterface {
         Parent root = loader.load();
         LogInGUIController lc = loader.getController();
         lc.setAppController(this);
-        primaryStage.setTitle("Anmelden");
-        primaryStage.setScene(new Scene(root, 280, 320));
+        stage.setTitle("Anmelden");
+        stage.setScene(new Scene(root, 280, 320));
         root.setStyle("-fx-background-color: linear-gradient(from 0% 100% to 100% 0%, #16a34a, #60a5fa)");
-        stage = primaryStage;
-        primaryStage.show();
+        this.stage = stage;
+        stage.show();
     }
 
     /**
@@ -146,7 +148,7 @@ public class ClientFxGUI extends Application implements ClientUserInterface {
      */
     public void switchToLogInGui() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("LogInGui.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("LogInGUI.fxml"));
             Parent root = loader.load();
             LogInGUIController lc = loader.getController();
             lc.setAppController(this);

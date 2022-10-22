@@ -4,7 +4,6 @@ import edu.hm.dako.common.ClientConversationStatus;
 import edu.hm.dako.connection.Connection;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import java.util.Vector;
 
 /**

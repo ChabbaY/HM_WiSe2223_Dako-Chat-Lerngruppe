@@ -1,5 +1,8 @@
 package edu.hm.dako.chatbenchmarking;
 
+import edu.hm.dako.chatbenchmarking.gui.BenchmarkingClientUserInterface;
+import edu.hm.dako.chatbenchmarking.gui.UserInterfaceInputParameters;
+
 /**
  * Schnittstelle zum Starten eines Benchmarks
  *

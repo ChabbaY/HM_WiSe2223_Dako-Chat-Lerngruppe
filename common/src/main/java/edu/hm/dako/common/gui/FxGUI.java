@@ -1,4 +1,4 @@
-package edu.hm.dako.common.graphics;
+package edu.hm.dako.common.gui;
 
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -16,7 +16,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-
 import java.awt.Dimension;
 import java.awt.Toolkit;
 
@@ -65,7 +64,7 @@ public class FxGUI extends Application{
     /**
      * Bildschirmauflösung
      */
-    protected Dimension dim;
+    protected final Dimension dim;
 
     /**
      * display panel

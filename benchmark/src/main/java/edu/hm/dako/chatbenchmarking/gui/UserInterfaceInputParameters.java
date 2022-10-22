@@ -1,4 +1,4 @@
-package edu.hm.dako.chatbenchmarking;
+package edu.hm.dako.chatbenchmarking.gui;
 
 import edu.hm.dako.common.ChatServerImplementationType;
 

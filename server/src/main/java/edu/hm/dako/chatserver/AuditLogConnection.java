@@ -11,7 +11,6 @@ import edu.hm.dako.connection.udp.UDPClientConnectionFactory;
 import edu.hm.dako.connection.tcp.TCPConnectionFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import java.rmi.Naming;
 
 /**

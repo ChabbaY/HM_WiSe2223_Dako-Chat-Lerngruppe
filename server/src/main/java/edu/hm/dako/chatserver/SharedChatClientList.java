@@ -3,7 +3,6 @@ package edu.hm.dako.chatserver;
 import edu.hm.dako.common.ClientConversationStatus;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import java.util.HashSet;
 import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;

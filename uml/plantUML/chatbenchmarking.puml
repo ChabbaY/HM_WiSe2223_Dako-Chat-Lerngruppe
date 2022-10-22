@@ -1,5 +1,5 @@
 @startuml
-interface edu.hm.dako.chatbenchmarking.BenchmarkingClientUserInterface {
+interface edu.hm.dako.chatbenchmarking.gui.BenchmarkingClientUserInterface {
 ~ void showStartData(UserInterfaceStartData)
 ~ void showResultData(UserInterfaceResultData)
 ~ void setMessageLine(String)
@@ -52,7 +52,7 @@ class edu.hm.dako.chatbenchmarking.DistributionMetrics {
 interface edu.hm.dako.chatbenchmarking.BenchmarkingStartInterface {
 ~ void executeTest(UserInterfaceInputParameters,BenchmarkingClientUserInterface)
 }
-class edu.hm.dako.chatbenchmarking.UserInterfaceResultData {
+class edu.hm.dako.chatbenchmarking.gui.UserInterfaceResultData {
 ~ double mean
 ~ double standardDeviation
 - long numberOfSentRequests
@@ -131,7 +131,7 @@ class edu.hm.dako.chatbenchmarking.BenchmarkingClientFactory {
 - <<Create>> BenchmarkingClientFactory()
 + {static} Runnable getClient(ClientUserInterface,UserInterfaceInputParameters,int,SharedClientStatistics,BenchmarkingClientUserInterface)
 }
-class edu.hm.dako.chatbenchmarking.BenchmarkingClientFxGUI {
+class edu.hm.dako.chatbenchmarking.gui.BenchmarkingClientFxGUI {
 - {static} int MIN_SCREEN_SIZE
 - {static} Pattern IPV6_PATTERN
 - {static} Pattern IPV4_PATTERN
@@ -283,7 +283,7 @@ class edu.hm.dako.chatbenchmarking.BenchmarkingClientCoordinator {
 + long getNumberOfReceivedChatMessages()
 - UserInterfaceResultData getResultData(long)
 }
-class edu.hm.dako.chatbenchmarking.UserInterfaceStartData {
+class edu.hm.dako.chatbenchmarking.gui.UserInterfaceStartData {
 ~ long numberOfRequests
 ~ String startTime
 ~ long numberOfPlannedEventMessages
@@ -422,7 +422,7 @@ class edu.hm.dako.chatbenchmarking.SharedClientStatistics.ClientStatistics {
 ~ long avgServerTime
 ~ long maxHeapSize
 }
-class edu.hm.dako.chatbenchmarking.UserInterfaceInputParameters {
+class edu.hm.dako.chatbenchmarking.gui.UserInterfaceInputParameters {
 - int numberOfClients
 - int messageLength
 - int clientThinkTime
@@ -486,8 +486,8 @@ class edu.hm.dako.chatbenchmarking.BenchmarkingConstants {
 }
 
 
-edu.hm.dako.chatbenchmarking.BenchmarkingClientUserInterface <|.. edu.hm.dako.chatbenchmarking.BenchmarkingClientFxGUI
-javafx.application.Application <|-- edu.hm.dako.chatbenchmarking.BenchmarkingClientFxGUI
+edu.hm.dako.chatbenchmarking.gui.BenchmarkingClientUserInterface <|.. edu.hm.dako.chatbenchmarking.gui.BenchmarkingClientFxGUI
+javafx.application.Application <|-- edu.hm.dako.chatbenchmarking.gui.BenchmarkingClientFxGUI
 edu.hm.dako.chatbenchmarking.BenchmarkingStartInterface <|.. edu.hm.dako.chatbenchmarking.BenchmarkingClientCoordinator
 edu.hm.dako.chatclient.ClientUserInterface <|.. edu.hm.dako.chatbenchmarking.BenchmarkingClientCoordinator
 edu.hm.dako.chatbenchmarking.Thread <|-- edu.hm.dako.chatbenchmarking.BenchmarkingClientCoordinator

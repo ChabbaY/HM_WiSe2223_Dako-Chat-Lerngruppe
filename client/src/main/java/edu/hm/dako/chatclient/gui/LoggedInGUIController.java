@@ -1,4 +1,4 @@
-package edu.hm.dako.chatclient;
+package edu.hm.dako.chatclient.gui;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -10,7 +10,6 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import java.io.IOException;
 
 /**

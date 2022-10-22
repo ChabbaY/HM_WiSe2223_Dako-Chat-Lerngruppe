@@ -10,7 +10,7 @@ import edu.hm.dako.connection.tcp.TCPServerSocket;
  */
 public class EchoTCPServerMultiThreaded {
     TCPServerSocket serverSocket = null;
-    final TCPConnection con = null;
+    static TCPConnection con = null;
 
     /**
      * Multithreaded Echo Client
@@ -31,7 +31,7 @@ public class EchoTCPServerMultiThreaded {
         while (listening) {
             try {
                 System.out.println("Server wartet auf Verbindungsanfragen ...");
-                TCPConnection con = server.waitForConnection();
+                con = server.waitForConnection();
                 EchoWorkerThread w1 = new EchoWorkerThread(con);
                 w1.start();
             } catch (Exception e3) {

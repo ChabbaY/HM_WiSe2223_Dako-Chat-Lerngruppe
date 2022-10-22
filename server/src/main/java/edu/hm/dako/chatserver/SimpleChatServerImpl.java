@@ -1,12 +1,11 @@
 package edu.hm.dako.chatserver;
 
+import edu.hm.dako.chatserver.gui.ServerGUIInterface;
 import edu.hm.dako.common.ExceptionHandler;
 import edu.hm.dako.connection.Connection;
 import edu.hm.dako.connection.ServerSocketInterface;
-import javafx.concurrent.Task;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import java.util.Vector;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -22,8 +21,7 @@ public class SimpleChatServerImpl extends AbstractChatServer {
     // ThreadPool für Worker-Threads
     private final ExecutorService executorService;
 
-    // Socket für den Listener, der alle Verbindungsaufbauwünsche der Clients
-    // entgegennimmt
+    // Socket für den Listener, der alle Verbindungsaufbauwünsche der Clients entgegennimmt
     private final ServerSocketInterface socket;
 
     // Verbindung zum AuditLog-Server
@@ -85,9 +83,9 @@ public class SimpleChatServerImpl extends AbstractChatServer {
 
     @Override
     public void start() {
-        Task<Void> task = new Task<>() {
+        Thread thread = new Thread() {
             @Override
-            protected Void call() {
+            public void run() {
                 // ClientListe erzeugen
                 clients = SharedChatClientList.getInstance();
 
@@ -117,12 +115,10 @@ public class SimpleChatServerImpl extends AbstractChatServer {
                         }
                     }
                 }
-                return null;
             }
         };
-        Thread th = new Thread(task);
-        th.setDaemon(true);
-        th.start();
+        thread.setDaemon(true);
+        thread.start();
     }
 
     @Override
