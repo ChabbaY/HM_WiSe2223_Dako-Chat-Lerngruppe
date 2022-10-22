@@ -1,7 +1,13 @@
 jar.enabled = true
 
 dependencies {
-
     implementation project(':common')
     implementation project(':communication')
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.9.0'
+}
+
+test {
+    useJUnit()
+    useJUnitPlatform()
 }

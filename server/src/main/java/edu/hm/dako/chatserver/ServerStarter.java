@@ -4,6 +4,7 @@ import edu.hm.dako.common.AuditLogImplementationType;
 import edu.hm.dako.common.ChatServerImplementationType;
 import edu.hm.dako.common.ExceptionHandler;
 import edu.hm.dako.common.SystemConstants;
+import edu.hm.dako.common.Tupel;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -99,9 +100,21 @@ public class ServerStarter {
                         implType = SystemConstants.IMPL_TCP_ADVANCED;
                     }
                 }
-                case "--port" -> port = validateServerPort(values[1]);
-                case "--send-buffer" -> sendBuffer = validateSendBufferSize(values[1]);
-                case "--receive-buffer" -> receiveBuffer = validateReceiveBufferSize(values[1]);
+                case "--port" -> {
+                    Tupel<Integer, Boolean> result = validateServerPort(values[1]);
+                    port = result.getX();
+                    startable = result.getY();
+                }
+                case "--send-buffer" -> {
+                    Tupel<Integer, Boolean> result = validateSendBufferSize(values[1]);
+                    sendBuffer = result.getX();
+                    startable = result.getY();
+                }
+                case "--receive-buffer" -> {
+                    Tupel<Integer, Boolean> result = validateReceiveBufferSize(values[1]);
+                    receiveBuffer = result.getX();
+                    startable = result.getY();
+                }
                 case "--auditlog" -> {
                     if ("false".equals(values[1])) {
                         auditlog = false;
@@ -115,7 +128,11 @@ public class ServerStarter {
                     }
                 }
                 case "--auditlog-host" -> auditlog_host = values[1];
-                case "--auditlog-port" -> auditlog_port = validateAuditLogServerPort(values[1], auditlog_protocol);
+                case "--auditlog-port" -> {
+                    Tupel<Integer, Boolean> result = validateAuditLogServerPort(values[1], auditlog_protocol);
+                    auditlog_port = result.getX();
+                    startable = result.getY();
+                }
             }
         }
 
@@ -225,10 +242,11 @@ public class ServerStarter {
     /**
      * validate auditLog-server port
      *
-     * @return port
+     * @return Tupel\<port, startable\>
      */
-    private int validateAuditLogServerPort(String port, String auditLogServerImplType) {
+    public static Tupel<Integer, Boolean> validateAuditLogServerPort(String port, String auditLogServerImplType) {
         int iServerPort = 0;
+        boolean startable = true;
         if (port.matches("[0-9]+")) {
             iServerPort = Integer.parseInt(port);
             if ((iServerPort < 1) || (iServerPort > 65535)) {
@@ -243,7 +261,7 @@ public class ServerStarter {
         } else {
             startable = false;
         }
-        return (iServerPort);
+        return new Tupel<>(iServerPort, startable);
     }
 
     /**
@@ -251,8 +269,9 @@ public class ServerStarter {
      *
      * @return port
      */
-    private int validateServerPort(String port) {
+    public static Tupel<Integer, Boolean> validateServerPort(String port) {
         int iServerPort = 0;
+        boolean startable = true;
         if (port.matches("[0-9]+")) {
             iServerPort = Integer.parseInt(port);
             if ((iServerPort < 1) || (iServerPort > 65535)) {
@@ -263,7 +282,7 @@ public class ServerStarter {
         } else {
             startable = false;
         }
-        return (iServerPort);
+        return new Tupel<>(iServerPort, startable);
     }
 
     /**
@@ -271,8 +290,9 @@ public class ServerStarter {
      *
      * @return send buffer size
      */
-    private int validateSendBufferSize(String size) {
+    public static Tupel<Integer, Boolean> validateSendBufferSize(String size) {
         int iSendBufferSize = 0;
+        boolean startable = true;
         if (size.matches("[0-9]+")) {
             iSendBufferSize = Integer.parseInt(size);
             if ((iSendBufferSize <= 0)
@@ -284,7 +304,7 @@ public class ServerStarter {
         } else {
             startable = false;
         }
-        return (iSendBufferSize);
+        return new Tupel<>(iSendBufferSize, startable);
     }
 
     /**
@@ -292,8 +312,9 @@ public class ServerStarter {
      *
      * @return receive buffer size
      */
-    private int validateReceiveBufferSize(String size) {
+    public static Tupel<Integer, Boolean> validateReceiveBufferSize(String size) {
         int iReceiveBufferSize = 0;
+        boolean startable = true;
         if (size.matches("[0-9]+")) {
             iReceiveBufferSize = Integer.parseInt(size);
             if ((iReceiveBufferSize <= 0)
@@ -305,6 +326,6 @@ public class ServerStarter {
         } else {
             startable = false;
         }
-        return (iReceiveBufferSize);
+        return new Tupel<>(iReceiveBufferSize, startable);
     }
 }

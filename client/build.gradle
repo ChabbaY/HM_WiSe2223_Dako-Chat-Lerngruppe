@@ -10,7 +10,6 @@ application {
 jar.enabled = true
 
 javafx {
-    //version = "17.0.2"
     version = '18'
     modules = ['javafx.controls', 'javafx.fxml']
 }
@@ -25,16 +24,20 @@ sourceSets {
 }
 
 dependencies {
-
     implementation project(':common')
     implementation project(':communication')
-    //implementation 'org.openjfx:javafx:17.0.2'
     implementation 'org.openjfx:javafx:19'
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.9.0'
+}
+
+test {
+    useJUnit()
+    useJUnitPlatform()
 }
 
 // build chatclient jar file
 task createChatClientJar(type: Jar) {
-
     // remove deprecated warning for gradle 7
     duplicatesStrategy = DuplicatesStrategy.INCLUDE
     manifest {
