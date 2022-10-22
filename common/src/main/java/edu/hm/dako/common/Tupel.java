@@ -5,6 +5,7 @@ package edu.hm.dako.common;
  *
  * @param <X> data type 1
  * @param <Y> data type 2
+ * @author Linus Englert
  */
 public class Tupel <X, Y> {
     /**

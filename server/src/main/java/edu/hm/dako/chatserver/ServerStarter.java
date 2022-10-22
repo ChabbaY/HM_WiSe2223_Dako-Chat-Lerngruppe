@@ -35,6 +35,9 @@ public class ServerStarter {
      */
     private boolean startable = true;
 
+    /**
+     * flag that is true when a GUI is used
+     */
     private static boolean GUI = true;
 
     /**
@@ -81,6 +84,17 @@ public class ServerStarter {
 
     /**
      * Konstruktor
+     *
+     * @param args available args, please only use non-default, auditlog-protocol must be specified before auditlog-port
+     *             --nogui disables the gui
+     *             --protocol=tcpsimple (default; tcpadvanced not implemented yet)
+     *             --port=50001 (default)
+     *             --send-buffer=300000 (default)
+     *             --receive-buffer=300000 (default)
+     *             --auditlog=true | false (default true)
+     *             --auditlog-protocol=tcp | udp | rmi (default tcp)
+     *             --auditlog-host=localhost (default)
+     *             --auditlog-port=40001 (default)
      */
     public ServerStarter(String[] args) {
         String implType = SystemConstants.IMPL_TCP_SIMPLE;
@@ -186,6 +200,18 @@ public class ServerStarter {
             return true;
         }
     }
+
+    /**
+     * Chat-Server starten
+     *
+     * @param implType          Implementierungstyp, der zu starten ist
+     * @param serverPort        Serverport, die der Server als Listener-Port nutzen soll
+     * @param sendBufferSize    Sendepuffergröße, die der Server nutzen soll
+     * @param receiveBufferSize Empfangspuffergröße, die der Server nutzen soll
+     * @param auditLogServerHostname address of the audit log server
+     * @param auditLogServerPort port of the audit log server
+     * @param auditLogServerImplType implementation of the audit log server
+     */
     private boolean startChatServer(String implType, int serverPort, int sendBufferSize, int receiveBufferSize,
                                  String auditLogServerHostname, int auditLogServerPort, String auditLogServerImplType)
             throws Exception {
@@ -243,7 +269,9 @@ public class ServerStarter {
     /**
      * validate auditLog-server port
      *
-     * @return Tupel\<port, startable\>
+     * @param port audit log server port
+     * @param auditLogServerImplType implementation type of the audit log server
+     * @return Tupel(port, startable)
      */
     public static Tupel<Integer, Boolean> validateAuditLogServerPort(String port, String auditLogServerImplType) {
         int iServerPort = 0;
@@ -268,6 +296,7 @@ public class ServerStarter {
     /**
      * validate server port
      *
+     * @param port port to validate
      * @return port
      */
     public static Tupel<Integer, Boolean> validateServerPort(String port) {
@@ -289,6 +318,7 @@ public class ServerStarter {
     /**
      * validate send buffer size
      *
+     * @param size buffer size to validate
      * @return send buffer size
      */
     public static Tupel<Integer, Boolean> validateSendBufferSize(String size) {
@@ -311,6 +341,7 @@ public class ServerStarter {
     /**
      * validate receive buffer size
      *
+     * @param size buffer size to validate
      * @return receive buffer size
      */
     public static Tupel<Integer, Boolean> validateReceiveBufferSize(String size) {

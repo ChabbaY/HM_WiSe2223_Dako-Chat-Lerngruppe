@@ -85,6 +85,13 @@ public class ClientStarter {
 
     /**
      * Konstruktor
+     *
+     * @param args available args, please only use non-default
+     *             --nogui disables the gui
+     *             --server=127.0.0.1 (default)
+     *             --port=50001 (default)
+     *             --protocol=tcpsimple (default; tcpadvanced not implemented yet)
+     *             --username=steve (will be chosen randomly if not specified)
      */
     public ClientStarter(String[] args) {
         String host = "127.0.0.1";
