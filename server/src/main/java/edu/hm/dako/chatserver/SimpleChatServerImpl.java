@@ -83,40 +83,37 @@ public class SimpleChatServerImpl extends AbstractChatServer {
 
     @Override
     public void start() {
-        Thread thread = new Thread() {
-            @Override
-            public void run() {
-                // ClientListe erzeugen
-                clients = SharedChatClientList.getInstance();
+        Thread thread = new Thread(() -> {
+            // ClientListe erzeugen
+            clients = SharedChatClientList.getInstance();
 
-                while (!Thread.currentThread().isInterrupted() && !socket.isClosed()) {
-                    try {
-                        // Auf ankommende Verbindungsaufbauwünsche warten
-                        System.out.println("SimpleChatServer wartet auf Verbindungsanfragen von Clients...");
-                        Connection connection = socket.accept();
-                        LOG.debug("Neuer Verbindungsaufbauwunsch empfangen");
+            while (!Thread.currentThread().isInterrupted() && !socket.isClosed()) {
+                try {
+                    // Auf ankommende Verbindungsaufbauwünsche warten
+                    System.out.println("SimpleChatServer wartet auf Verbindungsanfragen von Clients...");
+                    Connection connection = socket.accept();
+                    LOG.debug("Neuer Verbindungsaufbauwunsch empfangen");
 
-                        if (auditLogConnection == null) {
-                            // Neuen WorkerThread starten ohne AuditLog-Verbindung
-                            executorService.submit(new SimpleChatWorkerThreadImpl(connection, clients,
-                                    counter, serverGuiInterface));
-                        } else {
-                            // Wenn der AuditLog-Server verbunden ist, dann jedem WorkerThread die Verbindung
-                            // zu diesem mitgeben
-                            executorService.submit(new SimpleChatWorkerThreadImpl(connection, clients,
-                                    counter, serverGuiInterface, auditLogConnection));
-                        }
-                    } catch (Exception e) {
-                        if (socket.isClosed()) {
-                            LOG.debug("Socket wurde geschlossen");
-                        } else {
-                            LOG.error("Exception beim Entgegennehmen von Verbindungsaufbauwünschen: " + e);
-                            ExceptionHandler.logException(e);
-                        }
+                    if (auditLogConnection == null) {
+                        // Neuen WorkerThread starten ohne AuditLog-Verbindung
+                        executorService.submit(new SimpleChatWorkerThreadImpl(connection, clients,
+                                counter, serverGuiInterface));
+                    } else {
+                        // Wenn der AuditLog-Server verbunden ist, dann jedem WorkerThread die Verbindung
+                        // zu diesem mitgeben
+                        executorService.submit(new SimpleChatWorkerThreadImpl(connection, clients,
+                                counter, serverGuiInterface, auditLogConnection));
+                    }
+                } catch (Exception e) {
+                    if (socket.isClosed()) {
+                        LOG.debug("Socket wurde geschlossen");
+                    } else {
+                        LOG.error("Exception beim Entgegennehmen von Verbindungsaufbauwünschen: " + e);
+                        ExceptionHandler.logException(e);
                     }
                 }
             }
-        };
+        });
         thread.setDaemon(true);
         thread.start();
     }

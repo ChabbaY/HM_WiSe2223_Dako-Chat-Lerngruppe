@@ -281,7 +281,7 @@ public class BenchmarkingClientImpl extends AbstractChatClient
      */
     private void sendMessageAndWaitForAck(int i) {
         // Dummy-Nachricht zusammenbauen
-        final StringBuilder chatMessage = new StringBuilder("");
+        final StringBuilder chatMessage = new StringBuilder();
         chatMessage.append("+".repeat(Math.max(0, messageLength)));
 
         // Senden der Nachricht und warten, bis Bestätigung vom Server da ist

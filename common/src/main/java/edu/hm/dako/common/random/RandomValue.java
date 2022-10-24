@@ -2,13 +2,32 @@ package edu.hm.dako.common.random;
 
 import java.util.Random;
 
+/**
+ * zufällige Werte fürs Testen generieren
+ *
+ * @author Linus Englert
+ */
 public class RandomValue {
+    /**
+     * Konstruktor
+     */
+    public RandomValue() {
+    }
+
+    /**
+     * zufälliger User Name
+     *
+     * @return random name
+     */
     public static String randomName() {
         Random random = new Random();
         Name[] namen = Name.values();
         return namen[random.nextInt(namen.length)].toString() + "_" + (random.nextInt(8999) + 1000);
     }
 
+    /**
+     * beliebige Namen für das Bilden von User Namen
+     */
     private enum Name {
         //A
         abba, adele, admin, afraid_to_feel, agustin, aha, alex, alexander, american_idiot, amy, amy_winehouse,

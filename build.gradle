@@ -9,7 +9,7 @@ allprojects {
     targetCompatibility = 18
 
     checkstyle {
-        toolVersion '8.42'   // your choice here
+        toolVersion '10.3.4'   // your choice here (was 8.42)
     }
 
     ext['log4j2.version'] = '2.15.0'
@@ -44,7 +44,7 @@ subprojects {
     targetCompatibility = 16
 
     checkstyle {
-        toolVersion '8.42'   // your choice here
+        toolVersion '10.3.4'   // your choice here (was 8.42)
     }
 
     ext['log4j2.version'] = '2.15.0'
