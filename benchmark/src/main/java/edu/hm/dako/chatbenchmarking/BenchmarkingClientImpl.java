@@ -341,7 +341,7 @@ public class BenchmarkingClientImpl extends AbstractChatClient
         sharedStatistics.increaseReceivedMsgCounter(clientNumber, rtt, serverTime);
 
         // Progressbar weiterschreiben
-        benchmarkingGui.countUpProgressTask();
+        if (benchmarkingGui != null) benchmarkingGui.countUpProgressTask();
 
         if (rtt <= serverTime) {
             // Test, ob Messung plausibel ist, rtt muss größer als serverTime sein

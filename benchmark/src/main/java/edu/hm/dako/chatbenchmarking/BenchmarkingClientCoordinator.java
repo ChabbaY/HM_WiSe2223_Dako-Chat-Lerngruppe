@@ -94,14 +94,14 @@ public class BenchmarkingClientCoordinator extends Thread implements Benchmarkin
     }
 
     @Override
-    public void executeTest(UserInterfaceInputParameters param,
-                            BenchmarkingClientUserInterface clientGui) {
+    public void executeTest(UserInterfaceInputParameters param, BenchmarkingClientUserInterface clientGui) {
 
         this.params = param;
         this.benchmarkingClientGui = clientGui;
 
-        clientGui.setMessageLine(param.mapImplementationTypeToString(param.getChatServerImplementationType())
+        if (clientGui != null) clientGui.setMessageLine(param.mapImplementationTypeToString(param.getChatServerImplementationType())
                 + ": Benchmark gestartet");
+        else System.out.println("Benchmark gestartet");
 
         // Anzahl aller erwarteten Requests ermitteln
         numberOfAllRequests = (long) param.getNumberOfClients() * param.getNumberOfMessages();
@@ -110,11 +110,13 @@ public class BenchmarkingClientCoordinator extends Thread implements Benchmarkin
         sharedData = new SharedClientStatistics(param.getNumberOfClients(),
                 param.getNumberOfMessages(), param.getClientThinkTime());
 
-        // Berechnung aller Messages für Progress-Bar
-        if (clientGui.getProgressBar() != null) {
-            clientGui.getProgressBar()
-                    .setMaximum(param.getNumberOfClients() * param.getNumberOfMessages()
-                            + param.getNumberOfClients() + param.getNumberOfClients());
+        if (clientGui != null) {
+            // Berechnung aller Messages für Progress-Bar
+            if (clientGui.getProgressBar() != null) {
+                clientGui.getProgressBar()
+                        .setMaximum(param.getNumberOfClients() * param.getNumberOfMessages()
+                                + param.getNumberOfClients() + param.getNumberOfClients());
+            }
         }
 
         startTime = 0;
@@ -139,8 +141,7 @@ public class BenchmarkingClientCoordinator extends Thread implements Benchmarkin
         // Test aktiv
         running = true;
 
-        // Client-Threads in Abhängigkeit des Implementierungstyps instanziieren
-        // und starten
+        // Client-Threads in Abhängigkeit des Implementierungstyps instanziieren und starten
         ExecutorService executorService = Executors
                 .newFixedThreadPool(params.getNumberOfClients());
 
@@ -148,9 +149,8 @@ public class BenchmarkingClientCoordinator extends Thread implements Benchmarkin
             executorService.submit(
                     BenchmarkingClientFactory.getClient(this, params, i, sharedData, benchmarkingClientGui));
 
-            // Warten, bis der Client seinen Login abgeschlossen hat. Damit erfolgt
-            // eine Serialisierung der Logins, damit die Anzahl der Login-Events genau
-            // berechnet werden kann.
+            // Warten, bis der Client seinen Login abgeschlossen hat. Damit erfolgt eine Serialisierung der Logins,
+            // damit die Anzahl der Login-Events genau berechnet werden kann.
             while (sharedData.getNumberOfLoggedInClients() != i + 1) {
                 try {
                     Thread.sleep(10);
@@ -167,9 +167,8 @@ public class BenchmarkingClientCoordinator extends Thread implements Benchmarkin
         startData.setStartTime(getCurrentTime(cal));
 
         /*
-         * Maximal mögliche Events = ChatMessage-Events + Anzahl an Login-Events
-         * (wenn alle Clients sich seriell hintereinander einloggen) + die Anzahl an
-         * Logout-Events, wenn alle Clients bis zum letzten Logout arbeiten.
+         * Maximal mögliche Events = ChatMessage-Events + Anzahl an Login-Events (wenn alle Clients sich seriell
+         * hintereinander einloggen) + die Anzahl an Logout-Events, wenn alle Clients bis zum letzten Logout arbeiten.
          */
 
         long numberOfPlannedLoginEvents = 0;
@@ -179,21 +178,20 @@ public class BenchmarkingClientCoordinator extends Thread implements Benchmarkin
         log.debug("Anzahl geplanter LoginEvent-Nachrichten: " + numberOfPlannedLoginEvents);
 
         long numberOfPlannedMessagesEvents = numberOfAllRequests * params.getNumberOfClients();
-        log.debug(
-                "Anzahl geplanter MessageEvent-Nachrichten: " + numberOfPlannedMessagesEvents);
+        log.debug("Anzahl geplanter MessageEvent-Nachrichten: " + numberOfPlannedMessagesEvents);
 
-        long numberOfPlannedLogoutEvents = (long) params.getNumberOfClients()
-                * params.getNumberOfClients();
+        long numberOfPlannedLogoutEvents = (long) params.getNumberOfClients() * params.getNumberOfClients();
 
         log.debug("Anzahl geplanter LogoutEvent-Nachrichten: " + numberOfPlannedLogoutEvents);
 
-        startData.setNumberOfPlannedEventMessages(numberOfPlannedMessagesEvents
-                + numberOfPlannedLoginEvents + numberOfPlannedLogoutEvents);
+        startData.setNumberOfPlannedEventMessages(numberOfPlannedMessagesEvents + numberOfPlannedLoginEvents
+                + numberOfPlannedLogoutEvents);
 
-        benchmarkingClientGui.showStartData(startData);
+        if (benchmarkingClientGui != null) benchmarkingClientGui.showStartData(startData);
 
-        benchmarkingClientGui.setMessageLine(
-                "Alle " + params.getNumberOfClients() + " Clients-Threads gestartet");
+        if (benchmarkingClientGui != null) benchmarkingClientGui.setMessageLine("Alle " + params.getNumberOfClients()
+                + " Clients-Threads gestartet");
+        else System.out.println("Alle Client-Threads gestartet");
 
         // Auf das Ende aller Clients warten
         executorService.shutdown();
@@ -208,24 +206,23 @@ public class BenchmarkingClientCoordinator extends Thread implements Benchmarkin
         // Laufzeitzähler-Thread beenden
         timeCounterThread.stopThread();
 
-        // Analyse der Ergebnisse durchführen, Statistikdaten berechnen und
-        // ausgeben
+        // Analyse der Ergebnisse durchführen, Statistikdaten berechnen und ausgeben
         // sharedData.printStatistic();
 
         // Testergebnisse ausgeben
-        benchmarkingClientGui.setMessageLine("Alle Clients-Threads beendet");
+        if (benchmarkingClientGui != null) benchmarkingClientGui.setMessageLine("Alle Clients-Threads beendet");
+        else System.out.println("Alle Clients-Threads beendet");
 
         UserInterfaceResultData resultData = getResultData(startTime);
 
-        benchmarkingClientGui.showResultData(resultData);
-        benchmarkingClientGui
-                .setMessageLine(params.mapImplementationTypeToString(params.getChatServerImplementationType())
-                        + ": Benchmark beendet");
+        if (benchmarkingClientGui != null) benchmarkingClientGui.showResultData(resultData);
+        if (benchmarkingClientGui != null) benchmarkingClientGui.setMessageLine(params.mapImplementationTypeToString(
+                params.getChatServerImplementationType()) + ": Benchmark beendet");
 
-        benchmarkingClientGui.testFinished();
+        if (benchmarkingClientGui != null) benchmarkingClientGui.testFinished();
+        else System.out.println("Benchmark beendet");
 
-        log.debug(
-                "Anzahl aller erneuten Sendungen wegen Nachrichtenverlust (Übertragungswiederholungen): "
+        log.debug("Anzahl aller erneuten Sendungen wegen Nachrichtenverlust (Übertragungswiederholungen): "
                         + sharedData.getSumOfAllRetries());
 
         // Datensatz für Benchmark-Lauf auf Protokolldatei schreiben

@@ -2,6 +2,7 @@ package edu.hm.dako.chatclient;
 
 import edu.hm.dako.chatclient.gui.ClientFxGUI;
 import edu.hm.dako.common.SystemConstants;
+import edu.hm.dako.common.Tupel;
 import edu.hm.dako.common.random.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -33,6 +34,11 @@ public class ClientStarter {
      * will be set to true with every sent message
      */
     public static volatile boolean lock = true;
+
+    /**
+     * Flag, das angibt, ob der Client gestartet werden kann (alle Plausibilitätsprüfungen erfüllt)
+     */
+    private boolean startable = true;
 
     /**
      * starts the chat client
@@ -104,8 +110,17 @@ public class ClientStarter {
             switch (values[0]) {
                 case "--nogui" -> GUI = false;
                 case "--server" -> host = values[1];
-                case "--port" -> port = Integer.parseInt(values[1]);
-                case "--protocol" -> implType = values[1];
+                case "--port" -> {
+                    Tupel<Integer, Boolean> result = validateServerPort(values[1]);
+                    port = result.getX();
+                    startable = result.getY();
+                }
+                case "--protocol" -> {
+                    implType = values[1];
+                    if ("tcpadvanced".equals(values[1])) {
+                        implType = SystemConstants.IMPL_TCP_ADVANCED;
+                    }
+                }
                 case "--username" -> username = values[1];
             }
         }
@@ -118,6 +133,11 @@ public class ClientStarter {
     }
 
     private void startChatClient(String host, int port, String implType) {
+        if (!startable) {
+            LOG.error("Login konnte nicht zum Server gesendet werden, fehlerhafte Eingaben");
+            return;
+        }
+
         chatClient = new ClientImpl(null, port, host, implType);
 
         try {
@@ -144,5 +164,29 @@ public class ClientStarter {
             // Senden funktioniert nicht, Server vermutlich nicht aktiv
             LOG.error("Senden konnte nicht durchgeführt werden, Server aktiv?");
         }
+    }
+
+    //-----VALIDATION-----------------------------------------
+
+    /**
+     * validate server port
+     *
+     * @param port port to validate
+     * @return port
+     */
+    public static Tupel<Integer, Boolean> validateServerPort(String port) {
+        int iServerPort = 0;
+        boolean startable = true;
+        if (port.matches("[0-9]+")) {
+            iServerPort = Integer.parseInt(port);
+            if ((iServerPort < 1) || (iServerPort > 65535)) {
+                startable = false;
+            } else {
+                LOG.debug("Serverport: " + iServerPort);
+            }
+        } else {
+            startable = false;
+        }
+        return new Tupel<>(iServerPort, startable);
     }
 }

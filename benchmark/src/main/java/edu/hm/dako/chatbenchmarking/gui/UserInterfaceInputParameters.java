@@ -62,14 +62,16 @@ public class UserInterfaceInputParameters {
      * Konstruktor: Belegung der InputParameter mit Standardwerten
      */
     public UserInterfaceInputParameters() {
-        numberOfClients = 2;
-        clientThinkTime = 1;
-        messageLength = 100;
-        numberOfMessages = 5;
+        numberOfClients = 1;
+        clientThinkTime = 100;
+        messageLength = 10;
+        numberOfMessages = 10;
         remoteServerPort = 50001;
         remoteServerAddress = "127.0.0.1";
         implementationType = ChatServerImplementationType.TCPSimpleImplementation;
         measurementType = MeasurementType.VarThreads;
+        numberOfRetries = 1;
+        responseTimeout = 2000;
     }
 
     /**

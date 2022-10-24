@@ -34,7 +34,7 @@ public class BenchmarkingTimeCounterThread extends Thread {
     public void run() {
         log.debug(getName() + " gestartet");
 
-        out.resetCurrentRunTime();
+        if (out != null) out.resetCurrentRunTime();
 
         while (running) {
             try {
@@ -43,7 +43,7 @@ public class BenchmarkingTimeCounterThread extends Thread {
                 log.debug("Sleep unterbrochen");
             }
 
-            out.addCurrentRunTime(SLEEP_TIME_IN_SECONDS);
+            if (out != null) out.addCurrentRunTime(SLEEP_TIME_IN_SECONDS);
         }
     }
 
