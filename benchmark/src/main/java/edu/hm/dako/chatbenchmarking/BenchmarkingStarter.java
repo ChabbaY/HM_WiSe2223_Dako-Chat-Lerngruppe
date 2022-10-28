@@ -3,7 +3,7 @@ package edu.hm.dako.chatbenchmarking;
 import edu.hm.dako.chatbenchmarking.gui.BenchmarkingClientFxGUI;
 import edu.hm.dako.chatbenchmarking.gui.UserInterfaceInputParameters;
 import edu.hm.dako.common.ChatServerImplementationType;
-import edu.hm.dako.common.SystemConstants;
+import edu.hm.dako.common.Tupel;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.LoggerContext;
@@ -15,7 +15,7 @@ import java.io.InputStreamReader;
 /**
  * starts the benchmarking server
  *
- * @author Peter Mandl, edited by Lerngruppe
+ * @author Linus Englert
  */
 public class BenchmarkingStarter {
     /**
@@ -54,7 +54,7 @@ public class BenchmarkingStarter {
      *             --port=50001 (default)
      *             --host=localhost (default)
      */
-    public static void main(String[] args) {//TODO parametrize
+    public static void main(String[] args) {
         // Log4j2-Logging aus Datei konfigurieren
         LoggerContext context = (LoggerContext) LogManager.getContext(false);
         File file = new File("config/log4j/log4j2.benchmarkingClient.xml");
@@ -112,18 +112,46 @@ public class BenchmarkingStarter {
                         iParams.setChatServerImplementationType(ChatServerImplementationType.TCPAdvancedImplementation);
                     }
                 }
-                case "--num-clients" -> iParams.setNumberOfClients(Integer.parseInt(values[1]));//TODO validate
-                case "--num-messages" -> iParams.setNumberOfMessages(Integer.parseInt(values[1]));//TODO validate
-                case "--max-retries" -> iParams.setNumberOfRetries(Integer.parseInt(values[1]));//TODO validate
+                case "--num-clients" -> {
+                    Tupel<Integer, Boolean> validation = isPositiveNumber(values[1]);
+                    iParams.setNumberOfClients(validation.getX());
+                    startable = validation.getY();
+                }
+                case "--num-messages" -> {
+                    Tupel<Integer, Boolean> validation = isPositiveNumber(values[1]);
+                    iParams.setNumberOfMessages(validation.getX());
+                    startable = validation.getY();
+                }
+                case "--max-retries" -> {
+                    Tupel<Integer, Boolean> validation = isPositiveNumber(values[1]);
+                    iParams.setNumberOfRetries(validation.getX());
+                    startable = validation.getY();
+                }
                 case "--measurement" -> {
                     if ("var-length".equals(values[1])) {
                         iParams.setMeasurementType(UserInterfaceInputParameters.MeasurementType.VarMsgLength);
                     }
                 }
-                case "--message-length" -> iParams.setMessageLength(Integer.parseInt(values[1]));//TODO validate
-                case "--response-timeout" -> iParams.setResponseTimeout(Integer.parseInt(values[1]));//TODO validate
-                case "--think-time" -> iParams.setClientThinkTime(Integer.parseInt(values[1]));//TODO validate
-                case "--port" -> iParams.setRemoteServerPort(Integer.parseInt(values[1]));//TODO validate
+                case "--message-length" -> {
+                    Tupel<Integer, Boolean> validation = isPositiveNumber(values[1]);
+                    iParams.setMessageLength(validation.getX());
+                    startable = validation.getY();
+                }
+                case "--response-timeout" -> {
+                    Tupel<Integer, Boolean> validation = isPositiveNumber(values[1]);
+                    iParams.setResponseTimeout(validation.getX());
+                    startable = validation.getY();
+                }
+                case "--think-time" -> {
+                    Tupel<Integer, Boolean> validation = isPositiveNumber(values[1]);
+                    iParams.setClientThinkTime(validation.getX());
+                    startable = validation.getY();
+                }
+                case "--port" -> {
+                    Tupel<Integer, Boolean> validation = validateServerPort(values[1]);
+                    iParams.setRemoteServerPort(validation.getX());
+                    startable = validation.getY();
+                }
                 case "--host" -> iParams.setRemoteServerAddress(values[1]);
             }
         }
@@ -145,5 +173,46 @@ public class BenchmarkingStarter {
     }
 
     //----VALIDATION
-    //TODO add validation
+
+    /**
+     * validate server port
+     *
+     * @param port port to validate
+     * @return port
+     */
+    public static Tupel<Integer, Boolean> validateServerPort(String port) {
+        int iServerPort = 0;
+        boolean startable = true;
+        if (port.matches("[0-9]+")) {
+            iServerPort = Integer.parseInt(port);
+            if ((iServerPort < 1) || (iServerPort > 65535)) {
+                startable = false;
+            } else {
+                LOG.debug("Serverport: " + iServerPort);
+            }
+        } else {
+            startable = false;
+        }
+        return new Tupel<>(iServerPort, startable);
+    }
+
+    /**
+     * validates a number to be a positive Integer
+     *
+     * @param input String that contains the number
+     * @return Tupel (parsed number, startable)
+     */
+    public static Tupel<Integer, Boolean> isPositiveNumber(String input) {
+        int output = 0;
+        boolean startable = true;
+        if (input.matches("[0-9]+")) {
+            output = Integer.parseInt(input);
+            if (output <= 0) {
+                startable = false;
+            }
+        } else {
+            startable = false;
+        }
+        return new Tupel<>(output, startable);
+    }
 }

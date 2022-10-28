@@ -36,5 +36,6 @@ out/
 
 *.log
 ChatAuditLog.dat
+Benchmarking-ChatApp-Protokolldatei
 
 /logs

@@ -17,7 +17,7 @@ import org.apache.logging.log4j.core.LoggerContext;
 /**
  * starts the chat server
  *
- * @author Peter Mandl, edited by Lerngruppe
+ * @author Linus Englert
  */
 public class ServerStarter {
     /**

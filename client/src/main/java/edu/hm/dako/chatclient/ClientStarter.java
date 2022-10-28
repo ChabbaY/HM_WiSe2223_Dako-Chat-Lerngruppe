@@ -15,7 +15,7 @@ import java.io.InputStreamReader;
 /**
  * starts the chat client
  *
- * @author Peter Mandl, edited by Lerngruppe
+ * @author Linus Englert
  */
 public class ClientStarter {
     /**
