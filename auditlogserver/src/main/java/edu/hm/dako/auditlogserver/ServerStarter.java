@@ -37,7 +37,7 @@ public class ServerStarter {
      *
      * @param args available args, please only use non-default
      *             --nogui disables the gui
-     *             --protocol=tcp | udp | rmi (default; udp & rmi not implemented yet)
+     *             --protocol=tcp | udp | rmi (default; udp and rmi not implemented yet)
      *             --port=40001 (default)
      *             --send-buffer=300000 (default)
      *             --receive-buffer=300000 (default)
@@ -76,7 +76,7 @@ public class ServerStarter {
      *
      * @param args available args, please only use non-default
      *              --nogui disables the gui
-     *             --protocol=tcp | udp | rmi (default; udp & rmi not implemented yet)
+     *             --protocol=tcp | udp | rmi (default; udp and rmi not implemented yet)
      *             --port=40001 (default)
      *             --send-buffer=300000 (default)
      *             --receive-buffer=300000 (default)

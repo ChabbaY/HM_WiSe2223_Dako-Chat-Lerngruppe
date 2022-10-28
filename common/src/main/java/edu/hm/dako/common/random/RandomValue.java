@@ -1,5 +1,6 @@
 package edu.hm.dako.common.random;
 
+import java.util.HashMap;
 import java.util.Random;
 
 /**
@@ -8,6 +9,10 @@ import java.util.Random;
  * @author Linus Englert
  */
 public class RandomValue {
+    /**
+     * hash map to store already produced random names, they won't be produced a second time
+     */
+    private static final HashMap<Integer, String> randomNames = new HashMap<>();
     /**
      * Konstruktor
      */
@@ -22,7 +27,12 @@ public class RandomValue {
     public static String randomName() {
         Random random = new Random();
         Name[] namen = Name.values();
-        return namen[random.nextInt(namen.length)].toString() + "_" + (random.nextInt(8999) + 1000);
+        String randomName = namen[random.nextInt(namen.length)].toString() + "_" + (random.nextInt(8999) + 1000);
+        while (randomNames.containsValue(randomName)) {
+            randomName = namen[random.nextInt(namen.length)].toString() + "_" + (random.nextInt(8999) + 1000);
+        }
+        randomNames.put(randomName.hashCode(), randomName);
+        return randomName;
     }
 
     /**
