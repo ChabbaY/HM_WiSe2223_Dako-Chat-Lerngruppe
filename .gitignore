@@ -39,3 +39,6 @@ ChatAuditLog.dat
 Benchmarking-ChatApp-Protokolldatei
 
 /logs
+
+### Android ###
+local.properties
