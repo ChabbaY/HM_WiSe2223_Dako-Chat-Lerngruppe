@@ -3,7 +3,7 @@ package edu.hm.dako.chatclient;
 import edu.hm.dako.chatclient.gui.ClientFxGUI;
 import edu.hm.dako.common.SystemConstants;
 import edu.hm.dako.common.Tupel;
-import edu.hm.dako.common.random.*;
+import edu.hm.dako.common.random.RandomInput;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.LoggerContext;
@@ -103,7 +103,7 @@ public class ClientStarter {
         String host = "127.0.0.1";
         int port = 50001;
         String implType = SystemConstants.IMPL_TCP_SIMPLE;
-        username = RandomValue.randomName();
+        username = RandomInput.randomName();
 
         for(String s: args) {
             String[] values = s.split("=");

@@ -8,7 +8,7 @@ import java.util.Random;
  *
  * @author Linus Englert
  */
-public class RandomValue {
+public class RandomInput {
     /**
      * hash map to store already produced random names, they won't be produced a second time
      */
@@ -16,7 +16,7 @@ public class RandomValue {
     /**
      * Konstruktor
      */
-    public RandomValue() {
+    public RandomInput() {
     }
 
     /**

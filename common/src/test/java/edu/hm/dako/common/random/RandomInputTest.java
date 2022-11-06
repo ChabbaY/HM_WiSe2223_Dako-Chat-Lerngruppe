@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 
-class RandomValueTest {
+class RandomInputTest {
 
     /**
      * ensuring that every generated name is unique
@@ -13,7 +13,7 @@ class RandomValueTest {
     void randomName() {
         HashMap<Integer, String> names = new HashMap<>();
         for (int i = 0; i < 1000; i++) {
-            String random = RandomValue.randomName();
+            String random = RandomInput.randomName();
 
             assert !names.containsValue(random);
             names.put(random.hashCode(), random);
