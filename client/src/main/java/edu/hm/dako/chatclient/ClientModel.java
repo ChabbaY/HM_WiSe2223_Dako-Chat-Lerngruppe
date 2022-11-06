@@ -18,17 +18,17 @@ public class ClientModel {
     /**
      * users
      */
-    public final ObservableList<String> users = FXCollections.observableArrayList();
+    public ObservableList<String> users = FXCollections.observableArrayList();
 
     /**
      * chats
      */
-    public final ObservableList<String> chats = FXCollections.observableArrayList();
+    public ObservableList<String> chats = FXCollections.observableArrayList();
 
     /**
      * block
      */
-    public final BooleanProperty block = new SimpleBooleanProperty();
+    public BooleanProperty block = new SimpleBooleanProperty();
 
     /**
      * Konstruktor
