@@ -1,0 +1,16 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="AuditLog - Command Line" type="Application" factoryName="Application">
+    <option name="MAIN_CLASS_NAME" value="edu.hm.dako.auditlogserver.ServerStarter" />
+    <module name="dako.auditlogserver.main" />
+    <option name="PROGRAM_PARAMETERS" value="--nogui" />
+    <extension name="coverage">
+      <pattern>
+        <option name="PATTERN" value="edu.hm.dako.chatserver.gui.*" />
+        <option name="ENABLED" value="true" />
+      </pattern>
+    </extension>
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

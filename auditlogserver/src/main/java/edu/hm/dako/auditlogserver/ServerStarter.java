@@ -1,6 +1,9 @@
 package edu.hm.dako.auditlogserver;
 
 import edu.hm.dako.auditlogserver.gui.AuditLogFxGUI;
+import edu.hm.dako.chatserver.ServerInterface;
+import edu.hm.dako.common.AuditLogImplementationType;
+import edu.hm.dako.common.ExceptionHandler;
 import edu.hm.dako.common.SystemConstants;
 import edu.hm.dako.common.Tupel;
 import org.apache.logging.log4j.LogManager;
@@ -21,6 +24,11 @@ public class ServerStarter {
      * referencing the logger
      */
     private static final Logger LOG = LogManager.getLogger(ServerStarter.class);
+
+    /**
+     * Interface der Chat-Server-Implementierung
+     */
+    private ServerInterface chatServer;
 
     /**
      * Flag, das angibt, ob der Server gestartet werden kann (alle Plausibilitätsprüfungen erfüllt)
@@ -135,15 +143,43 @@ public class ServerStarter {
      * @param sendBufferSize    Sendepuffergröße, die der Server nutzen soll
      * @param receiveBufferSize Empfangspuffergröße, die der Server nutzen soll
      */
-    private void startAuditLogServer(String implType, int serverPort, int sendBufferSize, int receiveBufferSize) {
-        //TODO initialize audit log server
+    private boolean startAuditLogServer(String implType, int serverPort, int sendBufferSize, int receiveBufferSize)
+            throws Exception {
+        AuditLogImplementationType serverImpl;
+        if (implType.equals(SystemConstants.AUDIT_LOG_SERVER_TCP_IMPL)) {
+            serverImpl = AuditLogImplementationType.AuditLogServerTCPImplementation;
+        } else if (implType.equals(SystemConstants.AUDIT_LOG_SERVER_UDP_IMPL)) {
+            serverImpl = AuditLogImplementationType.AuditLogServerUDPImplementation;
+        } else {
+            serverImpl = AuditLogImplementationType.AuditLogServerRMIImplementation;
+        }
+
+        try {
+            //chatServer = ServerFactory.getServer(serverImpl, serverPort, sendBufferSize, receiveBufferSize, null);TODO
+        } catch (Exception e) {
+            LOG.error("Fehler beim Starten des Chat-Servers: " + e.getMessage());
+            ExceptionHandler.logException(e);
+            throw new Exception(e);
+        }
+        if (!startable) {
+            return false;
+        } else {
+            // Server starten
+            //chatServer.start();TODO
+            return true;
+        }
     }
 
     /**
      * Audit-Log-Server stoppen
      */
     private void stopAuditLogServer() {
-        //TODO stop audit log server
+        try {
+            chatServer.stop();
+        } catch (Exception e) {
+            LOG.error("Fehler beim Stoppen des Chat-Servers");
+            ExceptionHandler.logException(e);
+        }
     }
 
     //----VALIDATION--------------------------------------------------

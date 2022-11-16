@@ -385,7 +385,6 @@ public class ServerFxGUI extends FxGUI implements ServerGUIInterface {
      * Reaktion auf das Betätigen des Stop-Buttons
      */
     private void reactOnStopButton() {
-
         stopButton.setOnAction(event -> {
             try {
                 chatServer.stop();
@@ -417,8 +416,8 @@ public class ServerFxGUI extends FxGUI implements ServerGUIInterface {
      * Reaktion auf das Betätigen des Finish-Buttons
      */
     private void reactOnFinishButton() {
-        LOG.debug("Schliessen-Button betätigt");
         finishButton.setOnAction(event -> {
+            LOG.debug("Schliessen-Button betätigt");
             try {
                 ServerFxGUI.chatServer.stop();
             } catch (Exception var3) {
@@ -594,7 +593,6 @@ public class ServerFxGUI extends FxGUI implements ServerGUIInterface {
      * GUI-Feld für eingeloggte Clients über Event-Liste des JavaFX-GUI-Threads aktualisieren
      */
     private void updateLoggedInClients() {
-
         Platform.runLater(() -> {
             LOG.debug("runLater: run-Methode wird ausgeführt");
             LOG.debug("runLater: Logged in Clients: {}", loggedInClientCounter.get());
@@ -606,9 +604,7 @@ public class ServerFxGUI extends FxGUI implements ServerGUIInterface {
      * GUI-Feld für Anzahl empfangener Requests über Event-Liste des JavaFX-GUI-Threads aktualisieren
      */
     private void updateNumberOfRequests() {
-
         Platform.runLater(() -> {
-
             LOG.debug("runLater: run-Methode wird ausgeführt");
             LOG.debug("runLater: Received Requests: " + requestCounter.get());
             receivedRequests.setText(String.valueOf(requestCounter.get()));

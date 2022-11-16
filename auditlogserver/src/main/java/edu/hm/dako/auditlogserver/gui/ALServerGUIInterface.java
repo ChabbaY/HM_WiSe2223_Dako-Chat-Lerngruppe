@@ -13,7 +13,7 @@ public interface ALServerGUIInterface {
      *
      * @param data start data of the server
      */
-    //void showStartData(ServerStartData data);
+    void showStartData(ServerStartData data);
 
     /**
      * increases the number of logged in clients
