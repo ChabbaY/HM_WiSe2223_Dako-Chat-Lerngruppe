@@ -4,17 +4,17 @@
 
 | Aufgabe                   | Gabriel | Kilian | Linus | Oskar | Erledigt |
 |---------------------------|---------|--------|-------|-------|----------|
-| AL Server GUI             | ⬜       | ⬜      | ⬜     | ⬜     | ❌        |
-| AL Server GUI Interface   | ✅       | ⬜      | ⬜     | ⬜     | ❌        |
+| AL Server GUI             | ⬜       | ⬜      | ✅     | ⬜     | ✅        |
+| AL Server GUI Interface   | ✅       | ⬜      | ⬜     | ⬜     | ✅        |
 | Abstract AL Server        | ✅       | ⬜      | ⬜     | ⬜     | ❌        |
 | Abstract AL Worker Thread | ✅       | ⬜      | ⬜     | ⬜     | ❌        |
 | AL Server Factory         | ⬜       | ✅      | ⬜     | ⬜     | ❌        |
 | AL Server Interface       | ✅       | ⬜      | ⬜     | ⬜     | ❌        |
-| AL Server Starter         | ⬜       | ⬜      | ✅     | ⬜     | ❌        |
+| AL Server Starter         | ⬜       | ⬜      | ✅     | ⬜     | ✅        |
 | AL Server Impl            | ⬜       | ✅      | ⬜     | ⬜     | ❌        |
 | AL Worker Thread Impl     | ⬜       | ⬜      | ⬜     | ✅     | ❌        |
-| Shared Chat Server List   | ⬜       | ⬜      | ✅     | ⬜     | ❌        |
-| Server List Entry         | ⬜       | ⬜      | ✅     | ⬜     | ❌        |
+| Shared Chat Server List   | ⬜       | ⬜      | ✅     | ⬜     | ✅        |
+| Server List Entry         | ⬜       | ⬜      | ✅     | ⬜     | ✅        |
 
 ## Tests
 
@@ -32,6 +32,6 @@
 | Aufgabe                  | Gabriel | Kilian | Linus | Oskar | Erledigt |
 |--------------------------|---------|--------|-------|-------|----------|
 | Parametrisierung Starter | ⬜️      | ⬜️     | ✅️    | ⬜️    | ✅        |
-| Parametrisierung GUI     | ⬜️      | ⬜️     | ✅️    | ⬜️    | ❌        |
+| Parametrisierung GUI     | ⬜️      | ⬜️     | ✅️    | ⬜️    | ✅        |
 | Emoji-Unterstützung      | ⬜️      | ⬜️     | ⬜️    | ⬜️    | ❌        |
 | Verschlüsselung          | ⬜️      | ⬜️     | ⬜️    | ⬜️    | ❌        |
