@@ -2,8 +2,10 @@ package edu.hm.dako.chatbenchmarking.gui;
 
 import edu.hm.dako.chatbenchmarking.BenchmarkingClientCoordinator;
 import edu.hm.dako.chatbenchmarking.BenchmarkingConstants;
+import edu.hm.dako.chatbenchmarking.BenchmarkingStarter;
 import edu.hm.dako.common.ChatServerImplementationType;
 import edu.hm.dako.common.SystemConstants;
+import edu.hm.dako.common.Tupel;
 import edu.hm.dako.common.gui.FxGUI;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
@@ -158,14 +160,22 @@ public class BenchmarkingClientFxGUI extends FxGUI implements BenchmarkingClient
     private boolean startable = true;
 
     /**
+     * saving args for further processing
+     */
+    private static String[] args;
+
+    /**
      * Start der GUI
      * @param args - nicht verwendet
      */
-    public static void main(String[] args) {//TODO parametrize
+    public static void main(String[] args) {
         // Log4j2-Logging aus Datei konfigurieren
         LoggerContext context = (org.apache.logging.log4j.core.LoggerContext) LogManager.getContext(false);
         File file = new File("config/log4j/log4j2.benchmarkingClient.xml");
         context.setConfigLocation(file.toURI());
+
+        BenchmarkingClientFxGUI.args = args;
+
         launch(args);
     }
 
@@ -206,6 +216,51 @@ public class BenchmarkingClientFxGUI extends FxGUI implements BenchmarkingClient
         } else {
             progressBarFx.setMinSize(1050, 30);
             progressBarFx.setMaxSize(1050, 30);
+        }
+
+        for(String s: args) {
+            String[] values = s.split("=");
+            switch (values[0]) {
+                case "--protocol" -> {
+                    if ("tcpadvanced".equals(values[1])) {
+                        optionListImplType.setValue(SystemConstants.IMPL_TCP_ADVANCED);
+                    }
+                }
+                case "--num-clients" -> {
+                    Tupel<Integer, Boolean> validation = BenchmarkingStarter.isPositiveNumber(values[1]);
+                    if (validation.getY()) textFieldNumberOfClientThreads.setText(validation.getX().toString());
+                }
+                case "--num-messages" -> {
+                    Tupel<Integer, Boolean> validation = BenchmarkingStarter.isPositiveNumber(values[1]);
+                    if (validation.getY()) textFieldNumberOfMessagesPerClients.setText(validation.getX().toString());
+                }
+                case "--max-retries" -> {
+                    Tupel<Integer, Boolean> validation = BenchmarkingStarter.isPositiveNumber(values[1]);
+                    if (validation.getY()) textFieldNumberOfMaxRetries.setText(validation.getX().toString());
+                }
+                case "--measurement" -> {
+                    if ("var-length".equals(values[1])) {
+                        optionListMeasureType.setValue("Variable Length");
+                    }
+                }
+                case "--message-length" -> {
+                    Tupel<Integer, Boolean> validation = BenchmarkingStarter.isPositiveNumber(values[1]);
+                    if (validation.getY()) textFieldMessageLength.setText(validation.getX().toString());
+                }
+                case "--response-timeout" -> {
+                    Tupel<Integer, Boolean> validation = BenchmarkingStarter.isPositiveNumber(values[1]);
+                    if (validation.getY()) textFieldResponseTimeout.setText(validation.getX().toString());
+                }
+                case "--think-time" -> {
+                    Tupel<Integer, Boolean> validation = BenchmarkingStarter.isPositiveNumber(values[1]);
+                    if (validation.getY()) textFieldThinkTime.setText(validation.getX().toString());
+                }
+                case "--port" -> {
+                    Tupel<Integer, Boolean> validation = BenchmarkingStarter.validateServerPort(values[1]);
+                    if (validation.getY()) textFieldServerport.setText(validation.getX().toString());
+                }
+                case "--host" -> textFieldServerIpAddress.setText(values[1]);
+            }
         }
 
         // Reaktionsroutinen für Buttons einrichten

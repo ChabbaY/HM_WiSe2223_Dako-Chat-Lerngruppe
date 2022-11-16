@@ -95,6 +95,11 @@ public class AuditLogFxGUI extends FxGUI implements ALServerGUIInterface {
     private final TextField startTimeField, receivedRequests, loggedInClients;
 
     /**
+     * saving args for further processing
+     */
+    private static String[] args;
+
+    /**
      * starting the GUI
      *
      * @param args available args, please only use non-default
@@ -109,6 +114,8 @@ public class AuditLogFxGUI extends FxGUI implements ALServerGUIInterface {
         LoggerContext context = (LoggerContext) LogManager.getContext(false);
         File file = new File("config/log4j/log4j2.auditLogTcpServer.xml");
         context.setConfigLocation(file.toURI());
+
+        AuditLogFxGUI.args = args;
 
         // Anwendung starten
         launch(args);
@@ -152,6 +159,31 @@ public class AuditLogFxGUI extends FxGUI implements ALServerGUIInterface {
 
         pane.getChildren().add(createHeader(""));
         pane.getChildren().add(createButtonPane());
+
+        for(String s: args) {
+            String[] values = s.split("=");
+            switch (values[0]) {
+                case "--protocol" -> {
+                    if ("udp".equals(values[1])) {
+                        comboBoxImplType.setValue(SystemConstants.AUDIT_LOG_SERVER_UDP_IMPL);
+                    } else if ("rmi".equals(values[1])) {
+                        comboBoxImplType.setValue(SystemConstants.AUDIT_LOG_SERVER_RMI_IMPL);
+                    }
+                }
+                case "--port" -> {
+                    Tupel<Integer, Boolean> result = ServerStarter.validateServerPort(values[1]);
+                    if (result.getY()) serverPort.setText(result.getX().toString());
+                }
+                case "--send-buffer" -> {
+                    Tupel<Integer, Boolean> result = ServerStarter.validateSendBufferSize(values[1]);
+                    if (result.getY()) sendBufferSize.setText(result.getX().toString());
+                }
+                case "--receive-buffer" -> {
+                    Tupel<Integer, Boolean> result = ServerStarter.validateReceiveBufferSize(values[1]);
+                    if (result.getY()) receiveBufferSize.setText(result.getX().toString());
+                }
+            }
+        }
 
         reactOnStartButton();
         reactOnStopButton();

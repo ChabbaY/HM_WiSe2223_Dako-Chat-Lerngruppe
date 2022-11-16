@@ -106,6 +106,11 @@ public class ServerFxGUI extends FxGUI implements ServerGUIInterface {
     private final TextField startTimeField, receivedRequests, loggedInClients;
 
     /**
+     * saving args for further processing
+     */
+    private static String[] args;
+
+    /**
      * Benutzeroberfläche zum Starten des Chat-Servers
      *
      * @param args available args, please do not change order:
@@ -118,11 +123,13 @@ public class ServerFxGUI extends FxGUI implements ServerGUIInterface {
      *             --auditlog-port=40001 (default)
      *             --auditlog-protocol=tcp | udp | rmi (default tcp)
      */
-    public static void main(String[] args) {//TODO parametrize
+    public static void main(String[] args) {
         // Log4j2-Logging aus Datei konfigurieren
         LoggerContext context = (LoggerContext) LogManager.getContext(false);
         File file = new File("config/log4j/log4j2.chatServer.xml");
         context.setConfigLocation(file.toURI());
+
+        ServerFxGUI.args = args;
 
         // Anwendung starten
         launch(args);
@@ -166,6 +173,49 @@ public class ServerFxGUI extends FxGUI implements ServerGUIInterface {
 
         pane.getChildren().add(createHeader(""));
         pane.getChildren().add(createButtonPane());
+
+        String auditlog_protocol = SystemConstants.AUDIT_LOG_SERVER_TCP_IMPL;
+        for(String s: args) {
+            String[] values = s.split("=");
+            switch (values[0]) {
+                case "--protocol" -> {
+                    if ("tcpadvanced".equals(values[1])) {
+                        comboBoxImplType.setValue(SystemConstants.IMPL_TCP_ADVANCED);
+                    }
+                }
+                case "--port" -> {
+                    Tupel<Integer, Boolean> result = ServerStarter.validateServerPort(values[1]);
+                    if (result.getY()) serverPort.setText(result.getX().toString());
+                }
+                case "--send-buffer" -> {
+                    Tupel<Integer, Boolean> result = ServerStarter.validateSendBufferSize(values[1]);
+                    if (result.getY()) sendBufferSize.setText(result.getX().toString());
+                }
+                case "--receive-buffer" -> {
+                    Tupel<Integer, Boolean> result = ServerStarter.validateReceiveBufferSize(values[1]);
+                    if (result.getY()) receiveBufferSize.setText(result.getX().toString());
+                }
+                case "--auditlog" -> {
+                    if ("false".equals(values[1])) {
+                        enableAuditLogServerCheckbox.setSelected(false);
+                    }
+                }
+                case "--auditlog-protocol" -> {
+                    if ("udp".equals(values[1])) {
+                        auditlog_protocol = SystemConstants.AUDIT_LOG_SERVER_UDP_IMPL;
+                    } else if ("rmi".equals(values[1])) {
+                        auditlog_protocol = SystemConstants.AUDIT_LOG_SERVER_RMI_IMPL;
+                    }
+                    comboBoxAuditLogServerType.setValue(auditlog_protocol);
+                }
+                case "--auditlog-host" -> auditLogServerHostnameOrIp.setText(values[1]);
+                case "--auditlog-port" -> {
+                    Tupel<Integer, Boolean> result = ServerStarter.validateAuditLogServerPort(values[1],
+                            auditlog_protocol);
+                    if (result.getY()) auditLogServerPort.setText(result.getX().toString());
+                }
+            }
+        }
 
         reactOnStartButton();
         reactOnStopButton();

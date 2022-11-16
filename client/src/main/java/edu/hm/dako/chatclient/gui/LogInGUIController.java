@@ -1,6 +1,8 @@
 package edu.hm.dako.chatclient.gui;
 
+import edu.hm.dako.chatclient.ClientStarter;
 import edu.hm.dako.common.SystemConstants;
+import edu.hm.dako.common.Tupel;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
@@ -158,5 +160,22 @@ public class LogInGUIController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         comboServerType.getItems().addAll(SystemConstants.IMPL_TCP_SIMPLE,
                 SystemConstants.IMPL_TCP_ADVANCED);
+
+        for(String s: ClientFxGUI.args) {
+            String[] values = s.split("=");
+            switch (values[0]) {
+                case "--server" -> txtServername.setText(values[1]);
+                case "--port" -> {
+                    Tupel<Integer, Boolean> result = ClientStarter.validateServerPort(values[1]);
+                    if (result.getY()) txtServerPort.setText(result.getX().toString());
+                }
+                case "--protocol" -> {
+                    if ("tcpadvanced".equals(values[1])) {
+                        comboServerType.setValue(SystemConstants.IMPL_TCP_ADVANCED);
+                    }
+                }
+                case "--username" -> txtUsername.setText(values[1]);
+            }
+        }
     }
 }

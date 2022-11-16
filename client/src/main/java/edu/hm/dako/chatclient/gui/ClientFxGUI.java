@@ -36,15 +36,22 @@ public class ClientFxGUI extends Application implements ClientUserInterface {
     private ClientImpl communicator;
 
     /**
+     * saving args for further processing
+     */
+    static String[] args;
+
+    /**
      * Chat-GUI: Oberfläche für Chat-Nutzer
      *
      * @param args currently ignored
      */
-    public static void main(String[] args) {//TODO parametrize
+    public static void main(String[] args) {
         // Log4j2-Logging aus Datei konfigurieren
         LoggerContext context = (org.apache.logging.log4j.core.LoggerContext) LogManager.getContext(false);
         File file = new File("config/log4j/log4j2.chatClient.xml");
         context.setConfigLocation(file.toURI());
+
+        ClientFxGUI.args = args;
 
         launch(args);
     }
