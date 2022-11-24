@@ -1,0 +1,9 @@
+#
+# Satzaufbau:
+#
+# 01 - PDU Typ
+# 02 - Login-Name des Clients
+# 03 - Name des Chat-Client-Threads, der den Request absendet
+# 04 - Name des Worker-Threads, der den Request im Chat-Server verarbeitet
+# 05 - Zeitstempel zum Zeitpunkt des Audit-Logs im Chat-Server
+# 06 - Nutzdaten (eigentliche Chat-Nachricht in Textform)
