@@ -112,7 +112,7 @@ public class AuditLogFxGUI extends FxGUI implements ALServerGUIInterface {
     public static void main(String[] args) {
         // Log4j2-Logging aus Datei konfigurieren
         LoggerContext context = (LoggerContext) LogManager.getContext(false);
-        File file = new File("config/log4j/log4j2.auditLogTcpServer.xml");
+        File file = new File("config/log4j/log4j2.auditLogServer.xml");
         context.setConfigLocation(file.toURI());
 
         AuditLogFxGUI.args = args;
