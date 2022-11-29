@@ -1,22 +1,23 @@
 @startuml
 
 actor ChatClient1
+participant ChatServer
 actor ChatClient2
 ChatClient1 <-> ChatServer: TCP-Verbindungsaufbau
 ChatClient1 -> ChatServer: LoginRequest
-ChatServer -> AuditLogServer: AuditLog(LoginRequest)
 ChatServer -> ChatClient1: LoginEvent
 ChatServer -> ChatClient1: LoginResponse
 ChatServer <-> ChatClient2: TCP-Verbindungsaufbau
 ChatServer <- ChatClient2: LoginRequest
-ChatServer -> AuditLogServer: AuditLog(LoginRequest)
 ChatServer -> ChatClient2: LoginEvent
 ChatServer -> ChatClient1: LoginEvent
 ChatServer -> ChatClient2: LoginResponse
-ChatServer <- ChatClient1: ChatMessageRequest("Test")
-ChatServer -> AuditLogServer: AuditLog(ChatMessageRequest)
+ChatServer <- ChatClient1: ChatMessageRequest("Test1")
 ChatServer -> ChatClient2: ChatMessageEvent
 ChatServer -> ChatClient1: ChatMessageEvent
+ChatServer <- ChatClient2: ChatMessageRequest("Test2")
+ChatServer -> ChatClient1: ChatMessageEvent
+ChatServer -> ChatClient2: ChatMessageEvent
 ChatServer -> ChatClient1: ChatMessageResponse
 ChatServer <- ChatClient2: LogoutRequest
 ChatServer -> ChatClient2: LogoutEvent
@@ -24,7 +25,6 @@ ChatServer -> ChatClient1: LogoutEvent
 ChatServer <- ChatClient2: LogoutResponse
 ChatServer <-> ChatClient2: TCP-Verbindungsabbau
 ChatServer <- ChatClient1: LogoutRequest
-ChatServer -> AuditLogServer: AuditLog(LogoutRequest)
 ChatServer -> ChatClient1: LogoutEvent
 ChatServer -> ChatClient1: LogoutResponse
 ChatServer <-> ChatClient1: TCP-Verbindungsabbau
