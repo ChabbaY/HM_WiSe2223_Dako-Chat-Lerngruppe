@@ -1,7 +1,6 @@
 package edu.hm.dako.auditlogserver;
 
 import edu.hm.dako.auditlogserver.gui.AuditLogFxGUI;
-import edu.hm.dako.chatserver.ServerInterface;
 import edu.hm.dako.common.AuditLogImplementationType;
 import edu.hm.dako.common.ExceptionHandler;
 import edu.hm.dako.common.SystemConstants;
@@ -28,10 +27,11 @@ public class ServerStarter {
     /**
      * Interface der Chat-Server-Implementierung
      */
-    private ServerInterface chatServer;
+    private ALServerInterface auditLogServer;
 
     /**
-     * Flag, das angibt, ob der Server gestartet werden kann (alle Plausibilitätsprüfungen erfüllt)
+     * Flag, das angibt, ob der Server gestartet werden kann (alle
+     * Plausibilitätsprüfungen erfüllt)
      */
     private boolean startable = true;
 
@@ -45,7 +45,8 @@ public class ServerStarter {
      *
      * @param args available args, please only use non-default
      *             --nogui disables the gui
-     *             --protocol=tcp | udp | rmi (default; udp and rmi not implemented yet)
+     *             --protocol=tcp | udp | rmi (default; udp and rmi not implemented
+     *             yet)
      *             --port=40001 (default)
      *             --send-buffer=300000 (default)
      *             --receive-buffer=300000 (default)
@@ -60,7 +61,7 @@ public class ServerStarter {
 
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-        while(!GUI) {
+        while (!GUI) {
             String input = "";
             try {
                 System.out.println("stop zum Beenden");
@@ -69,7 +70,7 @@ public class ServerStarter {
                 LOG.error("Fehler bei Eingabe: " + e.getMessage());
             }
 
-            switch(input) {
+            switch (input) {
                 case "stop" -> {
                     starter.stopAuditLogServer();
                     return;
@@ -83,19 +84,20 @@ public class ServerStarter {
      * Konstruktor
      *
      * @param args available args, please only use non-default
-     *              --nogui disables the gui
-     *             --protocol=tcp | udp | rmi (default; udp and rmi not implemented yet)
+     *             --nogui disables the gui
+     *             --protocol=tcp | udp | rmi (default; udp and rmi not implemented
+     *             yet)
      *             --port=40001 (default)
      *             --send-buffer=300000 (default)
      *             --receive-buffer=300000 (default)
      */
-    public ServerStarter(String[] args){
+    public ServerStarter(String[] args) {
         String implType = SystemConstants.AUDIT_LOG_SERVER_TCP_IMPL;
         int port = 40001;
         int sendBuffer = 300000;
         int receiveBuffer = 300000;
 
-        for(String s: args) {
+        for (String s : args) {
             String[] values = s.split("=");
             switch (values[0]) {
                 case "--nogui" -> GUI = false;
@@ -139,7 +141,8 @@ public class ServerStarter {
      * Audit-Log-Server starten
      *
      * @param implType          Implementierungstyp, der zu starten ist
-     * @param serverPort        Serverport, die der Server als Listener-Port nutzen soll
+     * @param serverPort        Serverport, die der Server als Listener-Port nutzen
+     *                          soll
      * @param sendBufferSize    Sendepuffergröße, die der Server nutzen soll
      * @param receiveBufferSize Empfangspuffergröße, die der Server nutzen soll
      */
@@ -155,7 +158,7 @@ public class ServerStarter {
         }
 
         try {
-            //chatServer = ServerFactory.getServer(serverImpl, serverPort, sendBufferSize, receiveBufferSize, null);TODO
+            auditLogServer = ServerFactory.getServer(serverImpl, serverPort, sendBufferSize, receiveBufferSize, null);
         } catch (Exception e) {
             LOG.error("Fehler beim Starten des Chat-Servers: " + e.getMessage());
             ExceptionHandler.logException(e);
@@ -165,7 +168,7 @@ public class ServerStarter {
             return false;
         } else {
             // Server starten
-            //chatServer.start();TODO
+            // chatServer.start();TODO
             return true;
         }
     }
@@ -175,14 +178,14 @@ public class ServerStarter {
      */
     private void stopAuditLogServer() {
         try {
-            chatServer.stop();
+            auditLogServer.stop();
         } catch (Exception e) {
             LOG.error("Fehler beim Stoppen des Chat-Servers");
             ExceptionHandler.logException(e);
         }
     }
 
-    //----VALIDATION--------------------------------------------------
+    // ----VALIDATION--------------------------------------------------
 
     /**
      * validate server port
