@@ -7,12 +7,16 @@ import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Liste aller angemeldeten Server. Diese Liste wird im Auditlog-Server als Singleton verwaltet
- * (darf nur einmal erzeugt werden). Alle Worker-Threads im Auditlog-Server nutzen diese Liste.
+ * Liste aller angemeldeten Server. Diese Liste wird im Auditlog-Server als
+ * Singleton verwaltet
+ * (darf nur einmal erzeugt werden). Alle Worker-Threads im Auditlog-Server
+ * nutzen diese Liste.
  * <p>
- * Die Liste wird als HashMap organisiert. Als Schlüssel wird der Server Socket (Adresse:Port) verwendet.
+ * Die Liste wird als HashMap organisiert. Als Schlüssel wird der Server Socket
+ * (Adresse:Port) verwendet.
  * <p>
- * Genereller Hinweis: Zur Umgehung von ConcurrentModificationExceptions wird bei der Iteration durch Listen generell
+ * Genereller Hinweis: Zur Umgehung von ConcurrentModificationExceptions wird
+ * bei der Iteration durch Listen generell
  * eine Kopie der Liste angelegt.
  *
  * @author Linus Englert
@@ -52,11 +56,15 @@ public class SharedChatServerList {
      * getter
      *
      * @param serverAddress address of the server
-     * @param serverPort port of the server
+     * @param serverPort    port of the server
      * @return Referenz auf den gesuchten Server
      */
     public synchronized ServerListEntry getServer(String serverAddress, String serverPort) {
         return clients.get(serverAddress + ":" + serverPort);
+    }
+
+    public synchronized ServerListEntry getServer(String serverKey) {
+        return clients.get(serverKey);
     }
 
     /**
@@ -72,7 +80,7 @@ public class SharedChatServerList {
      * Prüft, ob ein Client in der Userliste ist
      *
      * @param serverAddress address of the server
-     * @param serverPort port of the server
+     * @param serverPort    port of the server
      * @return true = Server existiert, false = Server existiert nicht
      */
     public synchronized boolean existsServer(String serverAddress, String serverPort) {
@@ -93,8 +101,8 @@ public class SharedChatServerList {
      * Legt einen neuen Server an
      *
      * @param serverAddress address of the server
-     * @param serverPort port of the server
-     * @param server Server-Daten
+     * @param serverPort    port of the server
+     * @param server        Server-Daten
      */
     public synchronized void createServer(String serverAddress, String serverPort, ServerListEntry server) {
         clients.put(serverAddress + ":" + serverPort, server);
@@ -104,8 +112,8 @@ public class SharedChatServerList {
      * Aktualisierung eines vorhandenen Servers
      *
      * @param serverAddress address of the server
-     * @param serverPort port of the server
-     * @param server Server-Daten
+     * @param serverPort    port of the server
+     * @param server        Server-Daten
      */
     public synchronized void updateServer(String serverAddress, String serverPort, ServerListEntry server) {
         String socket = serverAddress + ":" + serverPort;
@@ -119,10 +127,11 @@ public class SharedChatServerList {
     }
 
     /**
-     * Prüft, ob ein Server in keiner Warteliste mehr ist und daher gelöscht werden kann
+     * Prüft, ob ein Server in keiner Warteliste mehr ist und daher gelöscht werden
+     * kann
      *
      * @param serverAddress address of the server
-     * @param serverPort port of the server
+     * @param serverPort    port of the server
      * @return true Löschen möglich, sonst false
      */
     public synchronized boolean deletable(String serverAddress, String serverPort) {
@@ -144,7 +153,7 @@ public class SharedChatServerList {
      * Löscht einen Server zwangsweise inklusive aller Einträge in Wartelisten
      *
      * @param serverAddress address of the server
-     * @param serverPort port of the server
+     * @param serverPort    port of the server
      */
     public synchronized void deleteServerWithoutCondition(String serverAddress, String serverPort) {
         String socket = serverAddress + ":" + serverPort;
@@ -165,11 +174,12 @@ public class SharedChatServerList {
     }
 
     /**
-     * Entfernt einen Server aus der ServerListe. Der Server darf nur gelöscht werden, wenn er nicht mehr in der
+     * Entfernt einen Server aus der ServerListe. Der Server darf nur gelöscht
+     * werden, wenn er nicht mehr in der
      * Warteliste eines anderen Server ist.
      *
      * @param serverAddress address of the server
-     * @param serverPort port of the server
+     * @param serverPort    port of the server
      * @return true bei erfolgreichem Löschen, sonst false
      */
     public synchronized boolean deleteServer(String serverAddress, String serverPort) {
@@ -220,7 +230,8 @@ public class SharedChatServerList {
             boolean clientUsed = true;
             ServerListEntry server1 = clients.get(s1);
             if ((server1.getWaitList().size() == 0) && (server1.isFinished())) {
-                // Eigene Warteliste leer, jetzt prüfen, ob auch alle anderen Wartelisten diesen Client nicht enthalten
+                // Eigene Warteliste leer, jetzt prüfen, ob auch alle anderen Wartelisten diesen
+                // Client nicht enthalten
                 clientUsed = false;
                 for (String s2 : new Vector<>(clients.keySet())) {
                     ServerListEntry server2 = clients.get(s2);
@@ -253,7 +264,7 @@ public class SharedChatServerList {
      * Erhöht den Zähler für empfangene Chat-Event-Confirm-PDUs für einen Server
      *
      * @param serverAddress address of the server
-     * @param serverPort port of the server
+     * @param serverPort    port of the server
      */
     public synchronized void increaseNumberOfReceivedChatEventConfirms(String serverAddress, String serverPort) {
         ServerListEntry server = clients.get(serverAddress + ":" + serverPort);
@@ -267,7 +278,7 @@ public class SharedChatServerList {
      * Erhöht den Zähler für gesendete Chat-Event-PDUs für einen Server
      *
      * @param serverAddress address of the server
-     * @param serverPort port of the server
+     * @param serverPort    port of the server
      */
     public synchronized void increaseNumberOfSentChatEvents(String serverAddress, String serverPort) {
         ServerListEntry server = clients.get(serverAddress + ":" + serverPort);
@@ -280,7 +291,7 @@ public class SharedChatServerList {
      * Erhöht den Zähler für empfangene Chat-Message-PDUs eines Servers
      *
      * @param serverAddress address of the server
-     * @param serverPort port of the server
+     * @param serverPort    port of the server
      */
     public synchronized void increaseNumberOfReceivedChatMessages(String serverAddress, String serverPort) {
         ServerListEntry server = clients.get(serverAddress + ":" + serverPort);
@@ -293,7 +304,7 @@ public class SharedChatServerList {
      * Erstellt eine Liste aller Server, die noch ein Event bestätigen müssen.
      *
      * @param serverAddress address of the server
-     * @param serverPort port of the server
+     * @param serverPort    port of the server
      * @return Referenz auf Warteliste des Servers
      */
     public synchronized Vector<String> createWaitList(String serverAddress, String serverPort) {
@@ -314,7 +325,7 @@ public class SharedChatServerList {
      * Löscht eine Event-Warteliste für einen Server
      *
      * @param serverAddress address of the server
-     * @param serverPort port of the server
+     * @param serverPort    port of the server
      */
     public synchronized void deleteWaitList(String serverAddress, String serverPort) {
         ServerListEntry server = clients.get(serverAddress + ":" + serverPort);
@@ -326,16 +337,20 @@ public class SharedChatServerList {
     /**
      * Löscht einen Eintrag aus der Event-Warteliste
      *
-     * @param serverAddress address of the server, für den ein Listeneintrag aus seiner Warteliste gelöscht werden soll
-     * @param serverPort port of the server, für den ein Listeneintrag aus seiner Warteliste gelöscht werden soll
-     * @param entryAddress address of the server, der aus der Event-Warteliste gelöscht werden soll
-     * @param entryPort port of the server, der aus der Event-Warteliste gelöscht werden soll
+     * @param serverAddress address of the server, für den ein Listeneintrag aus
+     *                      seiner Warteliste gelöscht werden soll
+     * @param serverPort    port of the server, für den ein Listeneintrag aus seiner
+     *                      Warteliste gelöscht werden soll
+     * @param entryAddress  address of the server, der aus der Event-Warteliste
+     *                      gelöscht werden soll
+     * @param entryPort     port of the server, der aus der Event-Warteliste
+     *                      gelöscht werden soll
      * @return Anzahl der noch vorhandenen Einträge in der Liste
      * @throws Exception Eintrag, der gelöscht werden sollte, ist nicht vorhanden
      */
 
     public synchronized int deleteWaitListEntry(String serverAddress, String serverPort,
-                                                String entryAddress, String entryPort) throws Exception {
+            String entryAddress, String entryPort) throws Exception {
         String socket = serverAddress + ":" + serverPort;
         String entrySocket = entryAddress + ":" + entryPort;
         LOG.debug("Client: " + entrySocket + ", aus Warteliste von " + socket + " löschen ");
@@ -359,7 +374,7 @@ public class SharedChatServerList {
      * Liefert die Länge der Event-Warteliste für einen Server
      *
      * @param serverAddress address of the server
-     * @param serverPort port of the server
+     * @param serverPort    port of the server
      * @return Anzahl der noch vorhandenen Einträge in der Liste
      */
     public synchronized int getWaitListSize(String serverAddress, String serverPort) {
@@ -374,7 +389,7 @@ public class SharedChatServerList {
      * Setzt Kennzeichen, dass die Arbeit für einen User eingestellt werden kann
      *
      * @param serverAddress address of the server
-     * @param serverPort port of the server
+     * @param serverPort    port of the server
      */
     public synchronized void finish(String serverAddress, String serverPort) {
         ServerListEntry server = clients.get(serverAddress + ":" + serverPort);

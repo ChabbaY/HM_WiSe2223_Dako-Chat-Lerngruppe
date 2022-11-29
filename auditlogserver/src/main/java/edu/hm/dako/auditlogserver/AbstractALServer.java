@@ -1,10 +1,6 @@
 package edu.hm.dako.auditlogserver;
 
 import edu.hm.dako.auditlogserver.gui.ALServerGUIInterface;
-import edu.hm.dako.chatserver.ServerInterface;
-import edu.hm.dako.chatserver.SharedChatClientList;
-import edu.hm.dako.chatserver.SharedServerCounter;
-import edu.hm.dako.chatserver.gui.ServerGUIInterface;
 
 /**
  * shared attributes for all implementations
@@ -22,12 +18,14 @@ public abstract class AbstractALServer implements ALServerInterface {
     /**
      * shared between all worker threads: managed list of all logged in clients
      */
-    protected SharedChatClientList clients;
+    protected SharedChatServerList clients;
 
     /**
      * counter for test
+     * 
+     * Auskommentiert, da noch nicht nötig
      */
-    protected SharedServerCounter counter;
+    // protected SharedServerCounter counter;
 
     /**
      * referencing server GUI to register events

@@ -32,9 +32,7 @@ public class AuditlogWorkerThread extends Thread {
         String hash = ((Integer)conn.hashCode()).toString();
         String fileName = dateString + hash;
         speicher = new FileStorage(fileName);
-
     }
-
 
     @Override
     public void run() {
@@ -88,8 +86,4 @@ public class AuditlogWorkerThread extends Thread {
             // ExceptionHandler.logException(e);
         }
     }
-
-
-
-
 }
