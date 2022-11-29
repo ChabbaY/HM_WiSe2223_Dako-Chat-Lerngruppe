@@ -25,10 +25,6 @@ public abstract class AbstractALWorkerThread extends Thread {
      */
     protected boolean finished = false;
 
-    /**
-     * Username des durch den Worker-Thread bedienten Clients
-     */
-    protected String userName = null;
 
     /**
      * Client-ThreadName
@@ -40,10 +36,6 @@ public abstract class AbstractALWorkerThread extends Thread {
      */
     protected long startTime;
 
-    /**
-     * Gemeinsam für alle WorkerThreads verwaltete Liste aller eingeloggten Clients
-     */
-    protected final SharedChatClientList clients;
 
     /**
      * Referenz auf globalen Zähler für Testausgaben
@@ -62,21 +54,20 @@ public abstract class AbstractALWorkerThread extends Thread {
 
     /**
      * Referenz auf GUI des Auditlog-Servers
+     * wofür brauchen wir die
      */
     protected final ALServerGUIInterface alServerGUIInterface;
 
     /**
      * Konstruktor
      *
-     * @param con                Verbindung zum Chat-Client
-     * @param clients            Liste der angemeldeten Chat-Clients
+     * @param con                Verbindung zum Client
      * @param counter            Referenz auf diverse Zähler für Tests
      * @param alServerGuiInterface Referenz auf GUI des Chat-ALServers
      */
     public AbstractALWorkerThread(Connection con, SharedChatClientList clients, SharedServerCounter counter,
                                   ALServerGUIInterface alServerGuiInterface) {
         this.connection = con;
-        this.clients = clients;
         this.logoutCounter = counter.logoutCounter;
         this.eventCounter = counter.eventCounter;
         this.confirmCounter = counter.confirmCounter;

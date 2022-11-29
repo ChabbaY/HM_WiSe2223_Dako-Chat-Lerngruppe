@@ -24,23 +24,30 @@ public class FileStorage implements StorageInterface {
     /**
      * file to save to
      */
-    private static final String FILE_NAME = "ChatAuditLog.dat";
+    private String fileName; //"ChatAuditLog.dat";//wollen wir den Namen lieber parametrisieren, um pro Verbindung mit einem ChatServer eine Datei zu haben?
 
+
+    public FileStorage(String name){
+        this.fileName = name;
+
+
+    }
     @Override
     public void save(AuditLogPDU pdu) {
-        File file = new File(FILE_NAME);
+        File file = new File(fileName);
 
         //create file if necessary
         try {
             boolean exist = file.createNewFile();
             if (!exist) {
-                log.debug("Datei " + FILE_NAME + " existierte bereits");
+                log.error("Datei " + fileName + " existierte bereits");
+                throw new IllegalArgumentException("Datei existiert bereits");
             } else {
-                log.debug("Datei " + FILE_NAME + " erfolgreich angelegt");
+                log.debug("Datei " + fileName + " erfolgreich angelegt");
             }
 
             // Datei zum Erweitern öffnen
-            FileWriter fileWriter = new FileWriter(FILE_NAME, StandardCharsets.UTF_8, true);
+            FileWriter fileWriter = new FileWriter(fileName, StandardCharsets.UTF_8, true);
             BufferedWriter out = new BufferedWriter(fileWriter);
 
             StringBuilder sb = new StringBuilder();
@@ -56,11 +63,14 @@ public class FileStorage implements StorageInterface {
 
             out.append(sb);
             formatter.close();
-            System.out.println("Audit Log PDU in Datei " + FILE_NAME + " geschrieben");
+            System.out.println("Audit Log PDU in Datei " + fileName + " geschrieben");
             out.flush();
             out.close();
         } catch (IOException e) {
-            log.error("Fehler beim Schreiben von Audit Log PDU in Datei " + FILE_NAME);
+            log.error("Fehler beim Schreiben von Audit Log PDU in Datei " + fileName);
         }
     }
+
+
+
 }
