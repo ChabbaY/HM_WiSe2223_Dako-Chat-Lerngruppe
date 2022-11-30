@@ -42,7 +42,7 @@ public class FileStorage implements StorageInterface {
             boolean exist = file.createNewFile();
             if (!exist) {
                 log.error("Datei " + fileName + " existierte bereits");
-                throw new IllegalArgumentException("Datei existiert bereits");
+               // throw new IllegalArgumentException("Datei existiert bereits");
             } else {
                 log.debug("Datei " + fileName + " erfolgreich angelegt");
             }
