@@ -35,6 +35,7 @@ public class FileStorage implements StorageInterface {
     @Override
     public void save(AuditLogPDU pdu) {
         File file = new File(fileName);
+        log.debug("Die file heißt: "+ fileName + "und liegt in: "+ file.toPath().toString());
 
         //create file if necessary
         try {

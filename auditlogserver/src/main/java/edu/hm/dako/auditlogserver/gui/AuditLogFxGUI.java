@@ -1,5 +1,7 @@
 package edu.hm.dako.auditlogserver.gui;
 
+import edu.hm.dako.auditlogserver.ALServerInterface;
+import edu.hm.dako.auditlogserver.ServerFactory;
 import edu.hm.dako.auditlogserver.ServerStartData;
 import edu.hm.dako.chatserver.ServerInterface;
 import edu.hm.dako.chatserver.ServerStarter;
@@ -47,7 +49,7 @@ public class AuditLogFxGUI extends FxGUI implements ALServerGUIInterface {
     /**
      * Interface der Chat-Server-Implementierung
      */
-    private static ServerInterface chatServer;
+    private static ALServerInterface chatServer;
 
     /**
      * Zähler für die eingeloggten Clients und die empfangenen Request
@@ -426,7 +428,7 @@ public class AuditLogFxGUI extends FxGUI implements ALServerGUIInterface {
         }
 
         try {
-            //chatServer = ServerFactory.getServer(serverImpl, serverPort, sendBufferSize, receiveBufferSize, this);TODO
+            chatServer = ServerFactory.getServer(serverImpl, serverPort, sendBufferSize, receiveBufferSize, this);
         } catch (Exception e) {
             LOG.error("Fehler beim Starten des Chat-Servers: " + e.getMessage());
             ExceptionHandler.logException(e);
@@ -436,7 +438,7 @@ public class AuditLogFxGUI extends FxGUI implements ALServerGUIInterface {
             setAlert("Bitte Korrigieren sie die rot markierten Felder");
         } else {
             // Server starten
-            //chatServer.start();TODO
+            chatServer.start();
         }
     }
 

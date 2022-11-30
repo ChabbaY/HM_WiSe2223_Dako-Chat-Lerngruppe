@@ -8,7 +8,6 @@ import org.apache.logging.log4j.Logger;
 import edu.hm.dako.auditlogserver.gui.ALServerGUIInterface;
 import edu.hm.dako.common.AuditLogImplementationType;
 import edu.hm.dako.connection.Connection;
-import edu.hm.dako.connection.ConnectionLogger;
 import edu.hm.dako.connection.ServerSocketInterface;
 import edu.hm.dako.connection.tcp.TCPServerSocket;
 

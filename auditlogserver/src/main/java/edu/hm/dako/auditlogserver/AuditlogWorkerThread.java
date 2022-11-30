@@ -18,7 +18,7 @@ import java.util.Calendar;
 public class AuditlogWorkerThread extends Thread {
 
 
-    private static final Logger LOG = LogManager.getLogger(SimpleChatWorkerThreadImpl.class);
+    private static final Logger LOG = LogManager.getLogger(AuditlogWorkerThread.class);
     private boolean finished = false;
 
     Connection con;
@@ -36,7 +36,7 @@ public class AuditlogWorkerThread extends Thread {
 
     @Override
     public void run() {
-        LOG.debug("ChatWorker-Thread erzeugt, ThreadName: " + Thread.currentThread().getName());
+        LOG.debug("AuditlogWorkerthread erzeugt, ThreadName: " + Thread.currentThread().getName());
         while (!finished && !Thread.currentThread().isInterrupted()) {
             try {
                 // Warte auf nächste Nachricht des Clients und führe entsprechende Aktion aus
@@ -58,11 +58,17 @@ public class AuditlogWorkerThread extends Thread {
         AuditLogPDU receivedPDU;
 
         try {
+            LOG.debug("Vallah");
+
+            //System.out.println(con.receive().toString());
             receivedPDU = (AuditLogPDU) con.receive();
+            LOG.debug(receivedPDU.toString());
+
             handleIncomingRequest(receivedPDU);
 
         }catch (Exception ex){
-            finished =true;
+            LOG.debug(ex.getMessage());
+            //finished =true;
 
         }
 
