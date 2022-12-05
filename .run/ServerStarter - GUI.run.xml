@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="ServerStarter - GUI" type="Application" factoryName="Application">
+  <configuration default="false" name="ServerStarter - GUI" type="Application" factoryName="Application" singleton="false">
     <option name="MAIN_CLASS_NAME" value="edu.hm.dako.chatserver.ServerStarter" />
     <module name="dako.server.main" />
     <extension name="coverage">
