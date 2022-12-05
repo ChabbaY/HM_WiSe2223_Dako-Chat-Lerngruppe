@@ -2,6 +2,7 @@ package edu.hm.dako.auditlogserver;
 
 import java.util.concurrent.Executors;
 
+import edu.hm.dako.connection.udp.UDPServerSocket;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -12,7 +13,7 @@ import edu.hm.dako.connection.ServerSocketInterface;
 import edu.hm.dako.connection.tcp.TCPServerSocket;
 
 public class ServerFactory {
-    private static Logger LOG = LogManager.getLogger(ServerFactory.class);
+    private static final Logger LOG = LogManager.getLogger(ServerFactory.class);
 
     private ServerFactory() {
     }
@@ -42,12 +43,18 @@ public class ServerFactory {
             try {
                 TCPServerSocket tcpServerSocket = new TCPServerSocket(serverPort, sendBufferSize,
                         receiveBufferSize);
-                return new AuditLogServerImpl(Executors.newCachedThreadPool(),
+                return new AuditLogTcpImpl(Executors.newCachedThreadPool(),
                         getDecoratedServerSocket(tcpServerSocket), serverGuiInterface);
             } catch (Exception e) {
                 throw new Exception(e);
             }
-            // Weitere Implementierungstypen derzeit nicht implementiert
+        } else if (implType == AuditLogImplementationType.AuditLogServerUDPImplementation) {
+            try {
+                UDPServerSocket udpServerSocket = new UDPServerSocket(serverPort, sendBufferSize, receiveBufferSize);
+                return new AuditLogUdpImpl(Executors.newCachedThreadPool(), getDecoratedServerSocket(udpServerSocket), serverGuiInterface);
+            } catch (Exception e) {
+                throw new Exception(e);
+            }
         }
         System.out.println("Derzeit nur TCPSimpleImplementation implementiert!");
         throw new RuntimeException("Unknown type: " + implType);// TODO more implementations

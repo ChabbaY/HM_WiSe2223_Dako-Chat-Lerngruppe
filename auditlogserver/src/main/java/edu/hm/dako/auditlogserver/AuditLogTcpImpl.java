@@ -11,7 +11,7 @@ import edu.hm.dako.common.ExceptionHandler;
 import edu.hm.dako.connection.Connection;
 import edu.hm.dako.connection.ServerSocketInterface;
 
-public class AuditLogServerImpl extends AbstractALServer {
+public class AuditLogTcpImpl extends AbstractALServer {
     private static final Logger LOG = LogManager.getLogger();
 
     // ThreadPool für Worker-Threads
@@ -21,7 +21,7 @@ public class AuditLogServerImpl extends AbstractALServer {
     // entgegennimmt
     private final ServerSocketInterface socket;
 
-    public AuditLogServerImpl(ExecutorService executorService, ServerSocketInterface socket, ALServerGUIInterface gui) {
+    public AuditLogTcpImpl(ExecutorService executorService, ServerSocketInterface socket, ALServerGUIInterface gui) {
         this.executorService = executorService;
         this.socket = socket;
         this.alServerGUIInterface = gui;
