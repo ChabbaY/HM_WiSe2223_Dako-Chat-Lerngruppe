@@ -17,7 +17,7 @@ javafx {
 sourceSets {
     main {
         resources {
-            srcDirs = ['src/main/java']
+            srcDirs = ['src/main/java','src/main/resources']
             includes = ['**/*.fxml']
         }
     }
@@ -29,7 +29,7 @@ dependencies {
     implementation project(':server')
     implementation 'org.openjfx:javafx:19'
     testImplementation 'junit:junit:4.13.2'
-    testImplementation 'org.junit.jupiter:junit-jupiter:5.9.1'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.9.0'
 }
 
 test {

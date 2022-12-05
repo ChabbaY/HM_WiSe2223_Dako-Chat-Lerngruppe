@@ -24,7 +24,7 @@ class FileStorageTest {
 
     @Test
     void save() {
-        FileStorage storage = new FileStorage();
+        FileStorage storage = new FileStorage("ChatAuditLog.dat");
         storage.save(pdu);
 
         try (BufferedReader br = new BufferedReader(new FileReader("ChatAuditLog.dat"))) {
