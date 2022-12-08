@@ -1,0 +1,44 @@
+plugins {
+    id 'application'
+}
+
+application {
+    mainClass.set('edu.hm.dako.api.main.APIStarter')
+}
+
+jar.enabled = true
+
+sourceSets {
+    main {
+        resources {
+            srcDirs = ['src/main/java','src/main/resources']
+        }
+    }
+}
+
+dependencies {
+    implementation 'com.h2database:h2-mvstore:2.1.214'
+    implementation 'io.springfox:springfox-boot-starter:3.0.0'
+    implementation 'org.jetbrains:annotations:23.0.0'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa:2.7.5'
+    implementation 'org.springframework.boot:spring-boot-starter-hateoas:2.7.5'
+    implementation 'org.springframework.boot:spring-boot-starter-parent:2.7.5'
+    implementation 'org.springframework.boot:spring-boot-starter-security:2.7.5'
+    implementation 'org.springframework.boot:spring-boot-starter-test:2.7.5'
+    implementation 'org.springframework.boot:spring-boot-starter-websocket:2.7.5'
+}
+
+// build api jar file
+task createApiJar(type: Jar) {//TODO fix jar build
+    // remove deprecated warning for gradle 7
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+    manifest {
+        attributes 'Main-Class': 'edu.hm.dako.api.main.APIStarter'
+    }
+    archiveBaseName.set('api')
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    } with jar
+}
+
+task build(overwrite: true, dependsOn: [checkstyleMain, createApiJar])
