@@ -1,6 +1,9 @@
 plugins {
     id 'application'
+    id 'java'
+    id 'war'
 }
+apply from: 'https://raw.githubusercontent.com/gretty-gradle-plugin/gretty/master/pluginScripts/gretty.plugin'
 
 application {
     mainClass.set('edu.hm.dako.api.main.APIStarter')
@@ -11,21 +14,28 @@ jar.enabled = true
 sourceSets {
     main {
         resources {
-            srcDirs = ['src/main/java','src/main/resources']
+            srcDirs = ['src/main/java','src/main/resources','src/main/webapp']
         }
     }
 }
 
 dependencies {
-    implementation 'com.h2database:h2-mvstore:2.1.214'
-    implementation 'io.springfox:springfox-boot-starter:3.0.0'
-    implementation 'org.jetbrains:annotations:23.0.0'
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa:2.7.5'
-    implementation 'org.springframework.boot:spring-boot-starter-hateoas:2.7.5'
-    implementation 'org.springframework.boot:spring-boot-starter-parent:2.7.5'
-    implementation 'org.springframework.boot:spring-boot-starter-security:2.7.5'
-    implementation 'org.springframework.boot:spring-boot-starter-test:2.7.5'
-    implementation 'org.springframework.boot:spring-boot-starter-websocket:2.7.5'
+    implementation 'javax.servlet:javax.servlet-api:4.0.1'
+    implementation 'org.json:json:20220924'
+    implementation 'org.slf4j:slf4j-simple:2.0.5'
+    implementation 'org.xerial:sqlite-jdbc:3.40.0.0'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.0'
+}
+
+test {
+    useJUnit()
+    useJUnitPlatform()
+}
+
+gretty {
+    httpPort = 8080
+    contextPath = '/api'
 }
 
 // build api jar file

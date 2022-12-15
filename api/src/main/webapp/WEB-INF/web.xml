@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="3.0"
+         metadata-complete="true"
+         xmlns="http://java.sun.com/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
+
+    <servlet>
+        <servlet-name>helloWorld</servlet-name>
+        <servlet-class>edu.hm.dako.api.servlet.HelloWorldServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>helloWorld</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>pdus</servlet-name>
+        <servlet-class>edu.hm.dako.api.servlet.PDUServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>pdus</servlet-name>
+        <url-pattern>/pdus</url-pattern>
+    </servlet-mapping>
+</web-app>
