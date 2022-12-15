@@ -1,5 +1,6 @@
 rootProject.name = 'dako'
 rootProject.buildFileName = 'build.gradle'
+include 'api'
 include 'auditlogserver'
 include 'benchmark'
 include 'client'
