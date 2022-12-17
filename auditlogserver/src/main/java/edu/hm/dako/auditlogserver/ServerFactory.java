@@ -1,22 +1,29 @@
 package edu.hm.dako.auditlogserver;
 
-import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
-import java.util.concurrent.Executors;
-
-import edu.hm.dako.connection.udp.UDPServerSocket;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import edu.hm.dako.auditlogserver.gui.ALServerGUIInterface;
 import edu.hm.dako.common.AuditLogImplementationType;
 import edu.hm.dako.connection.Connection;
 import edu.hm.dako.connection.ServerSocketInterface;
 import edu.hm.dako.connection.tcp.TCPServerSocket;
+import edu.hm.dako.connection.udp.UDPServerSocket;
+import java.util.concurrent.Executors;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
+/**
+ * create a new audit log server
+ *
+ * @author Kilian Brandner
+ */
 public class ServerFactory {
+    /**
+     * referencing the logger
+     */
     private static final Logger LOG = LogManager.getLogger(ServerFactory.class);
 
+    /**
+     * constructor
+     */
     private ServerFactory() {
     }
 

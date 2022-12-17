@@ -5,14 +5,29 @@ import java.util.Objects;
 /**
  * data to be stored in the database
  *
- * @autor Linus Englert
+ * @author Linus Englert
  */
 public class PDU {
     private int id;
     private String pduType, username, clientThread, serverThread, auditTime, content;
 
+    /**
+     * constructor
+     */
     public PDU() {
     }
+
+    /**
+     * constructor
+     *
+     * @param id id for database
+     * @param pduType type of pdu
+     * @param username name of the user
+     * @param clientThread client thread name
+     * @param serverThread server thread name
+     * @param auditTime timestamp
+     * @param content chat message
+     */
     public PDU(int id, String pduType, String username, String clientThread, String serverThread, String auditTime, String content) {
         this.id = id;
         this.pduType = pduType;
@@ -23,51 +38,121 @@ public class PDU {
         this.content = content;
     }
 
+    /**
+     * getter
+     *
+     * @return id
+     */
     public int getId() {
         return id;
     }
+    /**
+     * setter
+     *
+     * @param id id
+     */
     public void setId(int id) {
         this.id = id;
     }
 
+    /**
+     * getter
+     *
+     * @return pduType
+     */
     public String getPduType() {
         return pduType;
     }
+    /**
+     * setter
+     *
+     * @param pduType pduType
+     */
     public void setPduType(String pduType) {
         this.pduType = pduType;
     }
 
+    /**
+     * getter
+     *
+     * @return username
+     */
     public String getUsername() {
         return username;
     }
+    /**
+     * setter
+     *
+     * @param username username
+     */
     public void setUsername(String username) {
         this.username = username;
     }
 
+    /**
+     * getter
+     *
+     * @return client thread name
+     */
     public String getClientThread() {
         return clientThread;
     }
+    /**
+     * setter
+     *
+     * @param clientThread client thread name
+     */
     public void setClientThread(String clientThread) {
         this.clientThread = clientThread;
     }
 
+    /**
+     * getter
+     *
+     * @return server thread name
+     */
     public String getServerThread() {
         return serverThread;
     }
+    /**
+     * setter
+     *
+     * @param serverThread server thread name
+     */
     public void setServerThread(String serverThread) {
         this.serverThread = serverThread;
     }
 
+    /**
+     * getter
+     *
+     * @return audit time
+     */
     public String getAuditTime() {
         return auditTime;
     }
+    /**
+     * setter
+     *
+     * @param auditTime audit time
+     */
     public void setAuditTime(String auditTime) {
         this.auditTime = auditTime;
     }
 
+    /**
+     * getter
+     *
+     * @return chat message
+     */
     public String getContent() {
         return content;
     }
+    /**
+     * setter
+     *
+     * @param content chat message
+     */
     public void setContent(String content) {
         this.content = content;
     }

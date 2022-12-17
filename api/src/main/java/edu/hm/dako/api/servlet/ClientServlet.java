@@ -5,9 +5,8 @@ import edu.hm.dako.api.store.DataBaseController;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.json.JSONObject;
-
 import java.io.IOException;
+import org.json.JSONObject;
 
 /**
  * REST endpoints with more detailed information (statistics) about a client
@@ -15,7 +14,16 @@ import java.io.IOException;
  * @author Linus Englert
  */
 public class ClientServlet extends HttpServlet {
+    /**
+     * controller for database actions
+     */
     DataBaseController controller;
+
+    /**
+     * constructor
+     */
+    private ClientServlet() {
+    }
 
     @Override
     public void init() {

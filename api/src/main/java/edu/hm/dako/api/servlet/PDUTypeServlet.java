@@ -4,9 +4,8 @@ import edu.hm.dako.api.store.DataBaseController;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.json.JSONObject;
-
 import java.io.IOException;
+import org.json.JSONObject;
 
 /**
  * REST endpoints with more detailed information (statistics) about pdu types
@@ -14,7 +13,16 @@ import java.io.IOException;
  * @author Linus Englert
  */
 public class PDUTypeServlet extends HttpServlet {
+    /**
+     * controller of database actions
+     */
     DataBaseController controller;
+
+    /**
+     * constructor
+     */
+    private PDUTypeServlet() {
+    }
 
     @Override
     public void init() {

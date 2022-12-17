@@ -22,6 +22,8 @@ public class DataBaseController {
 
     /**
      * this class is a singleton and should not be instantiated directly!
+     *
+     * @return DataBaseController instance
      */
     public static DataBaseController getInstance() {
         return instance;
@@ -42,6 +44,9 @@ public class DataBaseController {
         }
     }
 
+    /**
+     * initializes a database connection and creates the table on first call
+     */
     public void init() {
         try {
             if (connection != null) return;
@@ -81,7 +86,11 @@ public class DataBaseController {
 
     //-----PDU----------------------------------------------------------------
 
-    //neueste zuerst
+    /**
+     * selects all PDUs from database
+     *
+     * @return PDU[] with the newest first
+     */
     public PDU[] selectAllPDU() {
         List<PDU> lst = new ArrayList<>();
         try {
@@ -105,6 +114,12 @@ public class DataBaseController {
         return lst.toArray(PDU[]::new);
     }
 
+    /**
+     * selects one PDU from database
+     *
+     * @param id specifies the result
+     * @return specified PDU
+     */
     public PDU selectPDU(int id) {
         try {
             PreparedStatement pstmt = connection.prepareStatement("SELECT * FROM pdu WHERE id=?;");
@@ -127,6 +142,12 @@ public class DataBaseController {
         return null;
     }
 
+    /**
+     * inserts a new PDU into database
+     *
+     * @param pdu PDU to insert
+     * @return true if inserted successfully
+     */
     public boolean insertPDU(PDU pdu) {
         try {
             PreparedStatement pstmt = connection.prepareStatement("INSERT INTO pdu (pdutype, username," +
@@ -146,6 +167,13 @@ public class DataBaseController {
         return false;
     }
 
+    /**
+     * updates a PDU in database
+     *
+     * @param id specifies the PDU to be updated
+     * @param pdu new PDU
+     * @return true if successfully updated
+     */
     public boolean updatePDU(int id, PDU pdu) {
         try {
             PreparedStatement pstmt = connection.prepareStatement("UPDATE pdu SET pdutype=?, username=?, " +
@@ -166,6 +194,12 @@ public class DataBaseController {
         return false;
     }
 
+    /**
+     * deletes a PDU from database
+     *
+     * @param id specifies the PDU to be deleted
+     * @return true if successfully deleted
+     */
     public boolean deletePDU(int id) {
         try {
             PreparedStatement pstmt = connection.prepareStatement("DELETE FROM pdu WHERE id=?;");
@@ -181,7 +215,12 @@ public class DataBaseController {
 
     //-----CLIENT----------------------------------------------------------------------------------------
 
-    //neueste zuerst
+    /**
+     * selects all PDUs from a specific user from database
+     *
+     * @param username specific user
+     * @return PDU[] with the newest first
+     */
     public PDU[] selectPDU(String username) {
         List<PDU> lst = new ArrayList<>();
         try {
@@ -207,6 +246,12 @@ public class DataBaseController {
         return lst.toArray(PDU[]::new);
     }
 
+    /**
+     * counts the number of chat messages a single client has sent
+     *
+     * @param username the specific client
+     * @return number of chat messages
+     */
     public int selectClientChatMessagesCount(String username) {
         try {
             PreparedStatement pstmt = connection.prepareStatement("SELECT COUNT(*) FROM pdu WHERE username=? " +
@@ -227,7 +272,12 @@ public class DataBaseController {
 
     //-----STATISTICS-----------------------------------------------------------------------------------
 
-    //0 Undefined, 1 Login, 2 Logout, 3 Chat, 4 Finish
+    /**
+     * counts the occurrence of specific pdu types:
+     * 0 Undefined, 1 Login, 2 Logout, 3 Chat, 4 Finish
+     *
+     * @return array that contains all counters with content as defined above
+     */
     public int[] selectPDUTypeCount() {
         int[] result = new int[] {0, 0, 0, 0, 0};
         try {

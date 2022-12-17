@@ -8,5 +8,10 @@ import edu.hm.dako.common.AuditLogPDU;
  * @author Linus Englert
  */
 public interface StorageInterface {
+    /**
+     * persists an audit log pdu
+     *
+     * @param pdu pdu to be persisted
+     */
     void audit(AuditLogPDU pdu);
 }

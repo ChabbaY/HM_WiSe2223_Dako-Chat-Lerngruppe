@@ -2,12 +2,15 @@ package edu.hm.dako.auditlogserver.persistence;
 
 import edu.hm.dako.common.AuditLogPDU;
 import edu.hm.dako.common.AuditLogRMIInterface;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import java.io.*;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
 import java.util.Formatter;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * storing audit log data in a text file (e.g. ChatAuditLog.dat)
@@ -23,14 +26,17 @@ public class FileStorage implements AuditLogRMIInterface, StorageInterface, Seri
     /**
      * file to save to
      */
-    private String fileName; //"ChatAuditLog.dat";//wollen wir den Namen lieber parametrisieren, um pro Verbindung mit einem ChatServer eine Datei zu haben?
+    private final String fileName; //"ChatAuditLog.dat";//wollen wir den Namen lieber parametrisieren, um pro Verbindung mit einem ChatServer eine Datei zu haben?
 
-
-    public FileStorage(String name){
-        this.fileName = name;
-
-
+    /**
+     * constructor
+     *
+     * @param fileName file name
+     */
+    public FileStorage(String fileName){
+        this.fileName = fileName;
     }
+
     @Override
     public void audit(AuditLogPDU pdu) {
         File file = new File(fileName);
@@ -70,9 +76,4 @@ public class FileStorage implements AuditLogRMIInterface, StorageInterface, Seri
             log.error("Fehler beim Schreiben von Audit Log PDU in Datei " + fileName);
         }
     }
-
-
-
-
-
 }

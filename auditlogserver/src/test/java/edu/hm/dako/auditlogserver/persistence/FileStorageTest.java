@@ -25,7 +25,7 @@ class FileStorageTest {
     @Test
     void save() {
         FileStorage storage = new FileStorage("ChatAuditLog.dat");
-        storage.save(pdu);
+        storage.audit(pdu);
 
         try (BufferedReader br = new BufferedReader(new FileReader("ChatAuditLog.dat"))) {
             String[] entry = br.readLine().split("\\|");

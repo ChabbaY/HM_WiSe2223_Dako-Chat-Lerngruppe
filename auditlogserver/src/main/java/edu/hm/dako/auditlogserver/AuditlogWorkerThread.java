@@ -2,20 +2,18 @@ package edu.hm.dako.auditlogserver;
 
 import edu.hm.dako.auditlogserver.persistence.FileStorage;
 import edu.hm.dako.auditlogserver.persistence.StorageInterface;
-import edu.hm.dako.chatserver.SimpleChatWorkerThreadImpl;
 import edu.hm.dako.common.AuditLogPDU;
-
-import edu.hm.dako.common.AuditLogRMIInterface;
 import edu.hm.dako.common.ExceptionHandler;
 import edu.hm.dako.connection.Connection;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-
 /***
- * Pro verwalteten Client (ChatServer) wird ein WorkerThrad
+ * Pro verwalteten Client (ChatServer) wird ein WorkerThread erzeugt
+ *
+ * @author Oskar Gruß
  */
 public class AuditlogWorkerThread extends Thread {
     private static final Logger LOG = LogManager.getLogger(AuditlogWorkerThread.class);
@@ -25,6 +23,11 @@ public class AuditlogWorkerThread extends Thread {
 
     StorageInterface speicher;
 
+    /**
+     * constructor
+     *
+     * @param conn server connection
+     */
     public AuditlogWorkerThread(Connection conn) {
         con = conn;
         String dateString = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss")
@@ -50,11 +53,10 @@ public class AuditlogWorkerThread extends Thread {
         closeConnection();
     }
 
-
-
-
-    private void handleIncomingMessage(){
-
+    /**
+     * handles incoming messages
+     */
+    private void handleIncomingMessage() {
         AuditLogPDU receivedPDU;
 
         try {
@@ -65,23 +67,23 @@ public class AuditlogWorkerThread extends Thread {
             LOG.debug(receivedPDU.toString());
 
             handleIncomingRequest(receivedPDU);
-
-        }catch (Exception ex){
+        } catch (Exception ex){
             LOG.debug(ex.getMessage());
             //finished =true;
-
         }
-
     }
 
+    /**
+     * handles incoming requests
+     *
+     * @param receivedPdu received audit log pdu that should be logged
+     */
     protected void handleIncomingRequest(AuditLogPDU receivedPdu) {
         speicher.audit(receivedPdu);
     }
 
     private void closeConnection() {
         LOG.debug("Schliessen der AuditLogConnection " );
-
-
 
         try {
             con.close();

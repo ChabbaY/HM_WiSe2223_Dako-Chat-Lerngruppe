@@ -1,7 +1,9 @@
 package edu.hm.dako.api.servlet;
 
 import edu.hm.dako.api.store.DataBaseController;
-import jakarta.servlet.*;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.ServletRequest;
+import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServlet;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -12,7 +14,16 @@ import java.io.PrintWriter;
  * @author Linus Englert
  */
 public class HelloWorldServlet extends HttpServlet {
+    /**
+     * message to be displayed as title
+     */
     private String msg;
+
+    /**
+     * constructor
+     */
+    private HelloWorldServlet() {
+    }
 
     @Override
     public void init() {

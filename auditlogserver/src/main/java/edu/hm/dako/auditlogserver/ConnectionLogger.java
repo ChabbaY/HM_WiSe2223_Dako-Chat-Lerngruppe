@@ -2,10 +2,9 @@ package edu.hm.dako.auditlogserver;
 
 import edu.hm.dako.common.AuditLogPDU;
 import edu.hm.dako.connection.Connection;
+import java.io.Serializable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import java.io.Serializable;
 
 /**
  * Stattet ein {@link Connection} Objekt mit automatischem Logging aus. Umschliesst eine beliebige Connection-Instanz

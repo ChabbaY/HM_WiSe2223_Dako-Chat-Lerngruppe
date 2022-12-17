@@ -2,30 +2,43 @@ package edu.hm.dako.auditlogserver;
 
 import edu.hm.dako.auditlogserver.gui.ALServerGUIInterface;
 import edu.hm.dako.auditlogserver.persistence.FileStorage;
-import edu.hm.dako.auditlogserver.persistence.StorageInterface;
-import edu.hm.dako.common.AuditLogPDU;
 import edu.hm.dako.common.AuditLogRMIInterface;
 import edu.hm.dako.common.ExceptionHandler;
-import edu.hm.dako.connection.Connection;
-import edu.hm.dako.connection.ServerSocketInterface;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Vector;
-import java.util.concurrent.ExecutorService;
 
+/**
+ * audit log RMI implementation
+ *
+ * @author Kilian Brandner
+ */
 public class AuditLogRmiImpl extends AbstractALServer {
+    /**
+     * referencing the logger
+     */
     private static final Logger LOG = LogManager.getLogger(AuditLogRmiImpl.class);
 
+    /**
+     * server port
+     */
     private int port;
 
+    /**
+     * rmi registry
+     */
     private Registry registry;
 
+    /**
+     * constructor
+     *
+     * @param gui interface to audit log server gui
+     * @param serverPort port of the audit log server
+     */
     public AuditLogRmiImpl(ALServerGUIInterface gui, int serverPort) {
         super();
         this.alServerGUIInterface = gui;

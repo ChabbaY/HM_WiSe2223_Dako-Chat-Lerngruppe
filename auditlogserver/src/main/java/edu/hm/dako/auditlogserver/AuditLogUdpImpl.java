@@ -4,22 +4,39 @@ import edu.hm.dako.auditlogserver.gui.ALServerGUIInterface;
 import edu.hm.dako.common.ExceptionHandler;
 import edu.hm.dako.connection.Connection;
 import edu.hm.dako.connection.ServerSocketInterface;
+import java.util.Vector;
+import java.util.concurrent.ExecutorService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.Vector;
-import java.util.concurrent.ExecutorService;
-
+/**
+ * audit log udp implementation
+ *
+ * @author Kilian Brandner
+ */
 public class AuditLogUdpImpl extends AbstractALServer {
+    /**
+     * referencing the logger
+     */
     private static final Logger LOG = LogManager.getLogger();
 
-    // ThreadPool für Worker-Threads
+    /**
+     * ThreadPool für Worker-Threads
+     */
     private final ExecutorService executorService;
 
-    // Socket für den Listener, der alle Verbindungsaufbauwünsche der ChatServer
-    // entgegennimmt
+    /**
+     * Socket für den Listener, der alle Verbindungsaufbauwünsche der ChatServer entgegennimmt
+     */
     private final ServerSocketInterface socket;
 
+    /**
+     * constructor
+     *
+     * @param executorService executor service
+     * @param socket server socket
+     * @param gui server gui
+     */
     public AuditLogUdpImpl(ExecutorService executorService, ServerSocketInterface socket, ALServerGUIInterface gui) {
         this.executorService = executorService;
         this.socket = socket;

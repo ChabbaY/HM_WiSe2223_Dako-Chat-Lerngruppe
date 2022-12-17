@@ -14,7 +14,16 @@ import org.json.JSONObject;
  * @author Linus Englert
  */
 public class PDUServlet extends HttpServlet {
+    /**
+     * controller for database actions
+     */
     DataBaseController controller;
+
+    /**
+     * constructor
+     */
+    private PDUServlet() {
+    }
 
     @Override
     public void init() {

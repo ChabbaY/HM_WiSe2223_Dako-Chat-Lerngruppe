@@ -1,10 +1,10 @@
 package edu.hm.dako.auditlogserver;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import java.util.HashSet;
 import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Liste aller angemeldeten Server. Diese Liste wird im Auditlog-Server als
@@ -22,8 +22,14 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author Linus Englert
  */
 public class SharedChatServerList {
+    /**
+     * referencing the logger
+     */
     private static final Logger LOG = LogManager.getLogger(SharedChatServerList.class);
-    // Liste aller eingeloggten Clients
+
+    /**
+     * Liste aller eingeloggten Clients
+     */
     private static ConcurrentHashMap<String, ServerListEntry> clients;
 
     private static SharedChatServerList instance;
@@ -63,6 +69,12 @@ public class SharedChatServerList {
         return clients.get(serverAddress + ":" + serverPort);
     }
 
+    /**
+     * getter
+     *
+     * @param serverKey key in the hash map
+     * @return the mapped server list entry
+     */
     public synchronized ServerListEntry getServer(String serverKey) {
         return clients.get(serverKey);
     }
