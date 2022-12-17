@@ -141,7 +141,7 @@ public class AuditLogConnection {
             }
         } catch (Exception e) {
             LOG.error("Exception bei Verbindungsaufbau zum AuditLog-Server");
-            //ExceptionHandler.logExceptionAndTerminate(e);
+            ExceptionHandler.logException(e);
             throw new Exception();
         }
     }

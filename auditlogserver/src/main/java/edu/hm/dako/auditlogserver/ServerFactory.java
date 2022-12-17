@@ -1,5 +1,7 @@
 package edu.hm.dako.auditlogserver;
 
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 import java.util.concurrent.Executors;
 
 import edu.hm.dako.connection.udp.UDPServerSocket;
@@ -52,6 +54,12 @@ public class ServerFactory {
             try {
                 UDPServerSocket udpServerSocket = new UDPServerSocket(serverPort, sendBufferSize, receiveBufferSize);
                 return new AuditLogUdpImpl(Executors.newCachedThreadPool(), getDecoratedServerSocket(udpServerSocket), serverGuiInterface);
+            } catch (Exception e) {
+                throw new Exception(e);
+            }
+        } else if (implType == AuditLogImplementationType.AuditLogServerRMIImplementation) {
+            try {
+                return new AuditLogRmiImpl(serverGuiInterface, serverPort);
             } catch (Exception e) {
                 throw new Exception(e);
             }

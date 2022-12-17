@@ -16,8 +16,6 @@ import java.util.Calendar;
  * Pro verwalteten Client (ChatServer) wird ein WorkerThrad
  */
 public class AuditlogWorkerThread extends Thread {
-
-
     private static final Logger LOG = LogManager.getLogger(AuditlogWorkerThread.class);
     private boolean finished = false;
 
@@ -76,8 +74,6 @@ public class AuditlogWorkerThread extends Thread {
 
     protected void handleIncomingRequest(AuditLogPDU receivedPdu) {
         speicher.save(receivedPdu);
-
-
     }
 
     private void closeConnection() {
