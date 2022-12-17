@@ -26,7 +26,7 @@ public class PDUServlet extends HttpServlet {
      * GET localhost:8080/api/pdus or localhost:8080/api/pdus?id=3<br/>
      * parameter: id<br/>
      * no id or id=0 is a list-request, a specific id >= 1 is a single-item-request<br/>
-     * response can be http200 (ok) with value or http404 (not found), http409 (bad request) if id not a number
+     * response can be http200 (ok) with value or http404 (not found), http400 (bad request) if id not a number
      *
      * @param request an {@link HttpServletRequest} object that contains the request the client has made of the servlet
      * @param response an {@link HttpServletResponse} object that contains the response the servlet sends to the client
@@ -99,7 +99,7 @@ public class PDUServlet extends HttpServlet {
     /**
      * DELETE localhost:8080/api/pdus<br/>
      * parameter: id<br/>
-     * response can be http200 (ok), http409 (bad request) if id not a number, http500 (server error)
+     * response can be http200 (ok), http400 (bad request) if id not a number, http500 (server error)
      *
      * @param request the {@link HttpServletRequest} object that contains the request the client made of the servlet
      * @param response the {@link HttpServletResponse} object that contains the response the servlet returns to the client

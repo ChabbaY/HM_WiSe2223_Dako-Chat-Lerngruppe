@@ -24,4 +24,24 @@
         <servlet-name>pdus</servlet-name>
         <url-pattern>/pdus</url-pattern>
     </servlet-mapping>
+
+    <servlet>
+        <servlet-name>clients</servlet-name>
+        <servlet-class>edu.hm.dako.api.servlet.ClientServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>clients</servlet-name>
+        <url-pattern>/pdus/clients</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>types</servlet-name>
+        <servlet-class>edu.hm.dako.api.servlet.PDUTypeServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>types</servlet-name>
+        <url-pattern>/pdus/types</url-pattern>
+    </servlet-mapping>
 </web-app>

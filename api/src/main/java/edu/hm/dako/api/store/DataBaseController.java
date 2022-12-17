@@ -79,11 +79,14 @@ public class DataBaseController {
         }
     }
 
+    //-----PDU----------------------------------------------------------------
+
+    //neueste zuerst
     public PDU[] selectAllPDU() {
         List<PDU> lst = new ArrayList<>();
         try {
             Statement stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM pdu;");
+            ResultSet rs = stmt.executeQuery("SELECT * FROM pdu ORDER BY audittime DESC;");
             while (rs.next()) {
                 lst.add(new PDU(rs.getInt("id"),
                         rs.getString("pdutype"),
@@ -174,5 +177,76 @@ public class DataBaseController {
             e.printStackTrace();
         }
         return false;
+    }
+
+    //-----CLIENT----------------------------------------------------------------------------------------
+
+    //neueste zuerst
+    public PDU[] selectPDU(String username) {
+        List<PDU> lst = new ArrayList<>();
+        try {
+            PreparedStatement pstmt = connection.prepareStatement("SELECT * FROM pdu WHERE username=? " +
+                    "ORDER BY audittime DESC;");
+            pstmt.setString(1, username);
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                lst.add(new PDU(rs.getInt("id"),
+                        rs.getString("pdutype"),
+                        rs.getString("username"),
+                        rs.getString("clientthread"),
+                        rs.getString("serverthread"),
+                        rs.getString("audittime"),
+                        rs.getString("content"))
+                );
+            }
+            rs.close();
+        } catch (SQLException e) {
+            System.err.println("Couldn't handle DB-Query");
+            e.printStackTrace();
+        }
+        return lst.toArray(PDU[]::new);
+    }
+
+    public int selectClientChatMessagesCount(String username) {
+        try {
+            PreparedStatement pstmt = connection.prepareStatement("SELECT COUNT(*) FROM pdu WHERE username=? " +
+                    "AND pdutype=?;");
+            pstmt.setString(1, username);
+            pstmt.setString(2, "Chat");
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+            rs.close();
+        } catch (SQLException e) {
+            System.err.println("Couldn't handle DB-Query");
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    //-----STATISTICS-----------------------------------------------------------------------------------
+
+    //0 Undefined, 1 Login, 2 Logout, 3 Chat, 4 Finish
+    public int[] selectPDUTypeCount() {
+        int[] result = new int[] {0, 0, 0, 0, 0};
+        try {
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT pdutype, COUNT(*) AS count FROM pdu GROUP BY pdutype;");
+            while (rs.next()) {
+                switch (rs.getString("pdutype")) {
+                    case "Login" -> result[1] = rs.getInt("count");
+                    case "Logout" -> result[2] = rs.getInt("count");
+                    case "Chat" -> result[3] = rs.getInt("count");
+                    case "Finish" -> result[4] = rs.getInt("count");
+                    default -> result[0] += rs.getInt("count");
+                }
+            }
+            rs.close();
+        } catch (SQLException e) {
+            System.err.println("Couldn't handle DB-Query");
+            e.printStackTrace();
+        }
+        return result;
     }
 }
