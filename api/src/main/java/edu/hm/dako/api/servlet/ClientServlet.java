@@ -19,12 +19,6 @@ public class ClientServlet extends HttpServlet {
      */
     DataBaseController controller;
 
-    /**
-     * constructor
-     */
-    private ClientServlet() {
-    }
-
     @Override
     public void init() {
         controller = DataBaseController.getInstance();

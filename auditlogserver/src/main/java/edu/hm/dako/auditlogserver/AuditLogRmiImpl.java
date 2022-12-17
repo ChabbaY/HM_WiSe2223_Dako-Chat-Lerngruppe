@@ -1,7 +1,7 @@
 package edu.hm.dako.auditlogserver;
 
 import edu.hm.dako.auditlogserver.gui.ALServerGUIInterface;
-import edu.hm.dako.auditlogserver.persistence.FileStorage;
+import edu.hm.dako.auditlogserver.persistence.Storage;
 import edu.hm.dako.common.AuditLogRMIInterface;
 import edu.hm.dako.common.ExceptionHandler;
 import org.apache.logging.log4j.LogManager;
@@ -58,7 +58,7 @@ public class AuditLogRmiImpl extends AbstractALServer {
             try {
                 String dateString = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss")
                         .format(Calendar.getInstance().getTime());
-                AuditLogRMIInterface remote = (AuditLogRMIInterface) UnicastRemoteObject.exportObject(new FileStorage(dateString), port);
+                AuditLogRMIInterface remote = (AuditLogRMIInterface) UnicastRemoteObject.exportObject(new Storage(dateString), port);
                 registry.bind("AuditLogRmiServer", remote);
             } catch (Exception e) {
                 LOG.error("Exception beim Entgegennehmen von Verbindungsaufbauwünschen: " + e);

@@ -18,12 +18,6 @@ public class PDUTypeServlet extends HttpServlet {
      */
     DataBaseController controller;
 
-    /**
-     * constructor
-     */
-    private PDUTypeServlet() {
-    }
-
     @Override
     public void init() {
         controller = DataBaseController.getInstance();

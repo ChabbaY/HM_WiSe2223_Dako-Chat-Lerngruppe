@@ -17,7 +17,7 @@ import org.apache.logging.log4j.Logger;
  *
  * @author Linus Englert
  */
-public class FileStorage implements AuditLogRMIInterface, StorageInterface, Serializable {
+class FileStorage implements AuditLogRMIInterface, StorageInterface, Serializable {
     /**
      * referencing the logger
      */

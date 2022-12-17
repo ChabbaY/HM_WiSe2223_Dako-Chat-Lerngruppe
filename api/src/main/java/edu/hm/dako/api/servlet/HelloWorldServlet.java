@@ -19,12 +19,6 @@ public class HelloWorldServlet extends HttpServlet {
      */
     private String msg;
 
-    /**
-     * constructor
-     */
-    private HelloWorldServlet() {
-    }
-
     @Override
     public void init() {
         msg = "Hello World!";

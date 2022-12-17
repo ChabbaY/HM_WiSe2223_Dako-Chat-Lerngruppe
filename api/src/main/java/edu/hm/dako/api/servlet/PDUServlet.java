@@ -19,12 +19,6 @@ public class PDUServlet extends HttpServlet {
      */
     DataBaseController controller;
 
-    /**
-     * constructor
-     */
-    private PDUServlet() {
-    }
-
     @Override
     public void init() {
         controller = DataBaseController.getInstance();
@@ -156,9 +150,11 @@ public class PDUServlet extends HttpServlet {
         String auditTime = request.getParameter("auditTime");
         String content = request.getParameter("content");
 
-        if ((pduType.length() > 100) || (username.length() > 100) || (clientThread.length() > 100) ||
+        if ((pduType == null) || (username == null) || (clientThread == null) || (serverThread == null) ||
+                (auditTime == null) || (content == null) ||
+                (pduType.length() > 100) || (username.length() > 100) || (clientThread.length() > 100) ||
                 (serverThread.length() > 100) || (auditTime.length() > 100) || (content.length() > 100)) {
-            response.getOutputStream().println("max parameter size of 100 chars exceeded");
+            response.getOutputStream().println("max parameter size of 100 chars exceeded ");
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             return null;
         }

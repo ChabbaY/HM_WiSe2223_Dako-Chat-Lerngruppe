@@ -1,6 +1,6 @@
 package edu.hm.dako.auditlogserver;
 
-import edu.hm.dako.auditlogserver.persistence.FileStorage;
+import edu.hm.dako.auditlogserver.persistence.Storage;
 import edu.hm.dako.auditlogserver.persistence.StorageInterface;
 import edu.hm.dako.common.AuditLogPDU;
 import edu.hm.dako.common.ExceptionHandler;
@@ -34,7 +34,7 @@ public class AuditlogWorkerThread extends Thread {
                 .format(Calendar.getInstance().getTime());
         String hash = ((Integer)conn.hashCode()).toString();
         String fileName = dateString + hash;
-        speicher = new FileStorage(fileName);
+        speicher = new Storage(fileName);
     }
 
     @Override
