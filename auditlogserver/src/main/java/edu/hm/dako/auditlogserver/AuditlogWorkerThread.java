@@ -1,9 +1,11 @@
 package edu.hm.dako.auditlogserver;
 
 import edu.hm.dako.auditlogserver.persistence.FileStorage;
+import edu.hm.dako.auditlogserver.persistence.StorageInterface;
 import edu.hm.dako.chatserver.SimpleChatWorkerThreadImpl;
 import edu.hm.dako.common.AuditLogPDU;
 
+import edu.hm.dako.common.AuditLogRMIInterface;
 import edu.hm.dako.common.ExceptionHandler;
 import edu.hm.dako.connection.Connection;
 import org.apache.logging.log4j.LogManager;
@@ -21,7 +23,7 @@ public class AuditlogWorkerThread extends Thread {
 
     Connection con;
 
-    FileStorage speicher;
+    StorageInterface speicher;
 
     public AuditlogWorkerThread(Connection conn) {
         con = conn;
@@ -73,7 +75,7 @@ public class AuditlogWorkerThread extends Thread {
     }
 
     protected void handleIncomingRequest(AuditLogPDU receivedPdu) {
-        speicher.save(receivedPdu);
+        speicher.audit(receivedPdu);
     }
 
     private void closeConnection() {

@@ -1,12 +1,11 @@
 package edu.hm.dako.auditlogserver.persistence;
 
 import edu.hm.dako.common.AuditLogPDU;
+import edu.hm.dako.common.AuditLogRMIInterface;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.Formatter;
 
@@ -15,7 +14,7 @@ import java.util.Formatter;
  *
  * @author Linus Englert
  */
-public class FileStorage implements StorageInterface {
+public class FileStorage implements AuditLogRMIInterface, StorageInterface, Serializable {
     /**
      * referencing the logger
      */
@@ -33,7 +32,7 @@ public class FileStorage implements StorageInterface {
 
     }
     @Override
-    public void save(AuditLogPDU pdu) {
+    public void audit(AuditLogPDU pdu) {
         File file = new File(fileName);
         log.debug("Die file heißt: "+ fileName + "und liegt in: "+ file.toPath().toString());
 

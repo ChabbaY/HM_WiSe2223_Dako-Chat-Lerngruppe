@@ -13,6 +13,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Vector;
@@ -21,12 +22,20 @@ import java.util.concurrent.ExecutorService;
 public class AuditLogRmiImpl extends AbstractALServer {
     private static final Logger LOG = LogManager.getLogger(AuditLogRmiImpl.class);
 
-    private int serverPort;
+    private int port;
+
+    private Registry registry;
 
     public AuditLogRmiImpl(ALServerGUIInterface gui, int serverPort) {
         super();
         this.alServerGUIInterface = gui;
-        this.serverPort = serverPort;
+        port = serverPort;
+        try {
+            registry = LocateRegistry.createRegistry(serverPort);
+        } catch (Exception e) {
+            LOG.error("Exception bei RMI-Registry-Erstellung: " + e);
+            ExceptionHandler.logException(e);
+        }
 
         LOG.debug("AuditLogServer konstruiert!");
     }
@@ -34,9 +43,10 @@ public class AuditLogRmiImpl extends AbstractALServer {
     @Override
     public void start() {
             try {
-                Registry registry = LocateRegistry.createRegistry(serverPort);
-                AuditLogRmiRemote impl = new AuditLogRmiRemote();
-                registry.bind("AuditLogRmiServer", impl);
+                String dateString = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss")
+                        .format(Calendar.getInstance().getTime());
+                AuditLogRMIInterface remote = (AuditLogRMIInterface) UnicastRemoteObject.exportObject(new FileStorage(dateString), port);
+                registry.bind("AuditLogRmiServer", remote);
             } catch (Exception e) {
                 LOG.error("Exception beim Entgegennehmen von Verbindungsaufbauwünschen: " + e);
                 ExceptionHandler.logException(e);

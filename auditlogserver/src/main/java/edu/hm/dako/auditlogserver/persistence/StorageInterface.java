@@ -8,5 +8,5 @@ import edu.hm.dako.common.AuditLogPDU;
  * @author Linus Englert
  */
 public interface StorageInterface {
-    void save(AuditLogPDU pdu);
+    void audit(AuditLogPDU pdu);
 }
