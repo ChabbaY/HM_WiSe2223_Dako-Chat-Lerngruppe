@@ -34,6 +34,7 @@ public class ClientServlet extends HttpServlet {
      */
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        Headers.setHeaders(response);
         String username = request.getParameter("username");
         int chatMessages = controller.selectClientChatMessagesCount(username);
 

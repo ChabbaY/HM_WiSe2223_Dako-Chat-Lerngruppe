@@ -36,6 +36,7 @@ public class PDUServlet extends HttpServlet {
      */
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        Headers.setHeaders(response);
         int id = evaluateId(request, response);
 
         if (id == 0) {//get all (id starts from 1)
@@ -64,6 +65,7 @@ public class PDUServlet extends HttpServlet {
      */
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        Headers.setHeaders(response);
         String[] input = getPDU(request, response);
         if (input == null) return;
 
@@ -83,6 +85,7 @@ public class PDUServlet extends HttpServlet {
      */
     @Override
     public void doPut(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        Headers.setHeaders(response);
         int id = evaluateId(request, response);
 
         String[] input = getPDU(request, response);
@@ -109,6 +112,7 @@ public class PDUServlet extends HttpServlet {
      */
     @Override
     public void doDelete(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        Headers.setHeaders(response);
         int id = evaluateId(request, response);
 
         if (!controller.deletePDU(id)) {

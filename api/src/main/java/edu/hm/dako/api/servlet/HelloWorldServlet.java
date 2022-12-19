@@ -1,10 +1,9 @@
 package edu.hm.dako.api.servlet;
 
 import edu.hm.dako.api.store.DataBaseController;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.ServletRequest;
-import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -27,9 +26,10 @@ public class HelloWorldServlet extends HttpServlet {
     }
 
     @Override
-    public void service(ServletRequest req, ServletResponse res) throws ServletException, IOException {
-        res.setContentType("text/html");
-        PrintWriter out = res.getWriter();
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        Headers.setHeaders(response);
+        response.setContentType("text/html");
+        PrintWriter out = response.getWriter();
         out.println("<h1>" + msg + "</h1>");
         out.println("<p>" + "S\u00FC\u00FC!" + "</p>");
     }

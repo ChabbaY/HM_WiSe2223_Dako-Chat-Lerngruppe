@@ -32,6 +32,7 @@ public class PDUTypeServlet extends HttpServlet {
      */
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        Headers.setHeaders(response);
         int[] typeCount = controller.selectPDUTypeCount();
         response.getOutputStream().println(new JSONObject()
                 .put("undefined", typeCount[0])
