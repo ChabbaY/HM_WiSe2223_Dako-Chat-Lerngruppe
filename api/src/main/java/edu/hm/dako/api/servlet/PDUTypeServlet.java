@@ -18,6 +18,7 @@ public class PDUTypeServlet extends HttpServlet {
      */
     DataBaseController controller;
 
+
     @Override
     public void init() {
         controller = DataBaseController.getInstance();
@@ -30,6 +31,8 @@ public class PDUTypeServlet extends HttpServlet {
      * @param request an {@link HttpServletRequest} object that contains the request the client has made of the servlet
      * @param response an {@link HttpServletResponse} object that contains the response the servlet sends to the client
      */
+
+
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         Headers.setHeaders(response);
