@@ -69,7 +69,7 @@ public class AuditlogWorkerThread extends Thread {
             handleIncomingRequest(receivedPDU);
         } catch (Exception ex){
             LOG.debug(ex.getMessage());
-            //finished =true;
+            finished =true;
         }
     }
 
