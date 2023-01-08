@@ -1,15 +1,22 @@
 package edu.hm.dako.auditlogserver;
 
 import edu.hm.dako.auditlogserver.gui.ALServerGUIInterface;
+import edu.hm.dako.auditlogserver.persistence.FileStorage;
 import edu.hm.dako.auditlogserver.persistence.Storage;
 import edu.hm.dako.common.AuditLogRMIInterface;
 import edu.hm.dako.common.ExceptionHandler;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import java.rmi.ConnectException;
+import java.rmi.Naming;
+import java.rmi.Remote;
+import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
 
 /**
@@ -43,31 +50,36 @@ public class AuditLogRmiImpl extends AbstractALServer {
         super();
         this.alServerGUIInterface = gui;
         port = serverPort;
-        try {
-            registry = LocateRegistry.createRegistry(serverPort);
-        } catch (Exception e) {
-            LOG.error("Exception bei RMI-Registry-Erstellung: " + e);
-            ExceptionHandler.logException(e);
-        }
 
         LOG.debug("AuditLogServer konstruiert!");
     }
 
     @Override
     public void start() {
-            try {
-                String dateString = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss")
-                        .format(Calendar.getInstance().getTime());
-                AuditLogRMIInterface remote = (AuditLogRMIInterface) UnicastRemoteObject.exportObject(new Storage(dateString), port);
-                registry.bind("AuditLogRmiServer", remote);
-            } catch (Exception e) {
-                LOG.error("Exception beim Entgegennehmen von Verbindungsaufbauwünschen: " + e);
-                ExceptionHandler.logException(e);
-            }
+        String name = "AuditLogRmiServer"; // specify the name here
+        FileStorage fileStorage = new FileStorage("ChatAuditLog.dat"); // create the FileStorage object
+        try {
+            startRmiRegistry(port); // start the RMI registry
+            exportObject(fileStorage, port, name);
+        } catch (RemoteException e) {
+            LOG.error("RMI Export ist fehlgeschlagen", e);
+            ExceptionHandler.logExceptionAndTerminate(e);
+        }
     }
 
     @Override
     public void stop() throws Exception {
         LOG.info("AuditLog beendet sich");
+    }
+
+    public static void startRmiRegistry(int port) throws RemoteException {
+        LocateRegistry.createRegistry(port);
+    }
+
+    public static void exportObject(Remote remote, int port, String name) throws RemoteException {
+        Remote remote_Stub = UnicastRemoteObject.exportObject(remote, port); // export the object
+        Registry registry = LocateRegistry.getRegistry(port);
+        registry.rebind(name, remote_Stub); // bind the object to the registry
+
     }
 }
