@@ -282,7 +282,7 @@ public class ServerStarter {
                 startable = false;
             } else if (auditLogServerImplType.equals(SystemConstants.AUDIT_LOG_SERVER_RMI_IMPL)) {
                 // Falls RMI ausgewählt wurde, wird standardmäßig der RMI-Registry-Port 1099 verwendet
-                iServerPort = Integer.parseInt(SystemConstants.DEFAULT_AUDIT_LOG_SERVER_RMI_REGISTRY_PORT);
+                //iServerPort = Integer.parseInt(SystemConstants.DEFAULT_AUDIT_LOG_SERVER_RMI_REGISTRY_PORT);
                 LOG.debug("Standard-Port für RMI-Registry: {}", iServerPort);
             } else {
                 LOG.debug("Port für AuditLog-Server: {}", iServerPort);

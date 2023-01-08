@@ -383,7 +383,7 @@ public class ServerFxGUI extends FxGUI implements ServerGUIInterface {
             String auditLogServerImplType = readAuditLogComboBox();
             if (Objects.equals(auditLogServerImplType, SystemConstants.AUDIT_LOG_SERVER_RMI_IMPL)) {
                 // RMI für AuditLog-Server ausgewählt, GUI-Einstellungen für RMI-AuditLog-Server anpassen
-                auditLogServerPort.setText(SystemConstants.DEFAULT_AUDIT_LOG_SERVER_RMI_REGISTRY_PORT);
+                //auditLogServerPort.setText(SystemConstants.DEFAULT_AUDIT_LOG_SERVER_RMI_REGISTRY_PORT);
             }
 
             if (startable) {
