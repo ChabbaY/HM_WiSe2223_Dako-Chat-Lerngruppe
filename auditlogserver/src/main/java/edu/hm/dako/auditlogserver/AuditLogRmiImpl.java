@@ -57,10 +57,12 @@ public class AuditLogRmiImpl extends AbstractALServer {
     @Override
     public void start() {
         String name = "AuditLogRmiServer"; // specify the name here
-        FileStorage fileStorage = new FileStorage("ChatAuditLog.dat"); // create the FileStorage object
+        String dateString = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss")
+                .format(Calendar.getInstance().getTime());
+        Storage storage = new Storage(dateString); // create the FileStorage object
         try {
             startRmiRegistry(port); // start the RMI registry
-            exportObject(fileStorage, port, name);
+            exportObject(storage, port, name);
         } catch (RemoteException e) {
             LOG.error("RMI Export ist fehlgeschlagen", e);
             ExceptionHandler.logExceptionAndTerminate(e);
@@ -80,6 +82,5 @@ public class AuditLogRmiImpl extends AbstractALServer {
         Remote remote_Stub = UnicastRemoteObject.exportObject(remote, port); // export the object
         Registry registry = LocateRegistry.getRegistry(port);
         registry.rebind(name, remote_Stub); // bind the object to the registry
-
     }
 }
