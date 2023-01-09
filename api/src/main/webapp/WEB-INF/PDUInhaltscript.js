@@ -1,0 +1,61 @@
+// api url
+const api_url =
+    "http://localhost:8080/api/pdus";
+
+// Defining async function
+async function getapi(url) {
+
+    // Storing response
+    const response = await fetch(url);
+
+    // Storing data in form of JSON
+    var data = await response.json();
+    console.log(typeof(data));
+    if (response) {
+        //hideloader();
+    }
+    show(data);
+}
+// Calling that async function
+getapi(api_url);
+
+// Function to hide the loader
+function hideloader() {
+    document.getElementById('loading').style.display = 'none';
+}
+// Function to define innerHTML for HTML table
+function show(data) {
+    let tab = "";
+
+    console.log(Array.from(data));
+    //data war nicht vorher nicht iterable
+    let datenarray = Array.from(data);
+    // Loop to access all rows
+    for (let r of datenarray) {
+        tab += `<tr class="hover:bg-gray-50">
+      <td class="px-6 py-4">${r.id}</td>
+      <td class="px-6 py-4 font-normal text-gray-900">
+        ${r.clientThread}
+      </td>
+      <td class="px-6 py-4 font-normal text-gray-900">${r.serverThread}</td>
+      <td class="px-6 py-4 font-semibold text-gray-900">
+        ${r.auditTime} ms
+      </td>
+      <td class="px-6 py-4">
+            <span
+                    class="inline-flex items-center gap-1 rounded-full bg-blue-50 px-2 py-1 text-xs font-semibold text-blue-600"
+            >
+              ${r.pdutype}
+            </span>
+      </td>
+      <td class="px-6 py-4 font-normal text-gray-900">
+        ${r.username}
+      </td>
+      <td class="px-6 py-4 font-normal text-gray-900 overflow-ellipsis">
+        ${r.content}
+      </td>
+    </tr>`;
+    }
+    // Setting innerHTML as tab variable
+    document.getElementById("contentofPDUs").innerHTML = tab;
+}
