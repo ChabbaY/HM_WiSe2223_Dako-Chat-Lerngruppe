@@ -2,35 +2,28 @@
 const api_url =
     "http://localhost:8080/api/pdus";
 
-// Defining async function
+// Definition einer asynchronen Methode zum api aufruf
 async function getapi(url) {
 
-    // Storing response
-    const response = await fetch(url);
+    // Speichern des Response Objects
+    const response = await fetch(url); //erstmal ein Promise
 
-    // Storing data in form of JSON
+    // Daten in JSON Speichern
     var data = await response.json();
     console.log(typeof(data));
-    if (response) {
-        //hideloader();
-    }
     show(data);
 }
-// Calling that async function
+// Aufruf der asynchronen getapi() Methode
 getapi(api_url);
 
-// Function to hide the loader
-function hideloader() {
-    document.getElementById('loading').style.display = 'none';
-}
-// Function to define innerHTML for HTML table
+
+// funktion um inner html zu definieren
 function show(data) {
     let tab = "";
 
-    console.log(Array.from(data));
-    //data war nicht vorher nicht iterable
+    //data iterable machen
     let datenarray = Array.from(data);
-    // Loop to access all rows
+    // schleife um alle PDU's auszulesen
     for (let r of datenarray) {
         tab += `<tr class="hover:bg-gray-50">
       <td class="px-6 py-4">${r.id}</td>

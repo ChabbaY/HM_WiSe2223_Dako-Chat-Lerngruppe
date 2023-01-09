@@ -1,17 +1,18 @@
 import java.awt.*;
-import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.StringSelection;
 
 import java.net.URI;
 import java.net.URL;
 
+
+
+
 public class Admintoolstarter {
+
+
 
     public static void main(String[] args) {
         openInBrowser("http://localhost:63342/dako/dako.api.main/WEB-INF/Startseite.html?_ijt=7d866ptr2kacpje7b6puf41o50&_ij_reload=RELOAD_ON_SAVE");
-
     }
-
 
 
 
@@ -22,24 +23,18 @@ public class Admintoolstarter {
         {
             URI uri = new URL(url).toURI();
             Desktop desktop = Desktop.isDesktopSupported() ? Desktop.getDesktop() : null;
-            if (desktop != null && desktop.isSupported(Desktop.Action.BROWSE))
+            if (desktop != null && desktop.isSupported(Desktop.Action.BROWSE)) //prüfung ob aufruf funktioniert
                 desktop.browse(uri);
         }
         catch (Exception e)
         {
-            /*
-             *  I know this is bad practice
-             *  but we don't want to do anything clever for a specific error
-             */
-            e.printStackTrace();
+            //einfache Fehlerbehandlung, da desktop angeblich nicht auf allen rechnern funktioniert.
 
-            // Copy URL to the clipboard so the user can paste it into their browser
-            StringSelection stringSelection = new StringSelection(url);
-            Clipboard clpbrd = Toolkit.getDefaultToolkit().getSystemClipboard();
-            clpbrd.setContents(stringSelection, null);
-            // Notify the user of the failure
-            /*WindowTools.informationWindow("This program just tried to open a webpage." + "\n"
-                            + "The URL has been copied to your clipboard, simply paste into your browser to access.",
-                    "Webpage: " + url);*/
+            System.out.println("Leider ist ein Fehler aufgetreten. Bitte öffnen sie die HTML Datei manuell.");
+            System.out.println("Sie finden Sie im Ordner API unter webapp/WEB-INF/Startseite.html");
+            System.out.println("Ich bitte Sie die Unanehmlichkeit zu entschuldigen.");
+
+
         }
-    }}
+    }
+}
