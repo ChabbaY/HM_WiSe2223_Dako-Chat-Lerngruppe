@@ -11,41 +11,17 @@ async function getapi(url) {
     // Storing data in form of JSON
     var data = await response.json();
     console.log(data);
-    if (response) {
-        hideloader();
-    }
     show(data);
 }
 // Calling that async function
 getapi(api_url);
-
-// Function to hide the loader
-function hideloader() {
-    document.getElementById('loading').style.display = 'none';
-}
 // Function to define innerHTML for HTML table
 function show(data) {
     console.log(data.login);
-    let tab =
-        `<tr>
-          <th>Undefined</th>
-          <th>Login</th>
-          <th>Chat</th>
-          <th>Finish</th>
-         </tr>`;
-
-    // Loop to access all rows
-    //for (let datas of data) {
-        //undefined, login, logout, chat, finish
-        tab += `<tr> 
-    <td>${data.undefined} </td>
-    <td>${data.login} </td>
-    <td>${data.logout} </td>
-    <td>${data.chat} </td>
-    <td>${data.finish} </td>    
-</tr>`;
-    //}
-    // Setting innerHTML as tab variable
-    document.getElementById("pdus").innerHTML = tab;
+    document.getElementById("pdu-undefined").innerText = data.undefined;
+    document.getElementById("pdu-login").innerText = data.login;
+    document.getElementById("pdu-logout").innerText = data.logout;
+    document.getElementById("pdu-chat").innerText = data.chat;
+    document.getElementById("pdu-finished").innerText = data.finish;
 }
 

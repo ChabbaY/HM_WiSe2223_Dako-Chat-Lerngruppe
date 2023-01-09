@@ -1,25 +1,105 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="bg-gray-100">
 <head>
     <script src="ChatPDUscript.js"></script>
        <meta charset="UTF-8" />
        <meta name="viewport"
              content="width=device-width, initial-scale=1.0" />
        <title>Document</title>
-    <link rel="stylesheet" href="tablestyle.css">
+    <link rel="stylesheet" href="windi.css">
 
 </head>
    <body>
-   <!-- Here a loader is created which
-        loads till response comes -->
-<div class="d-flex justify-content-center">
-    <div class="spinner-border"
-         role="status" id="loading">
-        <span class="sr-only">Loading...</span>
-    </div>
-</div>
-<h1>PDU Typen</h1>
+   <div class="min-h-full">
+       <nav class="bg-gray-800">
+           <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+               <div class="flex h-16 items-center justify-between">
+                   <div class="flex items-center">
+                       <div class="flex items-baseline space-x-4">
+                           <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
+                           <a href="./Startseite.html" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Dashboard</a>
+                           <a href="./ChatPDUs.html" class="bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium">Statistik</a>
+
+                           <a href="./InhaltderPDUs.html" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">PDU Liste</a>
+                       </div>
+                   </div>
+               </div>
+           </div>
+       </nav>
+
+       <header class="bg-white shadow">
+           <div class="mx-auto max-w-7xl py-6 px-4 sm:px-6 lg:px-8">
+               <h1 class="text-3xl font-bold tracking-tight text-gray-900">PDU Typen</h1>
+           </div>
+       </header>
+
+
+
+       <div
+               class='flex sm:flex-row flex-col space-y-2 sm:space-x-2 flex-row w-full px-10 md:px-12 py-8 items-center justify-center'>
+           <div
+                   class='flex flex-wrap flex-row sm:flex-col justify-center items-center w-full sm:w-1/4 p-5 bg-white rounded-md shadow-xl border-l-4 border-gray-300'>
+               <div>
+                   <div id="pdu-undefined" class="font-bold text-5xl text-center">
+                       0
+                   </div>
+                   <div class="font-normal text-gray-500 text-sm">
+                       Undefined
+                   </div>
+               </div>
+           </div>
+           <div
+                   class='flex flex-wrap flex-row sm:flex-col justify-center items-center w-full sm:w-1/4 p-5 bg-white rounded-md shadow-xl border-l-4 border-blue-300'>
+               <div>
+                   <div id="pdu-login" class="font-bold text-5xl text-center">
+                       0
+                   </div>
+                   <div class="font-normal text-gray-500 text-sm">
+                       Login
+                   </div>
+               </div>
+           </div>
+           <div
+                   class='flex flex-wrap flex-row sm:flex-col justify-center items-center w-full sm:w-1/4 p-5 bg-white rounded-md shadow-xl border-l-4 border-violet-300'>
+               <div>
+                   <div  id="pdu-logout" class="font-bold text-5xl text-center">
+                       0
+                   </div>
+                   <div class="font-normal text-gray-500 text-sm">
+                       Logout
+                   </div>
+               </div>
+           </div>
+           <div
+                   class='flex flex-wrap flex-row sm:flex-col justify-center items-center w-full sm:w-1/4 p-5 bg-white rounded-md shadow-xl border-l-4 border-emerald-300'>
+               <div>
+                   <div id="pdu-chat" class="font-bold text-5xl text-center">
+                       0
+                   </div>
+                   <div class="font-normal text-gray-500 text-sm">
+                       Chat
+                   </div>
+               </div>
+           </div>
+           <div
+                   class='flex flex-wrap flex-row sm:flex-col justify-center items-center w-full sm:w-1/4 p-5 bg-white rounded-md shadow-xl border-l-4 border-amber-300'>
+               <div>
+                   <div id="pdu-finished" class="font-bold text-5xl text-center">
+                       0
+                   </div>
+                   <div class="font-normal text-gray-500 text-sm">
+                       Finished
+                   </div>
+               </div>
+           </div>
+       </div>
+
+
+
+
+
 <!-- table for showing data -->
 <table id="pdus" class="fl-table table-wrapper"></table>
+   </div>
 </body>
 </html>
