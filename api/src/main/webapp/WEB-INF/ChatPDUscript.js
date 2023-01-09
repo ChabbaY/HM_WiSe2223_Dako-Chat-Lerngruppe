@@ -2,20 +2,21 @@
 const api_url =
     "http://localhost:8080/api/pdus/types";
 
-// Defining async function
+
 async function getapi(url) {
 
-    // Storing response
+    // Speichern der Response
     const response = await fetch(url);
 
-    // Storing data in form of JSON
+    // Speichern als JSON
     var data = await response.json();
     console.log(data);
     show(data);
 }
-// Calling that async function
+// Aufruf der asynchronen Funktion
 getapi(api_url);
-// Function to define innerHTML for HTML table
+
+//Befüllung der Tabelle über ID'S (anders als in der anderen javascript)
 function show(data) {
     console.log(data.login);
     document.getElementById("pdu-undefined").innerText = data.undefined;

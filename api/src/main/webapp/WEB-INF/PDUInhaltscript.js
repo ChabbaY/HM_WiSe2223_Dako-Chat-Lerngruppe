@@ -23,7 +23,7 @@ function show(data) {
 
     //data iterable machen
     let datenarray = Array.from(data);
-    // schleife um alle PDU's auszulesen
+    // schleife um Tabelle zu befüllen
     for (let r of datenarray) {
         tab += `<tr class="hover:bg-gray-50">
       <td class="px-6 py-4">${r.id}</td>
