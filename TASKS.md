@@ -6,13 +6,13 @@
 |---------------------------|---------|--------|-------|-------|----------|
 | AL Server GUI             | ⬜       | ⬜      | ✅     | ⬜     | ✅        |
 | AL Server GUI Interface   | ✅       | ⬜      | ⬜     | ⬜     | ✅        |
-| Abstract AL Server        | ✅       | ⬜      | ⬜     | ⬜     | ❌        |
-| Abstract AL Worker Thread | ✅       | ⬜      | ⬜     | ⬜     | ❌        |
-| AL Server Factory         | ⬜       | ✅      | ⬜     | ⬜     | ❌        |
-| AL Server Interface       | ✅       | ⬜      | ⬜     | ⬜     | ❌        |
+| Abstract AL Server        | ✅       | ⬜      | ⬜     | ⬜     | ✅        |
+| Abstract AL Worker Thread | ✅       | ⬜      | ⬜     | ⬜     | ✅        |
+| AL Server Factory         | ⬜       | ✅      | ⬜     | ⬜     | ✅        |
+| AL Server Interface       | ✅       | ⬜      | ⬜     | ⬜     | ✅        |
 | AL Server Starter         | ⬜       | ⬜      | ✅     | ⬜     | ✅        |
-| AL Server Impl            | ⬜       | ✅      | ⬜     | ⬜     | ❌        |
-| AL Worker Thread Impl     | ⬜       | ⬜      | ⬜     | ✅     | ❌        |
+| AL Server Impl            | ⬜       | ✅      | ⬜     | ⬜     | ✅        |
+| AL Worker Thread Impl     | ⬜       | ⬜      | ⬜     | ✅     | ✅        |
 | Shared Chat Server List   | ⬜       | ⬜      | ✅     | ⬜     | ✅        |
 | Server List Entry         | ⬜       | ⬜      | ✅     | ⬜     | ✅        |
 
