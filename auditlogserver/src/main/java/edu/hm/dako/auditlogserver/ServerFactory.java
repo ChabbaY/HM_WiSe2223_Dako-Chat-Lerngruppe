@@ -72,7 +72,7 @@ public class ServerFactory {
             }
         }
         System.out.println("Derzeit nur TCPSimpleImplementation implementiert!");
-        throw new RuntimeException("Unknown type: " + implType);// TODO more implementations
+        throw new RuntimeException("Unknown type: " + implType);
     }
 
     /**

@@ -38,7 +38,7 @@ test {
 }
 
 // build chatserver jar file
-task createAuditLogServerJar(type: Jar) {//TODO fix jar build
+task createAuditLogServerJar(type: Jar) {
     // remove deprecated warning for gradle 7
     duplicatesStrategy = DuplicatesStrategy.INCLUDE
     manifest {

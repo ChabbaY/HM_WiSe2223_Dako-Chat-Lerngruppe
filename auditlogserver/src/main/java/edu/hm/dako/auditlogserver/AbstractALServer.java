@@ -21,13 +21,6 @@ public abstract class AbstractALServer implements ALServerInterface {
     protected SharedChatServerList clients;
 
     /**
-     * counter for test
-     * 
-     * Auskommentiert, da noch nicht nötig
-     */
-    // protected SharedServerCounter counter;
-
-    /**
      * referencing server GUI to register events
      */
     protected ALServerGUIInterface alServerGUIInterface;

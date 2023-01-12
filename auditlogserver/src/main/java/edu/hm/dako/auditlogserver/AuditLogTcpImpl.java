@@ -54,7 +54,7 @@ public class AuditLogTcpImpl extends AbstractALServer {
             while (!Thread.currentThread().isInterrupted() && !socket.isClosed()) {
                 try {
                     // Auf ankommende Verbindungsaufbauwünsche warten
-                    System.out.println("SimpleChatServer wartet auf Verbindungsanfragen von Clients...");
+                    System.out.println("AuditLogServer wartet auf Verbindungsanfragen von Servern...");
                     Connection connection = socket.accept();
                     LOG.debug("Neuer Verbindungsaufbauwunsch empfangen");
 
@@ -76,18 +76,18 @@ public class AuditLogTcpImpl extends AbstractALServer {
 
     @Override
     public void stop() throws Exception {
-        // Alle Verbindungen zu aktiven Clients abbauen
+        // Alle Verbindungen zu aktiven Servern abbauen
         Vector<String> sendList = clients.getServerSocketList();
         for (String s : new Vector<>(sendList)) {
             ServerListEntry client = clients.getServer(s);
             try {
                 if (client != null) {
                     client.getConnection().close();
-                    LOG.error("Verbindung zu Client " + client.getServerAddress() + ":" + client.getServerPort()
+                    LOG.error("Verbindung zu Server " + client.getServerAddress() + ":" + client.getServerPort()
                             + " geschlossen");
                 }
             } catch (Exception e) {
-                LOG.debug("Fehler beim Schliessen der Verbindung zu Client " + client.getServerAddress() + ":"
+                LOG.debug("Fehler beim Schliessen der Verbindung zu Server " + client.getServerAddress() + ":"
                         + client.getServerPort());
                 ExceptionHandler.logException(e);
             }
@@ -105,6 +105,6 @@ public class AuditLogTcpImpl extends AbstractALServer {
         executorService.shutdown();
         LOG.debug("ThreadPool freigegeben");
 
-        System.out.println("SimpleChatServer beendet sich");
+        System.out.println("AuditLogServer beendet sich");
     }
 }

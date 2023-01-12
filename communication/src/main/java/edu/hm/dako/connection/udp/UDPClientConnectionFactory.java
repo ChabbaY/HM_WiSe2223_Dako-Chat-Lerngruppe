@@ -26,7 +26,7 @@ public class UDPClientConnectionFactory implements ConnectionFactory {
 
         // Maximale Wartezeit beim Empfang einer Nachricht in Millisekunden. Wenn in dieser Zeit keine Nachricht kommt,
         // wird das Empfangen abgebrochen. Mit verschiedenen Einstellungen experimentieren.
-        int defaultResponseTimeout = 5000;//TODO try different settings
+        int defaultResponseTimeout = 5000;
 
         return new UDPClientConnection(udpSocket, defaultResponseTimeout);
     }

@@ -55,7 +55,7 @@ public class AuditLogUdpImpl extends AbstractALServer {
                     // Auf ankommende Verbindungsaufbauwünsche warten
                     Connection connection = socket.accept();
 
-                    // Neuen WorkerThread starten ohne AuditLog-Verbindung
+                    // Neuen WorkerThread starten
                     executorService.submit(new AuditlogWorkerThread(connection, alServerGUIInterface));
                 } catch (Exception e) {
                     if (socket.isClosed()) {
@@ -72,18 +72,18 @@ public class AuditLogUdpImpl extends AbstractALServer {
 
     @Override
     public void stop() throws Exception {
-        // Alle Verbindungen zu aktiven Clients abbauen
+        // Alle Verbindungen zu aktiven Servern abbauen
         Vector<String> sendList = clients.getServerSocketList();
         for (String s : new Vector<>(sendList)) {
             ServerListEntry client = clients.getServer(s);
             try {
                 if (client != null) {
                     client.getConnection().close();
-                    LOG.error("Verbindung zu Client " + client.getServerAddress() + ":" + client.getServerPort()
+                    LOG.error("Verbindung zu Server " + client.getServerAddress() + ":" + client.getServerPort()
                             + " geschlossen");
                 }
             } catch (Exception e) {
-                LOG.debug("Fehler beim Schliessen der Verbindung zu Client " + client.getServerAddress() + ":"
+                LOG.debug("Fehler beim Schliessen der Verbindung zu Server " + client.getServerAddress() + ":"
                         + client.getServerPort());
                 ExceptionHandler.logException(e);
             }
@@ -101,6 +101,6 @@ public class AuditLogUdpImpl extends AbstractALServer {
         executorService.shutdown();
         LOG.debug("ThreadPool freigegeben");
 
-        System.out.println("SimpleChatServer beendet sich");
+        System.out.println("AuditLogServer beendet sich");
     }
 }

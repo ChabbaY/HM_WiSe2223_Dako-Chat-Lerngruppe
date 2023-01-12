@@ -62,6 +62,11 @@ public class Storage implements AuditLogRMIInterface, StorageInterface, Serializ
         activeStorage.audit(pdu);
     }
 
+    /**
+     * prüft, ob API gestartet wurde
+     *
+     * @return true falls API erreichbar
+     */
     public static boolean hasApiConnection() {
         try {
             URL url = new URL("http://localhost:8080/api/");
@@ -70,10 +75,8 @@ public class Storage implements AuditLogRMIInterface, StorageInterface, Serializ
             return (conn.getResponseCode() == 200);
         } catch (MalformedURLException e) {
             log.error("wrong URL");
-            e.printStackTrace();
         } catch (IOException e) {
             log.error("could not open URL");
-            e.printStackTrace();
         } catch (Exception e) {
             log.error("critical error");
             e.printStackTrace();

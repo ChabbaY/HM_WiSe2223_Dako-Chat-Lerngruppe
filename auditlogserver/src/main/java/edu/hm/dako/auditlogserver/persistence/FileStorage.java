@@ -2,7 +2,6 @@ package edu.hm.dako.auditlogserver.persistence;
 
 import edu.hm.dako.auditlogserver.gui.ALServerGUIInterface;
 import edu.hm.dako.common.AuditLogPDU;
-import edu.hm.dako.common.AuditLogPDUType;
 import edu.hm.dako.common.AuditLogRMIInterface;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -28,7 +27,7 @@ public class FileStorage implements AuditLogRMIInterface, StorageInterface, Seri
     /**
      * file to save to
      */
-    private final String fileName; //"ChatAuditLog.dat";//wollen wir den Namen lieber parametrisieren, um pro Verbindung mit einem ChatServer eine Datei zu haben?
+    private final String fileName; //parametrisieren, um pro Verbindung mit einem ChatServer eine Datei zu haben?
 
     private ALServerGUIInterface counter;
 

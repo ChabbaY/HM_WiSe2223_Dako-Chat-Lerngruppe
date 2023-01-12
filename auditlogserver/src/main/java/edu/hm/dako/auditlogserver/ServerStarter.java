@@ -70,11 +70,9 @@ public class ServerStarter {
                 LOG.error("Fehler bei Eingabe: " + e.getMessage());
             }
 
-            switch (input) {
-                case "stop" -> {
-                    starter.stopAuditLogServer();
-                    return;
-                }
+            if (input.equals("stop")) {
+                starter.stopAuditLogServer();
+                return;
             }
         }
 
@@ -168,7 +166,7 @@ public class ServerStarter {
             return false;
         } else {
             // Server starten
-            // chatServer.start();TODO
+            auditLogServer.start();
             return true;
         }
     }

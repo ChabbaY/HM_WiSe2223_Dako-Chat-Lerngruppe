@@ -39,7 +39,7 @@ gretty {
 }
 
 // build api jar file
-task createApiJar(type: Jar) {//TODO fix jar build
+task createApiJar(type: Jar) {
     // remove deprecated warning for gradle 7
     duplicatesStrategy = DuplicatesStrategy.INCLUDE
     manifest {

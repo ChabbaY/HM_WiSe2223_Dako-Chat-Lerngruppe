@@ -2,24 +2,15 @@ package edu.hm.dako.auditlogserver;
 
 import edu.hm.dako.auditlogserver.gui.ALServerGUIInterface;
 import edu.hm.dako.auditlogserver.persistence.FileStorage;
-import edu.hm.dako.auditlogserver.persistence.Storage;
-import edu.hm.dako.common.AuditLogRMIInterface;
 import edu.hm.dako.common.ExceptionHandler;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import java.io.File;
-import java.rmi.ConnectException;
-import java.rmi.Naming;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.ExportException;
 import java.rmi.server.UnicastRemoteObject;
-import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Calendar;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * audit log RMI implementation
@@ -55,9 +46,11 @@ public class AuditLogRmiImpl extends AbstractALServer {
 
     @Override
     public void start() {
-        FileStorage storage = new FileStorage("ChatAuditLog.dat", alServerGUIInterface); // create the FileStorage object
+        // create the FileStorage object
+        FileStorage storage = new FileStorage("ChatAuditLog.dat", alServerGUIInterface);
         try {
-            startRmiRegistry(port); // start the RMI registry
+            // start the RMI registry
+            startRmiRegistry(port);
             exportObject(storage, port, RMI_KEY);
         } catch (RemoteException e) {
             LOG.error("RMI Export ist fehlgeschlagen", e);
@@ -82,8 +75,10 @@ public class AuditLogRmiImpl extends AbstractALServer {
     }
 
     public static void exportObject(Remote remote, int port, String name) throws RemoteException {
-        Remote remote_Stub = UnicastRemoteObject.exportObject(remote, port); // export the object
+        // export the object
+        Remote remote_Stub = UnicastRemoteObject.exportObject(remote, port);
         Registry registry = LocateRegistry.getRegistry(port);
-        registry.rebind(name, remote_Stub); // bind the object to the registry
+        // bind the object to the registry
+        registry.rebind(name, remote_Stub);
     }
 }

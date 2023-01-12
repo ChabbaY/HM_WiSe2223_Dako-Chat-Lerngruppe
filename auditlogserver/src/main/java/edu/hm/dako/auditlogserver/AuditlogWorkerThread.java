@@ -64,14 +64,11 @@ public class AuditlogWorkerThread extends Thread {
         AuditLogPDU receivedPDU;
 
         try {
-            LOG.debug("Vallah");
-
-            //System.out.println(con.receive().toString());
             receivedPDU = (AuditLogPDU) con.receive();
             LOG.debug(receivedPDU.toString());
 
             handleIncomingRequest(receivedPDU);
-        } catch (Exception ex){
+        } catch (Exception ex) {
             LOG.debug(ex.getMessage());
             finished =true;
         }
@@ -93,7 +90,6 @@ public class AuditlogWorkerThread extends Thread {
             con.close();
         } catch (Exception e) {
             LOG.debug("Exception bei close");
-            // ExceptionHandler.logException(e);
         }
     }
 }
