@@ -1,6 +1,8 @@
 package edu.hm.dako.auditlogserver.persistence;
 
+import edu.hm.dako.auditlogserver.gui.ALServerGUIInterface;
 import edu.hm.dako.common.AuditLogPDU;
+import edu.hm.dako.common.AuditLogPDUType;
 import edu.hm.dako.common.AuditLogRMIInterface;
 import java.io.IOException;
 import java.io.Serializable;
@@ -42,9 +44,9 @@ public class Storage implements AuditLogRMIInterface, StorageInterface, Serializ
      *
      * @param fileName file name for text file storage, ignored if API is used
      */
-    public Storage(String fileName) {
-        fileStorage = new FileStorage(fileName);
-        apiStorage = new ApiStorage();
+    public Storage(String fileName, ALServerGUIInterface serverGUIInterface) {
+        fileStorage = new FileStorage(fileName, serverGUIInterface);
+        apiStorage = new ApiStorage(serverGUIInterface);
 
         if (hasApiConnection()) {
             activeStorage = apiStorage;
@@ -77,5 +79,14 @@ public class Storage implements AuditLogRMIInterface, StorageInterface, Serializ
             e.printStackTrace();
         }
         return false;
+    }
+    
+    public static void updateCounter(AuditLogPDU pdu, ALServerGUIInterface serverGUIInterface) {
+        // Counter hochzählen
+        serverGUIInterface.increaseNumberOfRequests();
+
+        // Client-Counter
+        if (pdu.getPduType().equals(AuditLogPDUType.LOGIN_REQUEST)) serverGUIInterface.increaseNumberOfLoggedInClients();
+        if (pdu.getPduType().equals(AuditLogPDUType.LOGOUT_REQUEST)) serverGUIInterface.decreaseNumberOfLoggedInClients();
     }
 }

@@ -59,7 +59,7 @@ public class AuditLogTcpImpl extends AbstractALServer {
                     LOG.debug("Neuer Verbindungsaufbauwunsch empfangen");
 
                     // Neuen WorkerThread starten ohne AuditLog-Verbindung
-                    executorService.submit(new AuditlogWorkerThread(connection));
+                    executorService.submit(new AuditlogWorkerThread(connection, alServerGUIInterface));
                 } catch (Exception e) {
                     if (socket.isClosed()) {
                         LOG.debug("Socket wurde geschlossen");
