@@ -1,5 +1,6 @@
 package edu.hm.dako.auditlogserver.persistence;
 
+import edu.hm.dako.auditlogserver.gui.ALServerGUIInterface;
 import edu.hm.dako.common.AuditLogPDU;
 import edu.hm.dako.common.AuditLogRMIInterface;
 import java.io.IOException;
@@ -23,14 +24,19 @@ class ApiStorage implements AuditLogRMIInterface, StorageInterface, Serializable
      */
     private static final Logger log = LogManager.getLogger(ApiStorage.class);
 
+    ALServerGUIInterface counter;
+
     /**
      * constructor
      */
-    public ApiStorage() {
+    public ApiStorage(ALServerGUIInterface serverGUIInterface) {
+        counter = serverGUIInterface;
     }
 
     @Override
     public void audit(AuditLogPDU pdu) {
+        Storage.updateCounter(pdu, counter);
+
         try {
             String encodedData =
                     "pduType=" + URLEncoder.encode(String.valueOf(pdu.getPduType()).trim(), StandardCharsets.UTF_8) +

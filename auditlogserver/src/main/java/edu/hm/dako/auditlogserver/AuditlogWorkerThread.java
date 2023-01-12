@@ -1,5 +1,6 @@
 package edu.hm.dako.auditlogserver;
 
+import edu.hm.dako.auditlogserver.gui.ALServerGUIInterface;
 import edu.hm.dako.auditlogserver.persistence.Storage;
 import edu.hm.dako.auditlogserver.persistence.StorageInterface;
 import edu.hm.dako.common.AuditLogPDU;
@@ -23,18 +24,21 @@ public class AuditlogWorkerThread extends Thread {
 
     StorageInterface speicher;
 
+    ALServerGUIInterface counter;
+
     /**
      * constructor
      *
      * @param conn server connection
      */
-    public AuditlogWorkerThread(Connection conn) {
+    public AuditlogWorkerThread(Connection conn, ALServerGUIInterface serverGuiInterface) {
         con = conn;
         String dateString = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss")
                 .format(Calendar.getInstance().getTime());
         String hash = ((Integer)conn.hashCode()).toString();
         String fileName = dateString + hash;
-        speicher = new Storage(fileName);
+        speicher = new Storage(fileName, serverGuiInterface);
+        counter = serverGuiInterface;
     }
 
     @Override

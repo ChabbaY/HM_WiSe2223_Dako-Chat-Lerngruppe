@@ -1,6 +1,8 @@
 package edu.hm.dako.auditlogserver.persistence;
 
+import edu.hm.dako.auditlogserver.gui.ALServerGUIInterface;
 import edu.hm.dako.common.AuditLogPDU;
+import edu.hm.dako.common.AuditLogPDUType;
 import edu.hm.dako.common.AuditLogRMIInterface;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -28,17 +30,17 @@ public class FileStorage implements AuditLogRMIInterface, StorageInterface, Seri
      */
     private final String fileName; //"ChatAuditLog.dat";//wollen wir den Namen lieber parametrisieren, um pro Verbindung mit einem ChatServer eine Datei zu haben?
 
-    /**
-     * constructor
-     *
-     * @param fileName file name
-     */
-    public FileStorage(String fileName){
+    private ALServerGUIInterface counter;
+
+    public FileStorage(String fileName, ALServerGUIInterface serverGuiInterface){
         this.fileName = fileName;
+        counter = serverGuiInterface;
     }
 
     @Override
     public void audit(AuditLogPDU pdu) {
+        Storage.updateCounter(pdu, counter);
+
         File file = new File(fileName);
         log.debug("Die file heißt: "+ fileName + "und liegt in: "+ file.toPath().toString());
 

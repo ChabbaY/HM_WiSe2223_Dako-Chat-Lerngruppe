@@ -55,7 +55,7 @@ public class AuditLogRmiImpl extends AbstractALServer {
 
     @Override
     public void start() {
-        FileStorage storage = new FileStorage("ChatAuditLog.dat"); // create the FileStorage object
+        FileStorage storage = new FileStorage("ChatAuditLog.dat", alServerGUIInterface); // create the FileStorage object
         try {
             startRmiRegistry(port); // start the RMI registry
             exportObject(storage, port, RMI_KEY);

@@ -56,7 +56,7 @@ public class AuditLogUdpImpl extends AbstractALServer {
                     Connection connection = socket.accept();
 
                     // Neuen WorkerThread starten ohne AuditLog-Verbindung
-                    executorService.submit(new AuditlogWorkerThread(connection));
+                    executorService.submit(new AuditlogWorkerThread(connection, alServerGUIInterface));
                 } catch (Exception e) {
                     if (socket.isClosed()) {
                         LOG.debug("Socket wurde geschlossen");
