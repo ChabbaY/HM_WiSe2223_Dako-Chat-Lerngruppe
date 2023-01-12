@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Admintoolstarter" type="Application" factoryName="Application" nameIsGenerated="true">
-    <option name="MAIN_CLASS_NAME" value="Admintoolstarter" />
+  <configuration default="false" name="edu.hm.dako.api.main.Admintoolstarter" type="Application" factoryName="Application" nameIsGenerated="true">
+    <option name="MAIN_CLASS_NAME" value="edu.hm.dako.api.main.Admintoolstarter" />
     <module name="dako.api.main" />
     <method v="2">
       <option name="Make" enabled="true" />
