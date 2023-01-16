@@ -30,7 +30,7 @@ dependencies {
     implementation 'org.openjfx:javafx:19'
     implementation(group: 'org.apache.commons', name: 'commons-math3', version: '3.6.1')
     testImplementation 'junit:junit:4.13.2'
-    testImplementation 'org.junit.jupiter:junit-jupiter:5.9.1'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.9.2'
 }
 
 test {
