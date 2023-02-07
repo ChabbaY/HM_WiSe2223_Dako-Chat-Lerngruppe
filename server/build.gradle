@@ -28,7 +28,7 @@ dependencies {
     implementation project(':communication')
     implementation 'org.openjfx:javafx:19'
     testImplementation 'junit:junit:4.13.2'
-    testImplementation 'org.junit.jupiter:junit-jupiter:5.9.1'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.9.2'
 }
 
 test {
