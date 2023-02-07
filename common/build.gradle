@@ -21,7 +21,7 @@ sourceSets {
 
 dependencies {
     implementation(group: 'org.apache.commons', name: 'commons-math3', version: '3.6.1')
-    implementation 'org.openjfx:javafx:19'
+    implementation 'org.openjfx:javafx:19.0.2.1'
     testImplementation 'junit:junit:4.13.2'
     testImplementation 'org.junit.jupiter:junit-jupiter:5.9.1'
 }
